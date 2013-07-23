@@ -44,6 +44,7 @@ DONE @ 90%
 - User comments on sketches. 
 - Iframe embedding.
 - User dashboard.
+- Documentation.
 
 
 <h2>Credits</h2>
