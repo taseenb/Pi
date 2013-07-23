@@ -10,12 +10,40 @@ Pi uses the javascript port of Processing http://processingjs.org/ allowing user
 Other libraries could be added in the future (imagine Paper.js http://paperjs.org/ or Raphael.js http://raphaeljs.com/), mixing all these possibilities together within a common environment.<br>
 If you can embed a YouTube video or an swf Flash file in any web page, why shouldn't be as easy to embed a Processing sketch or any other canvas based application?
 
+
 <h2>Browser compatibility</h2>
 Processing sketches are drawn on the canvas element: canvas support is mandatory.<br>
 Only modern browsers are supported: IE9+ (I'll probably target 10+ soon), Chrome 23+, Firefox 12+, Opera 12+, Safari 5.1+.
 
+
 <h2>Mobile app and site</h2>
 Pi does not support mobile devices at the moment. A responsive, mobile-friendly and touch site (or a mobile app) will probably be done in the future.
+
+
+<h2>Features</h2>
+
+DONE @ 90%
+- Desktop-like development environment.
+- Original Processing ide interface emulation.
+- Ide error console.
+- Live code.
+- Auto save.
+- Auto resize sketches to fit the screen.
+- Full-screen presentation mode.
+- Play-pause sketches.
+- Secured log in and sign up processes.
+
+IN PROGRESS:
+- Take pictures from the sketch. @TODO 50%
+- Sketches and collections manager. @TODO 20%
+- User profiles. @TODO 20%
+
+TO DO:
+- Image as sketch preview. @TODO 0%
+- User public portfolio. @TODO 0%
+- User comments on sketches. @TODO 0%
+- Iframe embedding. @TODO 0%
+- User dashboard. @TODO 0%
 
 
 <h2>Credits</h2>
