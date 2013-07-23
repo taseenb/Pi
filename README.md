@@ -17,12 +17,6 @@ Only modern browsers are supported: IE9+ (i'll only target 10+ soon), Chrome 23+
 <h2>Mobile app and site</h2>
 Pi does not support mobile devices at the moment. A responsive, mobile-friendly and touch site (or a mobile app) will probably be done in the future.
 
-<h2>Installation</h2>
-Installation instructions will be available soon.
-Please see the notes [1] [2]
-
-<h2>Builds</h2>
-There are no builds available, yet.
 
 <h2>Credits</h2>
 Author: Esteban Almiron http://www.estebanalmiron.com
@@ -38,11 +32,3 @@ Pi uses open source software:<br>
 
 And others that you can find in the /scripts/ and /scripts/lib/ directories.
 
-
-<h2>Notes</h2>
-1. In order to install Pi, you need a copy of the Yii framework https://github.com/yiisoft/yii installed in a directory. The latest stable version of the 1.1.x series will be supported.<br>
-2. Yii framework folder does not need to be installed under a Web-accessible directory. A Yii application has one entry script which is usually the only file that needs to be exposed to Web users. Other PHP scripts, including those from Yii, should be protected from Web access; otherwise they might be exploited by hackers. (From Yii docs)
-<br>
-3. Pi distribution should run "out of the box" on a LAMP environment, but it is easy to install on other platforms. The only difference should be the URL rewrite setup.<br>
-For Nginx, please read this basic information:http://www.yiiframework.com/doc/guide/1.1/en/quickstart.apache-nginx-config<br>
-For Windows Server, please translate the .htaccess file in the root directory to a web.config file.<br>
