@@ -40,11 +40,11 @@ define([
 	},
 	show: function() {
 	    this.$el.show();
-	    Pi.user.currentDesktop.$el.hide();
+	    //Pi.user.currentDesktop.$el.hide();
 	},
 	hide: function() {
 	    this.$el.hide();
-	    Pi.user.currentDesktop.$el.show();
+	    //Pi.user.currentDesktop.$el.show();
 	}
 
     });

@@ -113,5 +113,7 @@ define([
 	// Open the dialog
 	Pi.dialog.open(dialog, true);
     };
+    
+    return Pi;
 
 });

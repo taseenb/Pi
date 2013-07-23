@@ -48,12 +48,13 @@ class ActivationAction extends CAction
 	if (isset($user) && $user->status == User::ACTIVE)
 	{
 	    // Account is already active
-	    $this->_controller->render(
-		    '/user/message', array(
-		'title' => UserModule::t("User activation"),
-		'content' => UserModule::t("Your account is already active.")
-		    )
-	    );
+	    $this->_controller->redirect(Yii::app()->baseUrl . '/#alreadyActive');
+//	    $this->_controller->render(
+//		    '/user/message', array(
+//		'title' => UserModule::t("User activation"),
+//		'content' => UserModule::t("Your account is already active.")
+//		    )
+//	    );
 	}
 	elseif (isset($user->activkey) && $user->activkey == $key && $user->status == User::UNACTIVE)
 	{
@@ -62,12 +63,14 @@ class ActivationAction extends CAction
 	    $user->status = User::ACTIVE;
 	    if ($user->save())
 	    {
-		$this->_controller->render(
-			'/user/message', array(
-		    'title' => UserModule::t("User activation"),
-		    'content' => UserModule::t("Your account has been activated.")
-			)
-		);
+		// Successful activation
+		 $this->_controller->redirect(Yii::app()->baseUrl . '/#activated');
+//		$this->_controller->render(
+//			'/user/message', array(
+//		    'title' => UserModule::t("User activation"),
+//		    'content' => UserModule::t("Your account has been activated.")
+//			)
+//		);
 	    }
 	    else
 		throw new HttpException(500); // not saved - error

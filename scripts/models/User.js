@@ -78,6 +78,9 @@ define([
 	    
 	    if (updateSketches)
 		this.updateSketches(data);
+	    
+	    if (this.nav)
+		this.nav.render();
 	},
 	/**
 	 * Open user sketches (from bootstrap data).

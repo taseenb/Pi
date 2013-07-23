@@ -73,7 +73,6 @@ define([
 		isGuest: Pi.isGuest,
 		basePath: Pi.basePath,
 		fullName: this.model.getFullName()
-
 	    }));
 
 	    return this;

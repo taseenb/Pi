@@ -46,8 +46,7 @@ define([
 	    }
 	    else
 	    {
-		console.log("ide is not there...");
-		window.location.hash = "";
+		this.goHome();
 	    }
 	    //console.log(fullScreen);
 	    if (fullScreen === "fs") {
@@ -99,7 +98,69 @@ define([
 		Pi.page.set({
 		    "template": page
 		});
+		Pi.pageView.show();
 	    });
+	},
+	/**
+	 * Temporary about.
+	 */
+	about: function() {
+	    require([
+		'Pi/start/startDialogs',
+	    ], function(Pi) {
+		Pi.dialog.open({
+		    dataId: "about",
+		    title: 'About',
+		    content: "<p>" +
+			    "Pi is dedicated to Processing creatives. It aims to provide a comfortable space to create, exhibit and share interactive works, drawings and animations written in the <a href='http://processing.org/'>Processing</a> language (Java-like).</p>" +
+			    "Pi uses the magical javascript port of Processing, <a href='http://processingjs.org/'>Processing JS</a>, allowing users to code in javascript as well. " +
+			    "Other libraries could be added in the future (imagine <a href='http://paperjs.org/'>Paper.js</a> or <a href='http://raphaeljs.com/'>Raphael.js</a>), mixing all these possibilities together within a common environment.</p>" +
+			    "If you can embed a YouTube video or an swf Flash file in any web page, why shouldn't be as easy to embed a Processing sketch or any other canvas based application? " +
+			    "</p>"
+		});
+	    });
+	},
+	/**
+	 * Activated.
+	 */
+	activated: function() {
+	    if (Pi.isGuest) {
+		require([
+		    'Pi/start/startDialogs'
+		], function(Pi) {
+		    Pi.dialog.open({
+			dataId: "shortMessage",
+			title: 'Your account is ready',
+			content: "Your account has been activated.<br>You can finally <i class='icon-signin'></i> <a href='#log-in'>Log In</a>."
+		    });
+
+		});
+	    }
+	    else
+	    {
+		this.goHome();
+	    }
+	},
+	/**
+	 * Activated.
+	 */
+	alreadyActive: function() {
+	    if (Pi.isGuest) {
+		require([
+		    'Pi/start/startDialogs'
+		], function(Pi) {
+		    Pi.dialog.open({
+			dataId: "shortMessage",
+			title: 'Your account is active',
+			content: "Your account is already active.<br>You can <i class='icon-signin'></i> <a href='#log-in'>Log In</a>."
+		    });
+
+		});
+	    }
+	    else
+	    {
+		this.goHome();
+	    }
 	},
 	/**
 	 * Fill a Dialog model and/or directly open a modal dialog from cache.
@@ -133,6 +194,10 @@ define([
      * Routes.
      */
     Pi.router = new Router();
+
+    Pi.router.route("alreadyActive", "alreadyActive");
+    Pi.router.route("activated", "activated");
+    Pi.router.route("about", "about");
     Pi.router.route("art", "art");
     Pi.router.route("page/:page", "page");
     Pi.router.route("find", "find");
@@ -145,7 +210,7 @@ define([
      * Router events.
      */
     Pi.router.on("route", function(route) {
-	if (route!=="page") {
+	if (route !== "page") {
 	    require([
 		'Pi/start/startPages'
 	    ], function(Pi) {

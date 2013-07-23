@@ -100,4 +100,4 @@ $spinnerSketch = str_replace("\n", "\\n\\\n", $spinnerSketch);
 <!--</div>-->
 
 <!-- Add GitHub ribbon -->
-<a id="forkongithub" href="https://github.com/este77/pi">Fork me on GitHub</a>
+<a id="forkongithub" href="https://github.com/taseenb/Pi">Fork me on GitHub</a>
