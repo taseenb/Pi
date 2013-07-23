@@ -33,17 +33,17 @@ DONE @ 90%
 - Play-pause sketches.
 - Secured log in and sign up processes.
 
-IN PROGRESS:
-- Take pictures from the sketch. @TODO 50%
-- Sketches and collections manager. @TODO 20%
-- User profiles. @TODO 20%
+@TODO - IN PROGRESS:
+- Take pictures from the sketch. (50%)
+- Sketches and collections manager. (20%)
+- User profiles. (20%)
 
-TO DO:
-- Image as sketch preview. @TODO 0%
-- User public portfolio. @TODO 0%
-- User comments on sketches. @TODO 0%
-- Iframe embedding. @TODO 0%
-- User dashboard. @TODO 0%
+@TODO @ 0%:
+- Image as sketch preview.
+- User public portfolio.
+- User comments on sketches. 
+- Iframe embedding.
+- User dashboard.
 
 
 <h2>Credits</h2>
