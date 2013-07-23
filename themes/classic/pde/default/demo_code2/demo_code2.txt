@@ -1,0 +1,16 @@
+int p[] = new int[50];
+
+void setup() {
+	size(200, 200);
+  for(int i=0; i<p.length;i++) {
+    p[i] = new PVector(random(0,width), random(0,height));
+  }
+}
+ 
+void draw() {
+	beginShape();
+    for(int i=0; i<p.length;i++) {
+      vertex(p[i].x, p[i].y);
+    }
+    endShape();  
+}

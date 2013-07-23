@@ -1,0 +1,23 @@
+<% if (isGuest) { %>
+    
+    <li>
+	<a href="#sign-up">Sign Up</a>
+    </li>
+    <li>
+	<a href="#log-in"><i class="icon-signin"></i> Log In</a>
+    </li>
+
+<% } else { %>
+
+    <li class="bold">
+	<a href="#me" id="username">
+	    <%= fullName %>
+	</a>
+    </li>
+    <li class="last">
+	<a href="<%=basePath %>/user/logout/">
+	    <i class="icon-signout"></i> Log Out
+	</a>
+    </li>  
+
+<% } %>

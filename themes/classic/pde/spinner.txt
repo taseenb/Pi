@@ -1,0 +1,56 @@
+int resolution = 5;
+float speed = 12;
+float rotation = radians(speed);
+float myRadius;
+float time = 0;
+boolean started = false;
+float angle;
+
+void setup() 
+{
+    size(36,20);
+    smooth();
+    noStroke();
+    frameRate(25);
+    myRadius = width / 3;
+    colorMode(HSB, 360, 100, 100, 100);
+    angle = radians(360/resolution);
+}
+
+void draw() 
+{
+    background(0,0,0,0);
+    if (started) 
+    {
+	float[] x = new float[resolution];
+	float[] y = new float[resolution];
+	float[] ballDiameter = new float[resolution];
+	//fill(degrees(rotation),80,100,100);
+	for (int i=0;i<resolution;i++) 
+	{
+	    x[i] = (cos((angle*i) + rotation) * myRadius) + width/2;
+	    y[i] = (sin((angle*i) + rotation) * myRadius); //+ height/2
+	    ballDiameter[i] = (sin((angle*i) + rotation) * myRadius) * 0.8 ;
+	    fill(#FFFFFF);
+	    ellipse(x[i], y[i]+1, ballDiameter[i], ballDiameter[i]);
+	    fill(#777777);
+	    ellipse(x[i], y[i], ballDiameter[i], ballDiameter[i]);
+	    
+	}
+	rotation += radians(sin(frameCount/15)*15);
+    }
+    if (rotation/6 >= TWO_PI) rotation = radians(speed);
+}
+
+void start() 
+{
+    started = true;
+    loop();
+}
+
+void stop() 
+{
+    started = false;
+    noLoop();
+    background(0,0,0,0);
+}

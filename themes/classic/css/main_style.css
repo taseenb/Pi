@@ -1,0 +1,1066 @@
+@CHARSET "UTF-8";
+
+/* Tests
+------------------------------------------ */
+
+
+
+/* Base css
+------------------------------------------ */
+body { 
+    width:100%; 
+    height:100%;
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow:hidden;
+    background: #38393a url("../img/gui/bg_default.jpg") top left; 
+}
+
+textarea, 
+input { 
+    outline: none; 
+}
+
+a:active,
+a:focus,
+:active,
+:focus { 
+    text-decoration: none;
+    outline:0;
+    -moz-outline-style: none;
+    outline-style: none;
+}
+
+.clear {
+    clear:both;
+}
+
+
+/* Ajax
+------------------------------------------ */
+
+#ajax-spinner {
+    width:36px;
+    height:20px;
+    position: absolute;
+    top:7px;
+    left:50%;
+    right:50%;
+    z-index:1500;
+    display:none;
+}
+
+
+/* Desktop
+------------------------------------------ */
+
+.desktop_container {
+    position: absolute;
+    top: 31px;
+    bottom:0;
+    left: 0;
+    width: 100%;
+    z-index: -501;
+}
+
+.desktop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -500;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /*box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);*/
+    /*background-color: #4d7fb4;*/
+    background-color: transparent;
+    /*background-image: url("../img/gui/bg_elements.png"), url("../img/background/escheresque_ste_@2X.png");*/
+    /*background-position: 0px -126px, top center;*/
+    /*background-repeat: repeat-x, repeat;*/
+    /*background: #38393a url("../img/background/bg_00.png") top center repeat;*/
+    /*    background-image: url("../img/gui/bg_elements.png"), url("../img/background/colors.png");
+	background-position: 0px -126px, top left;
+	background-repeat: repeat-x, no-repeat;*/
+    background-image: url("../img/background/gradient_spring.jpg");
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+}
+
+
+/* Manager
+------------------------------------------ */
+.manager.active {
+    display:block;
+}
+.manager {
+    display:none;
+    width: 90%;
+    height: 85%;
+    position: absolute;
+    right:5%;
+    left:5%;
+    top: 10%;
+    bottom: 5%;
+    z-index: 99;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    overflow: hidden;
+    background-color: #FFF;
+    /*background: rgba(255, 255, 255, 0.95);*/
+    /*background: transparent url("../img/gui/bg_elements.png") 0px -126px repeat-x;*/
+    /*background: transparent url("../img/background/manager_bg.png") top left repeat;*/
+    /*    -webkit-box-shadow: inset 10px -5px 10px 0px rgba(0, 0, 0, 0.2);
+	box-shadow: inset 10px -5px 10px 0px rgba(0, 0, 0, 0.2); */
+}
+
+.manager #manager_container {
+    display: block;
+    position: absolute;
+    padding:20px;
+    background-color: #c6e3ff;
+    top:30px;
+    bottom:30px;
+}
+
+.manager .manager_close {
+    display: block;
+    position: absolute;
+    top: 50px;
+    right: 50px;
+    width:50px;
+    height:50px;
+    z-index: 1000;
+    background-color: #FF0000;
+    color: #333;
+    font-size: 24px;
+}
+
+
+/* OLD MANAGER
+.manager {
+    display:none;
+    width: 300px;
+    right: -300px;
+    right:0;
+    position: absolute;
+    top: 0;
+    bottom:0;
+    z-index: -1000;
+    margin: 0;
+    padding: 0;
+    color: #FFF;
+    overflow: hidden;
+    background: transparent url("../img/gui/bg_elements.png") 0px -126px repeat-x;
+    background: transparent url("../img/background/manager_bg.png") top left repeat;
+    -webkit-box-shadow: inset 10px -5px 10px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 10px -5px 10px 0px rgba(0, 0, 0, 0.2); 
+
+}*/
+
+
+
+.manager_box {
+    position:relative;
+    max-height:300px;
+    overflow: auto;
+    margin-bottom:30px;
+}
+
+.manager h1 {
+    height: 18px;
+    /*background-color: #666;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.5);*/
+    /*border-bottom: 3px solid #333;*/
+    padding: 10px 20px 0 20px;
+    margin: 0;
+    color: #FFF;
+    font-size: 12px;
+    font-weight:bold;
+    border-bottom: 1px solid #333;
+    box-shadow: 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.manager ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.manager ul li {
+    float:left;
+    clear:both;
+    padding: 0;
+    margin-bottom:10px;
+    width:100%;
+}
+
+.manager ul li .wrapper {
+    height:22px;
+    float:left;
+    clear:both;
+    margin: 5px 0;
+    cursor: pointer;
+    width:100%;
+}
+
+.manager ul li .wrapper:hover {
+    background-color: #000;
+}
+
+.manager ul li .wrapper:hover .actions {
+    visibility: visible;
+}
+
+.manager ul li .wrapper:hover .name {
+    background-color: #333;
+}
+
+.manager ul li .name {
+    width: 100px;
+    height:14px;
+    padding: 4px 20px;
+    float:left;
+}
+
+.manager ul li .name.active {
+    color: #999;
+}
+
+.manager ul li .actions {
+    visibility: hidden;
+    float:right;
+    padding: 0 20px 0 10px;
+}
+
+.manager ul li .actions span {
+    text-align: center;
+    width: 14px;
+    height: 20px;
+    float: left;
+    padding: 2px 4px 0 4px;
+    margin: 0 0 0 2px;
+}
+.manager ul li .actions span:hover {
+    background-color: #FFF;
+    color:#333;
+}
+
+.manager ul li .description {
+    display:none;
+    color:#999;
+    font-size: 11px;
+    float:left;
+    padding: 0px 20px;
+    clear:both;
+}
+
+.manager .hide {
+    display: none;
+}
+
+.manager .close_manager {
+    text-align: center;
+    width: 14px;
+    height: 14px;
+    padding: 0 4px;
+    float:right;
+    cursor:pointer;
+}
+
+
+/* Nav
+------------------------------------------ */
+
+/*New nav*/
+#nav .brand img {
+    width:19px;
+    margin: -4px 0 0 24px;
+}
+#nav {
+    -webkit-box-shadow:  0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:  0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Processing IDE window
+------------------------------------------ */
+.win  {
+    position: absolute !important;
+    color: #222205;
+    border: none !important;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.7), 0 2px 5px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.7), 0 2px 5px 6px rgba(0, 0, 0, 0.2);
+}
+
+.win.active, .win.front {
+    -webkit-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.3), 0 2px 20px 6px rgba(0, 0, 0, 0.4), inset 0px 2px 0px 0px rgba(255, 255, 255, 0.6);
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.3), 0 2px 20px 6px rgba(0, 0, 0, 0.4), inset 0px 2px 0px 0px rgba(255, 255, 255, 0.6);
+}
+
+.window-background {
+    background: -moz-linear-gradient(top,  rgba(255,255,255,0.40) 0%, rgba(255,255,255,0.10) 15%) !important; /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.40)), color-stop(15%,rgba(255,255,255,0.10))) !important; /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,0.40) 0%,rgba(255,255,255,0.10) 15%) !important; /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(255,255,255,0.40) 0%,rgba(255,255,255,0.10) 15%) !important; /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(255,255,255,0.40) 0%,rgba(255,255,255,0.10) 15%) !important; /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(255,255,255,0.40) 0%,rgba(255,255,255,0.10) 15%) !important; /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#40ffffff', endColorstr='#0dffffff',GradientType=0 ) !important; /* IE6-9 */
+}
+
+.win.active.window-background,
+.win.front.window-background {
+    background: rgb(237,237,237) !important; /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(237,237,237,1) 0%, rgba(178,178,178,1) 15%) !important; /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(237,237,237,1)), color-stop(15%,rgba(178,178,178,1))) !important; /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 15%) !important; /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 15%) !important; /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 15%) !important; /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 15%) !important; /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#b2b2b2',GradientType=0 ) !important; /* IE6-9 */
+}
+
+.win .title {
+    /*display:inline-block;*/
+    text-align: center;
+    position: relative;
+    top: 30px;
+/*    left:-4px;*/
+    /*left: 10px;*/
+/*    margin: 8px 0 0 0;*/
+    /*padding: 6px 12px;*/
+    margin: 0;
+    margin-bottom: 0;
+    color: #666;
+    font-size: 16px;
+    line-height: normal;
+/*    background-color: #FFF;*/
+    /*opacity: 0.5;*/
+    
+/*     -webkit-border-radius: 3px;
+     -moz-border-radius: 3px;
+     border-radius: 3px;*/
+    
+/*    -webkit-border-top-right-radius: 3px;
+    -webkit-border-top-left-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-topleft: 3px;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;*/
+
+/*    -webkit-border-top-right-radius: 3px;
+    -webkit-border-bottom-right-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-bottomright: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;*/
+
+/*    -webkit-box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.15);
+    box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.15);*/
+}
+
+.win.front .title {
+    color: #666;
+    opacity: 1;
+}
+
+.win.active .title {
+    display: none;
+    opacity: 1;
+}
+
+.title-shadow {
+    text-shadow: 1px 1px #f2f2f2, 1px 1px #f2f2f2 !important;
+}
+
+
+/* Output
+------------------------------------------ */
+.output, 
+.output.active, 
+.output.front {
+    background: none !important;
+    -moz-border-radius: 5px 5px 0 0;
+    -webkit-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+/*    -moz-border-radius: 0;
+    -webkit-border-radius: 0;
+    border-radius: 0;*/
+}
+
+.output {
+    -webkit-box-shadow: 0 2px 5px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px 6px rgba(0, 0, 0, 0.2);
+}
+.output.active, .output.front {
+    -webkit-box-shadow: 0 2px 20px 6px rgba(0, 0, 0, 0.4), inset 0px 2px 0px 0px rgba(255, 255, 255, 0.6);
+    box-shadow: 0 2px 20px 6px rgba(0, 0, 0, 0.4), inset 0px 2px 0px 0px rgba(255, 255, 255, 0.6);
+}
+
+.output .title {
+    display: block;
+    position: relative;
+    top: 0;
+    left:0;
+    margin: 0;
+    text-align: left;
+    border-radius: 5px 5px 0 0;
+    height: 30px;
+    padding: 12px 12px 0 12px;
+    text-shadow: 1px 1px #666, 1px 1px #666;
+    cursor: default;
+    font-size: 14px;
+    color: #666 !important;
+    background: none; 
+    /* white inset shadow */
+/*    -webkit-box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.7);
+    box-shadow: inset 0px 1px 0px 0px rgba(255, 255, 255, 0.7);*/
+}
+
+.output.active .title,
+.output.front .title {
+    display: block;
+    background: rgb(237,237,237) !important; 
+    background: -moz-linear-gradient(top,  rgba(237,237,237,1) 0%, rgba(178,178,178,1) 90%) !important;  
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(237,237,237,1)), color-stop(90%,rgba(178,178,178,1))) !important;  
+    background: -webkit-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 90%) !important;  
+    background: -o-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 90%) !important;  
+    background: -ms-linear-gradient(top,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 90%) !important;  
+    background: linear-gradient(to bottom,  rgba(237,237,237,1) 0%,rgba(178,178,178,1) 90%) !important; 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ededed', endColorstr='#b2b2b2',GradientType=0 ) !important;  
+    
+}
+
+.output.active .title {
+    color: #333 !important;
+}
+
+.output.front .title {
+    color: #999;
+}
+
+.output .title .resize-alert,
+.output .title .live-alert {
+    display: none;
+}
+
+.output .tools {
+    padding: 0 !important;
+    margin-top: -2px; 
+    float: right;
+}
+
+.output .canvas_wrapper .tools {
+    display: none !important;
+}
+
+.canvas_wrapper {
+    position:relative;
+    min-width: 100px;
+    min-height: 100px;
+    line-height: 0px;
+    text-align: center;
+}
+
+.canvas_wrapper .pictures_container,
+.canvas_wrapper .secondary_tools {
+    display:none;
+}
+
+
+/* Output fullscreen. 
+------------------------------------------ */
+.win.output.fullscreen {
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width:100%;
+    height:100%;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.output.fullscreen .title {
+    display:none !important;
+}
+
+.fullscreen .canvas_wrapper {
+    position:absolute;
+    height:100%;
+    width:100%;
+    background-color: #CCC;
+    overflow: auto;
+}
+
+.fullscreen .canvas_wrapper canvas {
+    top:0; 
+    bottom:0; 
+    left:0; 
+    right:0;
+    margin:auto;
+    position:absolute;
+    max-width: none;
+    max-height: none;
+    background-image: url("../img/gui/transparent_checker.gif") !important;
+    background-position: top left !important;
+    background-repeat: repeat !important;   
+}
+.output.fullscreen .canvas_wrapper .secondary_tools {
+    display: inline-block !important;
+    padding: 0;
+    position: fixed;
+    top:12px;
+    right: 32px;
+    z-index: 500;
+}
+.output.fullscreen .canvas_wrapper .secondary_tools a {
+    font-size: 18px;
+}
+.output.fullscreen .canvas_wrapper .pictures_container {
+    display:inline-block;
+    position: fixed;
+    top:48px;
+    right: 32px;
+    z-index: 499;
+}
+.output.fullscreen .canvas_wrapper .pictures_container img {
+    max-height: 48px;
+    float: left;
+    margin-left: 10px;
+    border: 5px solid #FFF;
+    -webkit-box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Pi Tools (play, stop, find, save, etc...)
+------------------------------------------ */
+.win.active .tools {
+    display:block;
+}
+.win .tools {
+    padding: 12px 12px 10px 12px;
+    height: 31px;
+    display:none;
+}
+.tools ul {
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+.tools ul li {
+    color: #5b6770;
+    cursor:pointer;
+    float:left;
+    margin-right:6px;
+    font-size: 14px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+.tools ul li:hover .icon-stack-base{
+    color: #FFF;
+}
+.tools ul li.active {
+    background-color: #CCFF66;
+}
+.win .tools ul li.circle {
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+/* Pause button is hidden by default */
+.tools ul li.pause,
+.tools ul li.refresh {
+    display: none;
+}
+
+/* Corrections for particular icons
+------------------------------------------ */
+.win .tools ul li .icon-play {
+    font-size:10px;
+    margin-left:1px;
+}
+
+.win .tools ul li .icon-stop {
+    font-size:9px;
+}
+
+.win .tools ul li .icon-pause {
+    font-size:10px;
+}
+
+.win .tools ul li em {
+    float:left;
+    margin:0 5px;
+}
+.win .tools ul li.save.unactive {
+    cursor:default;
+    opacity: 0.4;
+}
+
+/* Window secondary buttons (max, min, exit, play, pause)
+------------------------------------------ */
+
+.win .secondary_tools a {
+    margin-top:2px;
+    margin-left:12px;
+    font-size: 14px;
+    color: #5b6770;
+    cursor: pointer;
+    text-decoration: none;
+}
+.win .secondary_tools a:hover {
+    color: #FFF;
+    text-decoration: none;
+}
+
+.win .secondary_tools a.small_size {
+    font-size: 13px;
+}
+.win .secondary_tools a.medium_size {
+    font-size: 15px;
+}
+.win .secondary_tools a.large_size {
+    font-size: 18px;
+}
+.win .secondary_tools a.xl_size {
+    font-size: 21px !important;
+}
+.win .secondary_tools span.spacer {
+    width:20px;
+}
+
+/* Tools titles
+------------------------------------------ */
+.win .tools ul li.tools_title {
+    width: auto;
+    padding-top:5px;
+    margin-left:4px;
+    color:#5b6770;
+    font-size: 12px;
+}
+
+/* Window Tabs
+------------------------------------------ */
+
+.win.active .nav_container {
+    display:block;
+}
+
+.win .nav_container {
+    display:none;
+    margin: 0 65px 0 10px;
+    float:left;
+    position:absolute;
+    z-index:100;
+    
+}
+.win.active .nav-tabs > .active > a,
+.nav-tabs > .active > a:hover,
+.nav-tabs > .active > a:focus {
+    background-color: #FFF;
+}
+.win .nav {
+    margin-bottom: 0;
+}
+.win .nav-tabs > li.main {
+    font-weight: bold;
+}
+.nav-tabs .tab_editor {
+    padding:4px;
+    display:none;
+    background-color: #FFF;
+    border-radius: 4px;
+    margin-right: 2px;
+    position:absolute;
+    z-index: 2000;
+}
+
+.nav-tabs .tab_editor .input-append {
+    margin: 0;
+}
+.nav-tabs .tab_editor input {
+    padding: 2px 4px !important;
+}
+.nav-tabs .tab_editor .btn {
+    padding: 2px 8px !important;
+    font-size: 12px;
+}
+.nav-tabs .tab_editor a {
+    margin: 12px 6px 0px 0px;
+    font-size: 15px;
+    cursor: pointer;
+    color: #000
+}
+
+/* Plus and Tab selector
+------------------------------------------ */
+.win.active .nav-tabs li.plus_tab,
+.win.active .nav-tabs li.list_tab {
+    visibility: visible;
+}
+.win .nav-tabs li.plus_tab,
+.win .nav-tabs li.list_tab {
+    visibility: hidden;
+    float: left;
+    margin-left: 5px;
+    margin-top: 7px;
+    position:absolute;
+
+}
+.win .nav-tabs li.plus_tab {
+    right: -25px;
+}
+.win .nav-tabs li.list_tab {
+    right: -55px;
+}
+.win .nav-tabs li.plus_tab i,
+.win .nav-tabs li.list_tab i {
+    font-size: 22px;
+    padding:0px;
+    margin: 3px 0 4px 4px;
+    background:none;
+    color: #999;
+    cursor: pointer;
+}
+.win .nav-tabs li.list_tab i:hover,
+.win .nav-tabs li.plus_tab i:hover {
+    color: #FFF;
+}
+
+.win .nav-tabs > li.tab_selector > a {
+    background-color: transparent;
+}
+
+
+/* Code editor (ACE)
+------------------------------------------ */
+
+.win.active .code {
+    background-color: #FFF;
+}
+
+.code {
+    margin: 0;
+    position: absolute !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #DDD;
+}
+
+.js-code {
+    display:none; /* IMPORTANT */
+}
+.win.active .js-code {
+    background-color: #eff7fd;
+}
+.win.active .nav-tabs > .active.js > a,
+.nav-tabs > .active.js > a:hover,
+.nav-tabs > .active.js > a:focus {
+    background-color: #eff7fd;
+}
+
+.win.active .nav-tabs .active.js .js-mode {
+    display:inline;
+}
+.win.active .nav-tabs li .js-mode,
+.win.active .nav-tabs li .unsaved {
+    display:none;
+}
+
+.code_wrapper {
+    position:absolute;
+    min-height:80px;
+    top: 84px;
+    /* bottom:25px; */
+    bottom: 24px;
+    left:10px;
+    right:10px;
+    z-index:99;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    -webkit-box-shadow:  0px 0px 7px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:  0px 0px 7px 0px rgba(0, 0, 0, 0.2);
+}
+
+/* Window Footer + Console
+------------------------------------------ */
+
+.win .footer {
+    position: absolute;
+    height: 100px;
+    bottom:0;
+    left:0;
+    right:0;
+    background-color: transparent;
+}
+
+.win .console {
+    position: absolute;
+    padding: 2px 5px;
+    top:0;
+    left:0;
+    right:0;
+    bottom:24px;
+    background-color: #000;
+    font-size: 11px;
+    color: #FF0000;
+    border:none;
+    margin:0 10px;
+    -webkit-border-radius: 0px 0px 3px 3px;
+    border-radius: 0px 0px 3px 3px; 
+    overflow: auto;
+    line-height: normal;
+
+    /* @TODO : console is not active for the moment*/
+    /*    display:none; */
+}
+
+.win .console p {
+    margin: 0;
+}
+.win .console i {
+    font-style:normal;
+}
+
+.win.active .status {
+    visibility: visible;
+}
+.win .status {
+    visibility: hidden;
+    position: absolute;
+    bottom: 3px;
+    left:0;
+    right:0;
+    margin:0 10px;
+    /*padding: 7px;*/
+    /*background-color: #35434d;*/
+    color: #333;
+    font-size: 11px;
+    /*border-radius: 0 0 4px 4px;*/
+}
+
+
+/* Desktop icons
+------------------------------------------ */
+
+.icon {
+    cursor:pointer;
+    text-align:center;
+    min-width:64px;
+    max-width:128px;
+    text-shadow: 1px 2px 1px #000; /* rgba(0, 0, 0, 1);*/
+    z-index: -100 !important;
+    color:#FFF;
+    /*position: relative;*/
+    line-height: 17px;
+    display:none;
+    margin: 25px;
+}
+.icon img {
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.6);
+    width:64px;
+    height:64px;
+    border-radius: 9px;
+}
+.icon span {
+    display:block;
+}
+/*.icon a:hover img {
+	 box-shadow: 0 0 6px rgba(0, 0, 0, 0.5); 
+	 box-shadow: 0 0 9px rgba(150, 150, 150, 0.5); 
+}*/
+
+
+/* Avoid text selection 
+------------------------------------------ */
+
+.no_select { 
+    user-select: none; 
+    -o-user-select: none; 
+    -moz-user-select: none; 
+    -khtml-user-select: none; 
+    -webkit-user-select: none; 
+    -ms-user-select:none;
+}
+
+
+/* Dialog (extra style for jquery UI dialog).
+------------------------------------------ */
+
+.dialog_content {
+    text-align:center; 
+    margin-top:30px
+}
+
+.alternative-button {
+    position: absolute;
+    height: 42px;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #CCC;
+    display: block;
+}
+.alternative-button span {
+    text-align: right;
+    display: block;
+    position:relative;
+    padding: 15px 30px 0 30px;
+}
+
+.alternative-button a {
+    margin-left: 15px;
+}
+
+
+
+/* Forms (ajax)
+------------------------------------------ */
+.form_message span {
+    display:block;
+    margin: 8px 0;
+}
+
+.errorMessage {
+    display:none !important;
+}
+
+
+/* Forms (ajax)
+------------------------------------------ */
+
+@media screen and (min-width:800px){
+
+    a#forkongithub {
+	background:#c6e3ff;
+	color:#333;
+	text-decoration:none;
+	text-align:center;
+	font-weight:bold;
+	font-family:  Helvetica, Arial, sans-serif;
+	padding:5px 40px;
+	font-size:12px;
+	line-height:17px;
+	z-index: 110;
+	transition:0.5s;
+	width:120px;
+	position:fixed;
+	display:block;
+	overflow:hidden;
+	bottom:40px;
+	left:-40px;
+	transform:rotate(45deg);
+	-webkit-transform:rotate(45deg);
+	-ms-transform:rotate(45deg);
+	box-shadow:4px 4px 10px rgba(0,0,0,0.3);
+    }
+
+    a#forkongithub:hover {
+	background:#FFF;
+	color:#000;
+    }
+
+    a#forkongithub::before,
+    a#forkongithub::after {
+	content:"";
+	width:100%;
+	display:block;
+	position:absolute;
+	top:1px;
+	left:0;
+	height:1px;
+	background:#666;
+    }
+
+    a#forkongithub::after {
+	bottom:1px;
+	top:auto;
+    }
+
+}
+
+
+@media screen and (max-width:800px){
+
+    a#forkongithub {
+	display:none;
+    }
+
+}
+
+
+
+/* Gradients
+---------------- */
+
+.p5_icons {
+    background-color: #abb5bd;
+    /*    background: #abb5bd;  Old browsers 
+    background: -moz-linear-gradient(top,  #abb5bd 0%, #8aace2 100%);  FF3.6+ 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#abb5bd), color-stop(100%,#8aace2));  Chrome,Safari4+ 
+    background: -webkit-linear-gradient(top,  #abb5bd 0%,#8aace2 100%);  Chrome10+,Safari5.1+ 
+    background: -o-linear-gradient(top,  #abb5bd 0%,#8aace2 100%);  Opera 11.10+ 
+    background: -ms-linear-gradient(top,  #abb5bd 0%,#8aace2 100%);  IE10+ 
+    background: linear-gradient(to bottom,  #abb5bd 0%,#8aace2 100%);  W3C 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#abb5bd', endColorstr='#8aace2',GradientType=0 );  IE6-9 */
+
+}
+
+.p5_icons:hover {
+    background-color: #FFF;
+    /*    background: #a6bbdb;  Old browsers 
+    background: -moz-linear-gradient(top,  #a6bbdb 0%, #e3f0f9 100%);  FF3.6+ 
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a6bbdb), color-stop(100%,#e3f0f9));  Chrome,Safari4+ 
+    background: -webkit-linear-gradient(top,  #a6bbdb 0%,#e3f0f9 100%);  Chrome10+,Safari5.1+ 
+    background: -o-linear-gradient(top,  #a6bbdb 0%,#e3f0f9 100%);  Opera 11.10+ 
+    background: -ms-linear-gradient(top,  #a6bbdb 0%,#e3f0f9 100%);  IE10+ 
+    background: linear-gradient(to bottom,  #a6bbdb 0%,#e3f0f9 100%);  W3C 
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6bbdb', endColorstr='#e3f0f9',GradientType=0 );  IE6-9 */
+
+}
+
+.p5_icons.box-shadow
+{
+    -webkit-box-shadow:  0px 1px 1px 0px rgba(255, 255, 255, 0.2);
+    box-shadow:  0px 1px 1px 0px rgba(255, 255, 255, 0.2);
+}
+/*.p5_icons:hover.box-shadow
+{
+    -webkit-box-shadow:  0px -1px 0px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:  0px -1px 0px 0px rgba(0, 0, 0, 0.2);
+}*/
+
+
+.text_shadow,
+.p5_icons {
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.40);
+}
+
+.text_shadow:hover,
+.p5_icons:hover {
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.15);
+}
+
+/* Page
+---------------- */
+.page {
+    background-color: #FFF;
+    margin-top: 31px;
+    padding:30px;
+}
