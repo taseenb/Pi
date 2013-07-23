@@ -12,7 +12,7 @@ If you can embed a YouTube video or an swf Flash file in any web page, why shoul
 
 <h2>Browser compatibility</h2>
 Processing sketches are drawn on the canvas element: canvas support is mandatory.<br>
-Only modern browsers are supported: IE9+ (i'll only target 10+ soon), Chrome 23+, Firefox 1+, Opera 12+, Safari 5.1+.
+Only modern browsers are supported: IE9+ (i'll only target 10+ soon), Chrome 23+, Firefox 12+, Opera 12+, Safari 5.1+.
 
 <h2>Mobile app and site</h2>
 Pi does not support mobile devices at the moment. A responsive, mobile-friendly and touch site (or a mobile app) will probably be done in the future.
