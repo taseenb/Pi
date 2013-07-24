@@ -57,8 +57,7 @@ define([
 	    'mousedown': function(e)
 	    {
 		e.stopPropagation();
-		// Close the tab selector
-		// this.model.getIde().tabsSelector.close();
+		this.model.set('active', true); // @TODO avoid double call to the hash when clicking the tab
 	    },
 	    'dblclick': function(e)
 	    {

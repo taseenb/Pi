@@ -184,16 +184,13 @@ define([
 		    return b;
 		}
 	    },
-		    
-	'shortMessage': {
-	    width: 360,
-	    height: 180
-	},
-		    
+	    'shortMessage': {
+		width: 360,
+		height: 180
+	    },
 	    'about': {
 		width: 480,
 		height: 380,
-		
 	    },
 	    /*
 	     * Alert.

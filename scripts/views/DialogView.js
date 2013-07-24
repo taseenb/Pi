@@ -42,14 +42,14 @@ define([
 		draggable: false,
 		close: function() {
 		    Pi.user.nav.deactivateAll();
-		    window.location.hash = "";
+		    window.location.hash = ""; //Pi.router.goHome(); //
 		},
 		// Add buttons dynamically only AFTER the creation of the jquery ui dialog 
 		// (adding it before will result in an error)
 		create: function() {
 		    var btns = model.buttons;
 		    $(this).dialog({
-			'buttons': !_.isEmpty(btns) || !_.isUndefined(btns) ? btns : {}
+			'buttons': !_.isEmpty(btns) || !_.isUndefined(btns) ? this.createButtons(btns) : {}
 		    });
 		}
 	    });
@@ -66,6 +66,20 @@ define([
 
 	    return this;
 	},
+	
+	/**
+	 * Create buttons for the dialog. (add necessary classes)
+	 * @param {object} buttons Key-value pairs representation fo the button
+	 */
+//	createButtons: function(_btns) {
+//	    var btns = [];
+//	    _.each(_btns, function(btn) {
+//		//btn.text
+//	    });
+//	    
+//	    return btns;
+//	},
+	
 	/**
 	 * Show the dialog.
 	 */
