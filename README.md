@@ -1,28 +1,28 @@
-Pi == Processing ideas
-==============================
-Processing ideas (alpha)<br>
-The Processing ide web application http://www.processingideas.com/<br>
-Languages: Javascript + Php<br>
+# Pi == Processing ideas
 
-<h2>The first idea</h2>
-Pi is dedicated to Processing creatives. It aims to provide a comfortable space to create, exhibit and share interactive works, drawings and animations written in the Processing http://processing.org/ language (Java-like).<br>
-Pi uses the javascript port of Processing http://processingjs.org/ allowing users to code in javascript as well.<br>
-Other libraries could be added in the future (imagine Paper.js http://paperjs.org/ or Raphael.js http://raphaeljs.com/), mixing all these possibilities together within a common environment.<br>
-If you can embed a YouTube video or an swf Flash file in any web page, why shouldn't be as easy to embed a Processing sketch or any other canvas based application?
+Processing ideas (alpha)  
+The Processing ide web application http://www.processingideas.com/  
+Languages: Javascript + Php  
 
-
-<h2>Browser compatibility</h2>
-Processing sketches are drawn on the canvas element: canvas support is mandatory.<br>
-Only modern browsers are supported: IE9+ (I'll probably target 10+ soon), Chrome 23+, Firefox 12+, Opera 12+, Safari 5.1+.
+## The first idea
+Pi is dedicated to Processing creatives. It aims to provide a comfortable space to create, exhibit and share interactive works, drawings and animations written in the Processing http://processing.org/ language (Java-like).  
+Pi uses the javascript port of Processing http://processingjs.org/ allowing users to code in javascript as well.  
+Other libraries could be added in the future (imagine Paper.js http://paperjs.org/ or Raphael.js http://raphaeljs.com/), mixing all these possibilities together within a common environment.  
+If you can embed a YouTube video or an swf Flash file in any web page, why shouldn't be as easy to embed a Processing sketch or any other canvas based application?  
 
 
-<h2>Mobile app and site</h2>
-Pi does not support mobile devices at the moment. A responsive, mobile-friendly and touch site (or a mobile app) will probably be done in the future.
+## Browser compatibility
+Processing sketches are drawn on the canvas element: canvas support is mandatory.  
+Only modern browsers are supported: IE9+ (I'll probably target 10+ soon), Chrome 23+, Firefox 12+, Opera 12+, Safari 5.1+.  
 
 
-<h2>Features</h2>
+## Mobile app and site
+Pi does not support mobile devices at the moment. A responsive, mobile-friendly and touch site (or a mobile app) will probably be done in the future.  
 
-DONE @ 90%
+
+## Features
+
+#### DONE @ 90%
 - Desktop-like development environment.
 - Original Processing ide interface emulation.
 - Ide error console.
@@ -33,12 +33,12 @@ DONE @ 90%
 - Play-pause sketches.
 - Secured log in and sign up processes.
 
-@TODO - IN PROGRESS:
+#### @TODO - IN PROGRESS:
 - Take pictures from the sketch. (50%)
 - Sketches and collections manager. (20%)
 - User profiles. (20%)
 
-@TODO @ 0%:
+#### @TODO @ 0%:
 - Image as sketch preview.
 - User public portfolio.
 - User comments on sketches. 
@@ -47,17 +47,17 @@ DONE @ 90%
 - Documentation.
 
 
-<h2>Credits</h2>
+## Credits
 Author: Esteban Almiron http://www.estebanalmiron.com
-<br>Pi uses open source software:<br>
-- Processing JS http://processingjs.org/<br>
-- Jquery http://jquery.com/<br>
+Pi uses open source software:
+- Processing JS http://processingjs.org/
+- Jquery http://jquery.com/
 - Require.js http://requirejs.org/
 - Underscore.js http://underscorejs.org/
 - Backbone.js http://backbonejs.org/
-- Jquery UI http://jqueryui.com/<br>
+- Jquery UI http://jqueryui.com/
 - Ace http://ace.ajax.org/
 - Yii http://www.yiiframework.com/
 
-And others that you can find in the /scripts/ and /scripts/lib/ directories.
+And others that you can find in the /scripts/ and /scripts/lib/ directories.  
 
