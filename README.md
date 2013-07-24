@@ -48,17 +48,17 @@ Pi does not support mobile devices at the moment. A responsive, mobile-friendly 
 
 
 ## Credits
-Author: Esteban Almiron http://www.estebanalmiron.com  
+Author: taasenb (aka [Esteban Almiron](http://www.estebanalmiron.com) )  
 
-Pi uses open source software:
-- Processing JS http://processingjs.org/
-- Jquery http://jquery.com/
-- Require.js http://requirejs.org/
-- Underscore.js http://underscorejs.org/
-- Backbone.js http://backbonejs.org/
-- Jquery UI http://jqueryui.com/
-- Ace http://ace.ajax.org/
-- Yii http://www.yiiframework.com/
+Pi uses open source software:  
+- [Processing JS](http://processingjs.org/)
+- [Jquery](http://jquery.com/)
+- [Require.js](http://requirejs.org/)
+- [Underscore.js](http://underscorejs.org/)
+- [Backbone.js](http://backbonejs.org/)
+- [Jquery UI](http://jqueryui.com/)
+- [Ace](http://ace.ajax.org/)
+- [Yii](http://www.yiiframework.com/)
 
 And others that you can find in the /scripts/ and /scripts/lib/ directories.  
 
