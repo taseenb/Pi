@@ -48,7 +48,7 @@ Pi does not support mobile devices at the moment. A responsive, mobile-friendly 
 
 
 ## Credits
-Author: taasenb (aka [Esteban Almiron](http://www.estebanalmiron.com) )  
+Author: taasenb ([Esteban Almiron](http://www.estebanalmiron.com))  
 
 Pi uses open source software:  
 - [Processing JS](http://processingjs.org/)
