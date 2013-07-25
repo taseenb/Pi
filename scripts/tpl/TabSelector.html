@@ -1,17 +1,12 @@
+<a id="about" class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
+    <i class="icon-chevron-down"></i>
+</a>
+<ul class="dropdown-menu" role="menu" aria-labelledby="help">
 
-    <a id="about" class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
-	<i class="icon-chevron-down"></i>
-    </a>
-    <ul class="dropdown-menu" role="menu" aria-labelledby="help">
-	
-	<li role="presentation"><a href="#" class="add_tab">New tab</a></li>
-	<li role="presentation"><a href="#" class="rename_tab">Rename</a></li>
-	<li role="presentation"><a href="#" class="delete_tab">Delete</a></li>
-	
-	<li id="divider<%= id %>" class="divider" role="presentation"></li>
-	
-	<% _.each(tabs, function(tab){ %>
-	<li role="presentation" id="ts<%= tab.project_id %>_<%= tab.id%>"><a href="#<%= openProjectAction %>/<%= tab.project_id %>/<%= tab.id%>"><%= tab.name %></a></li>
-	<% }); %>
-	
-    </ul>
+    <li role="presentation"><a href="#" class="add_tab">New tab</a></li>
+    <li role="presentation"><a href="#" class="rename_tab">Rename</a></li>
+    <li role="presentation"><a href="#" class="delete_tab">Delete</a></li>
+
+    <li class="divider" role="presentation"></li>
+
+</ul>

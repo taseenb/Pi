@@ -1,39 +1,28 @@
 define([
     // Main scripts
-    'Pi', 'backbone', 'jquery',
+    'Pi',
     // Templates
-    "text!tpl/TabSelector.html",
-    // Ace
-    "ace"
+    "text!tpl/TabSelector.html"
 
-], function(Pi, Backbone, $, TabSelectorHtml, ace) {
+], function(Pi, TabSelectorHtml) {
 
     "use strict";
 
-    var tabTemplate = _.template(TabSelectorHtml);
-
     var TabsSelectorView = Backbone.View.extend({
 	tagName: "li",
-	//className: "tab_selector",
+	className: "tab_selector",
 	/**
 	 * Init.
 	 */
 	initialize: function() {
-	    this.$el = this.model.view.$el.find("#ts" + this.model.getId());
-	},
-	events: {
-//	    "click": function(e) {
-//		e.preventDefault();
-//		this.toggle();
-//	    }
+	    this.$el = this.model.view.$el.find('.tab_selector');
+	    this.render(); // render immediatly to activate data binding
 	},
 	/**
 	 * Render tabs selector.
-	 * @returns {undefined}
 	 */
 	render: function() {
-	    var action = Pi.action.openProject;
-	    this.$el.append(tabTemplate({
+	    this.$el.append(_.template(TabSelectorHtml, {
 		id: this.model.getId(),
 		tabs: this.model.tabs.toArrayWithId(),
 		openProjectAction: Pi.action.openProject
@@ -64,24 +53,7 @@ define([
 	 */
 	rename: function(tab) {
 	    $('#ts' + tab.getTabUniqueId() + " a").text(tab.get('name'));
-	},
-		
-		
-//	toggle: function() {
-//	    if (this.$menu.data('active')) {
-//		this.close();
-//	    } else {
-//		this.open();
-//	    }
-//	},
-//	open: function() {
-//	    this.$menu.show();
-//	    this.$menu.data('active', true);
-//	},
-//	close: function() {
-//	    this.$menu.hide();
-//	    this.$menu.data('active', false);
-//	}
+	}
     });
 
     return TabsSelectorView;

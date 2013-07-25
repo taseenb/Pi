@@ -1,14 +1,14 @@
 <div class="tab_editor">
     <div class="input-append">
-	<input class="input-small" id="appendedInputButtons" type="text" value="<%= name %>" maxlength="<%= fileNameMaxLength%>">
+	<input class="input-small" id="appendedInputButtons" type="text" value="{{name}}" maxlength="{{fileNameMaxLength}}">
 	<button class="apply btn btn-primary" type="button"><i class="icon-ok-sign"></i></button>
 	<button class="delete_tab btn btn-danger" type="button"><i class="icon-minus-sign"></i></button>
 	<button class="cancel btn" type="button"><i class="icon-remove-sign"></i></button>
     </div>
 </div>
 
-<a href="<%= tabHref %>">
+<a href="{{tabHref}}">
     <span class="js-mode"><i class="icon-usd"></i>&nbsp;</span>
     <span class="unsaved">*</span>
-    <span class="tab-name"><%= name %></span>
+    <span class="tab-name">{{name}}</span>
 </a>

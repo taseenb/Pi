@@ -606,9 +606,14 @@ a:focus,
     float:left;
     margin:0 5px;
 }
-.win .tools ul li.save.unactive {
+.win .tools ul li.save.disabled {
     cursor:default;
     opacity: 0.4;
+    background-color: #CCC;
+}
+.win .tools ul li.save.disabled:hover {
+    background-color: #CCC;
+    text-shadow: none;
 }
 
 /* Window secondary buttons (max, min, exit, play, pause)

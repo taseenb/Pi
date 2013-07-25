@@ -186,8 +186,6 @@ define([
 		    ide.tabs.add(new Tab(_tab));
 		});
 		
-		ide.tabsSelector.render();
-		
 		// IMPORTANT: always set first the main tab active when loading
 		// a project and set the hash to this project, unless there is 
 		// another path already set

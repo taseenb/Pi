@@ -71,14 +71,14 @@ define([
 	 * Create buttons for the dialog. (add necessary classes)
 	 * @param {object} buttons Key-value pairs representation fo the button
 	 */
-//	createButtons: function(_btns) {
-//	    var btns = [];
-//	    _.each(_btns, function(btn) {
-//		//btn.text
-//	    });
-//	    
-//	    return btns;
-//	},
+	createButtons: function(_btns) {
+	    var btns = [];
+	    _.each(_btns, function(btn) {
+		//btn.text
+	    });
+	    
+	    return btns;
+	},
 	
 	/**
 	 * Show the dialog.

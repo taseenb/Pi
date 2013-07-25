@@ -1,12 +1,17 @@
 define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
+    
     // Templates
     "text!tpl/Ide.html",
+    
     // Models
     "models/Ide",
-    // Backbon Extensions
+    
+    // Backbone Extensions
     'Pi/Model',
+    'Pi/start/startDataBinding',
+    
     // Plugins
     'jquery-ui'
 
@@ -14,10 +19,15 @@ define([
 
     "use strict";
 
-    var ideTemplate = _.template(IdeHtml);
+//    var ideTemplate = _.template(IdeHtml);
 
-    var IdeView = Backbone.View.extend({
+    var IdeView = Backbone.Epoxy.View.extend({
 	model: Ide,
+	/**
+	 * Data binding.
+	 */
+	bindings: "data-e-bind",
+	bindingHandlers: _.extend(Pi.bindingHandlers,{}),
 	/**
 	 * Init view.
 	 */
@@ -25,15 +35,21 @@ define([
 	{
 	    // Listen to
 	    this.listenTo(this.model, "change:minimized", this.minimizedState);
-	    this.listenTo(this.model, "change:saved", this.saveState);
+//	    this.listenTo(this.model, "change:saved", this.saveState);
 	    this.listenTo(this.model, "change:active", this.activeState);
-	    this.listenTo(this.model, "change:zIndex", this.zIndexState);
-	    this.listenTo(this.model, "change:front", this.frontState);
+	    this.listenTo(this.model, "change:zIndex", function() {
+		this.$el.css('z-index', this.model.get('zIndex'));
+	    });
+//	    this.listenTo(this.model, "change:front", this.frontState);
 	    this.listenTo(this.model, "change:jsMode", this.jsModeState);
 	    this.listenTo(this.model, "change:autoSave", this.autoSaveState);
 	    this.listenTo(this.model, "change:liveCode", this.liveCodeState);
 	    this.listenTo(this.model, "change:consoleOpen", this.consoleState);
-	    this.listenTo(this.model, "change:running", this.runningState);
+//	    this.listenTo(this.model, "change:running", this.runningState);
+
+	    this.$el.html(IdeHtml).attr({
+		'data-e-bind': "active:active,front:front"
+	    });
 	},
 	/**
 	 * View main attributes.
@@ -93,10 +109,12 @@ define([
 		    "click .save:not(.autosave)": function(e)
 		    {
 			e.stopPropagation();
-			if (Pi.isGuest)
-			    window.location.hash = "#log-in";
-			else
-			    this.model.saveSketch();
+			if (!this.model.get('saved')) {
+			    if (Pi.isGuest)
+				window.location.hash = "#log-in";
+			    else
+				this.model.saveSketch();
+			}
 
 		    },
 		    "click .autosave": function(e)
@@ -145,8 +163,6 @@ define([
 		    },
 		    "click .delete_tab": function(e) {
 			e.stopPropagation();
-			//this.$el.find('#dropdown' + this.model.getId()).dropdown();
-			//console.log("delete tab");
 			var activeTab = this.model.getActiveTab();
 			if (activeTab.isMain()) {
 			    Pi.alert(
@@ -204,14 +220,7 @@ define([
 	    var that = this,
 		    ideModel = this.model.attributes;
 
-	    this.$el
-		    .html(
-		    ideTemplate({
-		name: this.model.get('name'),
-		id: this.model.getId()
-	    })
-		    )
-		    .addClass('window-background')
+	    this.$el.addClass('window-background')
 		    .attr({
 		'id': "ide" + this.model.getId(),
 		'data-href': '#' + Pi.action.openProject + '/' + this.model.getId()
@@ -238,16 +247,9 @@ define([
 	    // Update states
 	    this.activeState();
 	    this.autoSaveState();
-	    this.saveState();
 
 	    // Jquery shortcuts
 	    this.$console = this.$el.find('.console');
-
-	    // Render tabs (only after ide is complete)
-//	    this.model.tabs.each(function(tab) {
-//		tab.view.render();
-//	    });
-
 
 	    return this;
 	},
@@ -261,21 +263,6 @@ define([
 	    });
 	},
 	/**
-	 * Change save state.
-	 */
-	saveState: function()
-	{
-	    var savedButton = this.$el.find('.save');
-	    if (this.model.get('saved'))
-	    {
-		savedButton.addClass("unactive");
-	    }
-	    else
-	    {
-		savedButton.removeClass("unactive");
-	    }
-	},
-	/**
 	 * Active state.
 	 */
 	activeState: function()
@@ -285,47 +272,6 @@ define([
 		this.bringToFront();
 		Pi.desktop.set({
 		    active: false
-		});
-		this.$el.addClass('active front');
-		if (this.model.outputView)
-		    this.model.outputView.$el.addClass('active');
-	    }
-	    else
-	    {
-		this.$el.removeClass('active');
-		if (this.model.outputView)
-		    this.model.outputView.$el.removeClass('active');
-	    }
-	},
-	/**
-	 * Front state: front window is the first window, even if not active.
-	 */
-	frontState: function() {
-	    if (this.model.get('front'))
-	    {
-		this.$el.addClass('front');
-		if (this.model.outputView)
-		    this.model.outputView.$el.addClass('front');
-	    }
-	    else
-	    {
-		this.$el.removeClass('front');
-		if (this.model.outputView)
-		    this.model.outputView.$el.removeClass('front');
-	    }
-	},
-	/**
-	 * Z-Index state.
-	 */
-	zIndexState: function()
-	{
-	    var z = this.model.get('zIndex');
-	    this.$el.css({
-		'zIndex': z
-	    });
-	    if (this.model.outputView) {
-		this.model.outputView.$el.css({
-		    'zIndex': z + 1
 		});
 	    }
 	},
@@ -375,13 +321,6 @@ define([
 	 * Javascript view for the active tab.
 	 */
 	jsModeState: function() {
-	    if (this.model.get('jsMode')) {
-		this.$el.find(".javascript").addClass('active');
-	    }
-	    else
-	    {
-		this.$el.find(".javascript").removeClass('active');
-	    }
 	    this.model.getActiveTab().view.toggleJsEditor();
 	},
 	/**
@@ -389,12 +328,10 @@ define([
 	 */
 	liveCodeState: function() {
 	    if (this.model.get('liveCode')) {
-		this.$el.find(".livecode").addClass('active');
 		this.model.startLiveCode();
 	    }
 	    else
 	    {
-		this.$el.find(".livecode").removeClass('active');
 		this.model.stopLiveCode();
 	    }
 	},
@@ -403,12 +340,10 @@ define([
 	 */
 	consoleState: function() {
 	    if (this.model.get('consoleOpen')) {
-		this.$el.find(".toggle_console").addClass('active');
 		this.showConsole();
 	    }
 	    else
 	    {
-		this.$el.find(".toggle_console").removeClass('active');
 		this.hideConsole();
 	    }
 	},
@@ -449,7 +384,7 @@ define([
 	    if (this.model.get('autoSave')) {
 		saveBtn.hide();
 		autoSaveBtn
-			.addClass('active')
+//			.addClass('active')
 			.attr({
 		    title: "Auto Save is on"
 		});
@@ -459,40 +394,13 @@ define([
 	    {
 		saveBtn.show();
 		autoSaveBtn
-			.removeClass('active')
+//			.removeClass('active')
 			.attr({
 		    title: "Auto Save is off"
 		});
 		this.model.stopAutoSave();
 	    }
-	},
-	runningState: function() {
-	    if (this.model.get('running')) {
-		this.$el.find('.play').hide();
-		this.$el.find('.refresh').show();
-	    }
-	    else
-	    {
-		this.$el.find('.refresh').hide();
-		this.$el.find('.play').show();
-	    }
-	},
-	/**
-	 * Change play button into Pause on the ide when the sketch is running.
-	 * NOT USED ANYMORE.
-	 */
-	pauseState: function() {
-	    if (!this.model.get('isPaused')) {
-		this.$el.find('.play').hide();
-		this.$el.find('.pause').show();
-	    }
-	    else
-	    {
-		this.$el.find('.pause').hide();
-		this.$el.find('.play').show();
-	    }
 	}
-
     });
 
     return IdeView;

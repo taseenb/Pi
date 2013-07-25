@@ -1,11 +1,13 @@
 define([
-    'Pi', 'jquery', 'backbone',
+    'Pi', //'jquery', 'backbone',
     // Start Pi
+    'Pi/start/startUnderscoreTemplate',
+    'Pi/start/startDataBinding',
     'Pi/start/startDesktop',
     'Pi/start/startDialogs',
     'Pi/start/startUser'
 
-], function(Pi, $, Backbone) {
+], function(Pi) {
 
     var Router = Backbone.Router.extend({
 	// initialize: function() {},

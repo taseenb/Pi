@@ -1,39 +1,39 @@
 <div class="title">
     <div class="secondary_tools pull-right">
-	<a rel="<%= id %>" class="fs text_shadow" title="Full Screen"><i class="icon-fullscreen"></i></a>
+	<a  class="fs text_shadow" title="Full Screen"><i class="icon-fullscreen"></i></a>
 	<span class="spacer"></span>
-	<a rel="<%= id %>" class="pause text_shadow" title="Pause">
+	<a data-e-bind="hide:isPaused" class="pause text_shadow" title="Pause">
 	    <i class="icon-pause"></i>
 	</a>
-	<a rel="<%= id %>" class="play text_shadow" title="Play" style="margin-right:1px">
+	<a data-e-bind="show:isPaused" class="play text_shadow" title="Play" style="margin-right:1px">
 	    <i class="icon-play"></i>
 	</a>
-	<a rel="<%= id %>" class="stop text_shadow" title="Stop">
+	<a  class="stop text_shadow" title="Stop">
 	    <i class="icon-stop"></i>
 	</a>
     </div>
-    <span class="name title-shadow"><%= name %></span>
-    &nbsp;&nbsp;
-    <span class="label label-warning resize-alert" title="The sketch was resized to fit the screen. Go full screen if you want to see its original size.">RESIZED</span>
-    &nbsp;&nbsp;
-    <span class="label label-info live-alert" title="The sketch is playing in live mode. If you change the code, the sketch will stop and play again automagically.">LIVE</span>
+    <span class="name title-shadow" data-e-bind="text:name"></span>
+    &nbsp;
+    <span data-e-bind="show:outputResized" class="label label-warning resize-alert" title="The sketch was resized to fit the screen. Go full screen if you want to see its original size.">RESIZED</span>
+    &nbsp;
+    <span data-e-bind="show:liveCode" class="label label-info live-alert" title="The sketch is playing in live mode. If you change the code, the sketch will stop and play again automagically.">LIVE</span>
 </div>
 
 <div class="canvas_wrapper">
     <div class="secondary_tools pull-right">
-	<a rel="<%= id %>" class="picture text_shadow" title="Take a Picture">
+	<a  class="picture text_shadow" title="Take a Picture">
 	    <i class="icon-camera-retro"></i>
 	</a>
-	<a rel="<%= id %>" class="pause text_shadow" title="Pause">
+	<a  class="pause text_shadow" title="Pause">
 	    <i class="icon-pause"></i>
 	</a>
-	<a rel="<%= id %>" class="play text_shadow" title="Play" style="margin-right:1px">
+	<a  class="play text_shadow" title="Play" style="margin-right:1px">
 	    <i class="icon-play"></i>
 	</a>
-	<a rel="<%= id %>" class="fs text_shadow xl_size" title="Exit Full Screen">
+	<a  class="fs text_shadow xl_size" title="Exit Full Screen">
 	    <i class="icon-remove"></i>
 	</a>
     </div>
     <div class="pictures_container"></div>
-    <canvas id="canvas<%= id %>" ></canvas>
+    <canvas></canvas>
 </div>

@@ -8,9 +8,9 @@ var require = {
 	// Backbone + Underscore
 	"backbone": "lib/backbone-amd/backbone",
 	"underscore": "lib/underscore-amd/underscore",
-	"backboneRelational": 'libs/backbone/backbone-relational',
-	"backboneCollectionBinder": 'libs/backbone-binder/Backbone.CollectionBinder',
-	"backboneModelBinder": 'libs/backbone-binder/Backbone.ModelBinder',
+	"relational": 'lib/backbone/backbone-relational',
+	"epoxy": 'lib/backbone-epoxy/backbone.epoxy', // data binding
+	//"rivets": 'lib/rivets/rivets.min',
 	
 	// Jquery plugins	
 	"jquery-ui": "lib/jquery-ui/jquery-ui-1.10.3.custom.min",

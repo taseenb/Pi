@@ -1,34 +1,41 @@
 define([
     // Main scripts
-    'Pi', 'backbone', 'jquery',
+    'Pi',
     // Templates
     "text!tpl/Output.html",
-    // Backbone Extensions
-
+    // Backbone add-ons
+    'Pi/start/startDataBinding',
     // Plugins
     'jquery-ui',
     "jquery-easing"
 
-], function(Pi, Backbone, $, OutputHtml) {
+], function(Pi, OutputHtml) {
 
     "use strict";
 
-    var outputTemplate = _.template(OutputHtml);
-
-    var OutputView = Backbone.View.extend({
+    var OutputView = Backbone.Epoxy.View.extend({
 	/**
 	 * Init view.
 	 */
 	initialize: function()
 	{
+	    this.listenTo(this.model, "change:zIndex", function() {
+		this.$el.css('z-index', this.model.get('zIndex') + 1);
+	    });
 	    this.listenTo(this.model, "change:ouputPosition", this.positionState);
-	    this.listenTo(this.model, "change:name", this.nameState);
-	    this.listenTo(this.model, "change:isPaused", this.pauseState);
 	    this.listenTo(this.model, "change:fullScreen", this.fullScreenState);
-	    this.listenTo(this.model, "change:liveCode", this.liveCodeState);
+
+	    // Raw html
+	    this.$el.html(OutputHtml).attr({
+		'data-e-bind': "active:active,front:front"
+	    });
 	},
+	/**
+	 * Data binding.
+	 */
+	bindings: "data-e-bind",
+	bindingHandlers: _.extend(Pi.bindingHandlers, {}),
 	className: 'output',
-	resized: false,
 	events: {
 	    "dragstop ": function(event, ui) {
 		this.model.set({
@@ -51,11 +58,8 @@ define([
 		    hide: true
 		});
 	    },
-	    "click .pause": function(e) {
-		this.pauseSketch();
-	    },
-	    "click .play": function(e) {
-		this.unpauseSketch();
+	    "click .play, .pause": function(e) {
+		this.togglePause();
 	    },
 	    "click .fs": function(e) {
 		this.model.set('fullScreen', !this.model.get('fullScreen')); // toggle fullScreen on/off
@@ -70,16 +74,7 @@ define([
 	render: function()
 	{
 	    this.$el
-		    .html(
-		    outputTemplate({
-		id: this.model.getId(),
-		name: this.model.get('name')
-	    })
-		    )
 		    .addClass('win active front no_select')
-		    .attr({
-		id: "output" + this.model.getId()
-	    })
 		    .css({
 		top: this.model.get('top'),
 		zIndex: this.model.get('zIndex') + 1
@@ -87,7 +82,9 @@ define([
 		    .appendTo(this.model.container)
 		    .draggable({
 		handle: '.title'
-	    });
+	    })
+		    .find('canvas')
+		    .attr('id', 'canvas' + this.model.getId());
 	    return this;
 	},
 	canvas: function() {
@@ -105,24 +102,6 @@ define([
 		top: that.model.get('ouputPosition').top,
 		left: that.model.get('ouputPosition').left
 	    });
-	},
-	pauseState: function() {
-	    if (!this.model.get('isPaused')) {
-		this.$el.find('.pause').show();
-		this.$el.find('.play').hide();
-	    }
-	    else
-	    {
-		this.$el.find('.pause').hide();
-		this.$el.find('.play').show();
-	    }
-	},
-	/**
-	 * Update outuput window title.
-	 */
-	nameState: function() {
-	    var name = this.model.get('name');
-	    this.$el.find('.name').text(name);
 	},
 	/**
 	 * Check fullscreen state and toggles fullscreen mode on/off.
@@ -198,26 +177,22 @@ define([
 	adjustSize: function() {
 	    var w = this.originalWidth,
 		    h = this.originalHeight;
-
 	    if (!this.fullScreen) {
 		this.reduceToMaxSize(w, h);
 		if (w > this.maxCanvasWidth() || h > this.maxCanvasHeight()) {
-		    this.resized = true;
+		    this.model.set('outputResized', true);
 		}
 	    }
 	    else
 	    {
-		if (this.resized) {
+		if (this.model.get('outputResized')) {
 		    this.$el.find('canvas').css({
 			'width': w,
 			'height': h
 		    });
-		    this.resized = false;
+		    this.model.set('outputResized', false);
 		}
 	    }
-
-	    // Add an alert if the canvas have been resized.
-	    this.resizeAlert();
 	},
 	/**
 	 * Reduce width and height to fit the screen (recursive).
@@ -260,46 +235,21 @@ define([
 		    'width': Math.floor(newW),
 		    'height': Math.floor(newH)
 		});
-		//console.log("canvas updated");
 	    }
 	},
 	/**
-	 * Livecode.
+	 * Toggle pause/play.
 	 */
-	liveCodeState: function() {
-	    if (this.model.get('liveCode')) {
-		this.$el.find(".live-alert").show();
+	togglePause: function() {
+	    if (this.model.get('isPaused')) {
+		this.model.set('isPaused', false);
+		this.processingInstance['unpause' + this.model.uid]();
 	    }
 	    else
 	    {
-		this.$el.find(".live-alert").hide();
+		this.model.set('isPaused', true);
+		this.processingInstance['pause' + this.model.uid]();
 	    }
-	},
-	/**
-	 * Add an alert telling the user that the sketch was resized.
-	 */
-	resizeAlert: function() {
-	    if (this.resized) {
-		this.$el.find(".resize-alert").show();
-	    }
-	    else
-	    {
-		this.$el.find(".resize-alert").hide();
-	    }
-	},
-	/**
-	 * Pause the sketch.
-	 */
-	pauseSketch: function() {
-	    this.model.set('isPaused', true);
-	    this.processingInstance['pause' + this.model.uid]();
-	},
-	/**
-	 * Unpause the sketch (play again after pause).
-	 */
-	unpauseSketch: function() {
-	    this.model.set('isPaused', false);
-	    this.processingInstance['unpause' + this.model.uid]();
 	}
     });
 

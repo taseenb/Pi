@@ -1,17 +1,12 @@
-<div class="title title-shadow"><%= name %></div>
+<div class="title title-shadow" data-e-bind="text:name"></div>
 
 <div class="tools"><ul>
-	<li class="play circle p5_icons box-shadow" title="Play">
+	<li data-e-bind="hide:running" class="play circle p5_icons box-shadow" title="Play">
 	    <span class="icon-stack">
 		<i class="icon-play"></i>
 	    </span>
 	</li>
-	<li class="pause circle p5_icons box-shadow" title="Pause">
-	    <span class="icon-stack">
-		<i class="icon-pause"></i>
-	    </span>
-	</li>
-	<li class="refresh circle p5_icons box-shadow" title="Play Again">
+	<li data-e-bind="show:running" class="refresh circle p5_icons box-shadow" title="Play Again">
 	    <span class="icon-stack">
 		<i class="icon-refresh"></i>
 	    </span>
@@ -22,26 +17,33 @@
 	    </span>
 	</li>
 	<li><em>&nbsp;</em></li>
-	<li class="save p5_icons box-shadow" title="Save">
+	<li data-e-bind="disabled:saved" class="save p5_icons box-shadow" title="Save">
 	    <span class="icon-stack">
 		<i class="icon-save"></i>
 	    </span>
 	</li>
-	<li class="autosave p5_icons box-shadow">
+	<li data-e-bind="active:autoSave" class="autosave p5_icons box-shadow">
 	    <span class="icon-stack">
 		<i class="icon-cloud-upload"></i>
 	    </span>
 	</li>
-	<li class="livecode p5_icons box-shadow" title="Live Code">
+	<li data-e-bind="active:liveCode" class="livecode p5_icons box-shadow" title="Live Code">
 	    <span class="icon-stack">
 		<i class="icon-bolt"></i>
 	    </span>
 	</li>
-	<li class="toggle_console p5_icons box-shadow" title="Console">
+	<li data-e-bind="active:consoleOpen" class="toggle_console p5_icons box-shadow" title="Console">
 	    <span class="icon-stack">
 		<i class="icon-terminal"></i>
 	    </span>
 	</li>
+	
+	<li data-e-bind="active:jsMode" class="javascript p5_icons box-shadow" title="Javascript">
+	    <span class="icon-stack">
+		<i class="icon-dollar"></i>
+	    </span>
+	</li>
+	
 <!--	<li class="export p5_icons box-shadow" title="Download">
 	    <span class="icon-stack">
 		<i class="icon-download-alt"></i>
@@ -68,7 +70,7 @@
 
 <div class="nav_container">
     <ul class="nav nav-tabs">
-	<li id="ts<%= id %>" class="text_shadow tab_selector"></li>
+	<li class="text_shadow tab_selector"></li>
 	<li id="new_tab" class="add_tab plus_tab text_shadow"><i class="icon-plus-sign-alt"></i></li>
     </ul>
 </div>

@@ -36,9 +36,15 @@ define([
 	    fullScreen: false,
 	    iconImg: "piSketchIcon.svg",
 	    iconClasses: "maximize",
+	    outputResized: false,
+	    ouputPosition: {
+		left: 0,
+		top: 0
+	    },
 	    saved: true,
 	    front: true,
 	    active: true, // must be true, otherwise ide will not be active when initialized
+	    
 	    // db "projects"
 	    collection_id: undefined,
 	    name: undefined,
@@ -94,6 +100,7 @@ define([
 		left: setup['left'],
 		zIndex: setup['zIndex']
 	    });
+	    
 	    // Create a new name for the ide/project, if new
 	    if (!this.get('name') && this.isNew())
 	    {
@@ -101,7 +108,7 @@ define([
 		    'name': this.createNewTitle(Pi.sessions)
 		});
 	    }
-
+	    
 	    // Start tracking changes and unsaved attributes.
 	    this.trackUnsaved(this.safeAttributes);
 	},
@@ -190,7 +197,7 @@ define([
 		this.outputView.originalHeight = this.outputView.canvas().height;
 		this.outputView.fullScreen = (options && options.fullScreen) ? true : false;
 		this.outputView.fullScreenState();
-		this.outputView.liveCodeState();
+//		this.outputView.liveCodeState();
 
 	    }
 	    catch (e)
