@@ -44,7 +44,6 @@ define([
 	    saved: true,
 	    front: true,
 	    active: true, // must be true, otherwise ide will not be active when initialized
-	    
 	    // db "projects"
 	    collection_id: undefined,
 	    name: undefined,
@@ -100,7 +99,7 @@ define([
 		left: setup['left'],
 		zIndex: setup['zIndex']
 	    });
-	    
+
 	    // Create a new name for the ide/project, if new
 	    if (!this.get('name') && this.isNew())
 	    {
@@ -108,7 +107,7 @@ define([
 		    'name': this.createNewTitle(Pi.sessions)
 		});
 	    }
-	    
+
 	    // Start tracking changes and unsaved attributes.
 	    this.trackUnsaved(this.safeAttributes);
 	},
@@ -352,27 +351,27 @@ define([
 	/**
 	 * Save ide tabs
 	 */
-	saveTabs: function()
-	{
-	    var saved = $.Deferred(),
-		    that = this,
-		    tabsLength = this.tabs.length,
-		    saveCounter = 0;
-
-	    this.tabs.each(function(tab) {
-		tab.set('project_id', that.get('id'));
-		$.when(tab.smartSave())
-			.done(function() {
-		    saveCounter++;
-		    if (tabsLength === saveCounter)
-			saved.resolve();
-		})
-			.fail(function() {
-		    saved.reject();
-		});
-	    });
-	    return saved.promise;
-	},
+//	saveTabs: function()
+//	{
+//	    var saved = $.Deferred(),
+//		    that = this,
+//		    tabsLength = this.tabs.length,
+//		    saveCounter = 0;
+//
+//	    this.tabs.each(function(tab) {
+//		tab.set('project_id', that.get('id'));
+//		$.when(tab.smartSave())
+//			.done(function() {
+//		    saveCounter++;
+//		    if (tabsLength === saveCounter)
+//			saved.resolve();
+//		})
+//			.fail(function() {
+//		    saved.reject();
+//		});
+//	    });
+//	    return saved.promise;
+//	},
 	/**
 	 * Delete the sketch.
 	 */
@@ -404,7 +403,7 @@ define([
 		    title: "Save sketch",
 		    message: "Do you want to save before closing?",
 		    buttons: [
-			{ 
+			{
 			    label: "Save",
 			    resolve: true
 			},
@@ -420,21 +419,13 @@ define([
 		Pi.confirmation({
 		    promise: this.promise['askForSave' + this.getId()],
 		    title: "Do you want to save?",
-		    message: "If you want to save your data, please <strong><a href='#log-in'>log in</a></strong>.<br>"+
+		    message: "If you want to save your data, please <strong><a href='#log-in'>log in</a></strong>.<br>" +
 			    "If you don't have an account yet, <strong><a href='#sign-up'>sign up for Pi</a></strong>.",
 		    buttons: [
 			{
 			    label: "Just close",
 			    resolve: false
-			},
-//			{
-//			    label: "Log in",
-//			    hash: "log-in"
-//			},
-//			{
-//			    label: "Sign up",
-//			    hash: "sign-up"
-//			}
+			}
 		    ]
 		});
 	    }

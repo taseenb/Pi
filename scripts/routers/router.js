@@ -210,7 +210,6 @@ define([
      * Routes.
      */
     Pi.router = new Router();
-
     Pi.router.route("alreadyActive", "alreadyActive");
     Pi.router.route("activated", "activated");
     Pi.router.route("contribute", "contribute");
@@ -220,7 +219,6 @@ define([
     Pi.router.route("find", "find");
     Pi.router.route("me", "me");
     Pi.router.route(Pi.action.openProject + "/:ideId(/:tabId)(/:fullScreen)", "openProject");
-
 
 
     /**

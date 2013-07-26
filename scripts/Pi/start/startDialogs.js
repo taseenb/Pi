@@ -80,8 +80,6 @@ define([
 	// Create the buttons object for jquery ui dialog: http://api.jqueryui.com/dialog/#option-buttons
 	var buttons = {};
 	
-	//console.log(options);
-	
 	// Create buttons
 	_.each(options.buttons, function(btn) {
 	    
@@ -97,7 +95,7 @@ define([
 	    
 	});
 	
-	// Add a cancel button
+	// Always add a cancel button
 	buttons['Cancel'] = function() {
 	    if (options.cancelResolve !== undefined)
 		options.cancelResolve ? options.promise.resolve() : options.promise.reject();
@@ -110,9 +108,6 @@ define([
 	    "content": options.message,
 	    "buttons": buttons
 	};
-	
-	//console.log(dialog);
-	
 	// Open the dialog and force rerendering
 	Pi.dialog.open(dialog, true);
     };
