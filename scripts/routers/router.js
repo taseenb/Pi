@@ -1,5 +1,5 @@
 define([
-    'Pi', //'jquery', 'backbone',
+    'Pi', 'jquery', 'backbone',
     
     // Templates
     "text!tpl/static/about.html",
@@ -10,11 +10,9 @@ define([
     'Pi/start/startDataBinding',
     'Pi/start/startDesktop',
     'Pi/start/startDialogs',
-    'Pi/start/startUser',
-    
-    
+    'Pi/start/startUser'
 
-], function(Pi, aboutHtml, contributeHtml) {
+], function(Pi, $, Backbone, aboutHtml, contributeHtml) {
 
     var Router = Backbone.Router.extend({
 	// initialize: function() {},

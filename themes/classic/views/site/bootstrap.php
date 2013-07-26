@@ -98,8 +98,6 @@ $local = file_exists($scriptsPath.'/config-local.js') ? true : false;
 	</div>
 
 
-<!--<canvas id="test"></canvas>-->
-
 	<!-- Manager -->
 	<div id="manager" class="manager">
 	    <a id="manager_close" class="manager_close" href="#">test<i class="icon-remove "></i></a>

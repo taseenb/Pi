@@ -10,14 +10,17 @@ class ChangePassword extends CFormModel {
 	public $verifyPassword;
 	
 	public function rules() {
+		
+		$minPwdLength = Yii::app()->params['minPwdLength'];
+		
 		return Yii::app()->controller->id == 'recovery' ? array(
 			array('password, verifyPassword', 'required'),
-			array('password, verifyPassword', 'length', 'max'=>128, 'min' => 4,'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")),
-			array('verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => UserModule::t("Retype Password is incorrect.")),
+			array('password, verifyPassword', 'length', 'max' => 64, 'min' => $minPwdLength, "tooLong" => "Too many characters!", "tooShort" => "$minPwdLength characters or more. Be tricky."),
+			array('verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => UserModule::t("Passwords do not match.")),
 		) : array(
 			array('oldPassword, password, verifyPassword', 'required'),
-			array('oldPassword, password, verifyPassword', 'length', 'max'=>128, 'min' => 4,'message' => UserModule::t("Incorrect password (minimal length 4 symbols).")),
-			array('verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => UserModule::t("Retype Password is incorrect.")),
+			array('password', 'length', 'max' => 64, 'min' => $minPwdLength, "tooLong" => "Too many characters!", "tooShort" => "$minPwdLength characters or more. Be tricky."),
+			array('verifyPassword', 'compare', 'compareAttribute'=>'password', 'message' => UserModule::t("Passwords do not match.")),
 			array('oldPassword', 'verifyOldPassword'),
 		);
 	}
@@ -28,9 +31,9 @@ class ChangePassword extends CFormModel {
 	public function attributeLabels()
 	{
 		return array(
-			'oldPassword'=>UserModule::t("Old Password"),
-			'password'=>UserModule::t("password"),
-			'verifyPassword'=>UserModule::t("Retype Password"),
+			'oldPassword'=>UserModule::t("Your Old Password"),
+			'password'=>UserModule::t("Create a New Password"),
+			'verifyPassword'=>UserModule::t("Retype Your Password"),
 		);
 	}
 	

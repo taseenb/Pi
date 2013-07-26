@@ -1,13 +1,13 @@
 define([
     // Main scripts
-    'Pi', 'jquery',
+    'Pi', 'backbone', 'jquery',
     // Collections
     // Models
     "models/Dialog",
     // Views
     "views/DialogView"
 
-], function(Pi, $, Dialog, DialogView) {
+], function(Pi, Backbone, $, Dialog, DialogView) {
 
     /**
      * Pi Dialog windows.

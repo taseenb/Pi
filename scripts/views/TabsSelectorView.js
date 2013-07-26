@@ -1,10 +1,10 @@
 define([
     // Main scripts
-    'Pi',
+    'Pi', 'backbone', 'jquery',
     // Templates
     "text!tpl/TabSelector.html"
 
-], function(Pi, TabSelectorHtml) {
+], function(Pi, Backbone, $, TabSelectorHtml) {
 
     "use strict";
 

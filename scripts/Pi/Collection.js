@@ -1,7 +1,10 @@
 /**
  * Add features to the Backbone.Collection class.
  */
-define(['backbone'], function(Backbone) {
+define([
+    'backbone'
+    
+], function(Backbone) {
 
     "use strict";
 

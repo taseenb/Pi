@@ -1,6 +1,6 @@
 define([
     // Main scripts
-    'Pi',
+    'Pi', 'backbone', 'jquery',
     // Templates
     "text!tpl/Output.html",
     // Backbone add-ons
@@ -9,7 +9,7 @@ define([
     'jquery-ui',
     "jquery-easing"
 
-], function(Pi, OutputHtml) {
+], function(Pi, Backbone, $, OutputHtml) {
 
     "use strict";
 

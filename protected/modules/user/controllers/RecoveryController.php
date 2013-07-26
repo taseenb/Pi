@@ -13,7 +13,6 @@ class RecoveryController extends UController
      */
     public function actionRecovery()
     {
-
 	$defender = new Defender();
 	if (!$defender->isSafeIp())
 	{
@@ -48,12 +47,12 @@ class RecoveryController extends UController
      */
     private function _changePasswordForm($email, $activkey)
     {
-
 	$form = new ChangePassword;
 	$user = User::model()->notsafe()->findByAttributes(array('email' => $email));
 
 	if (isset($user) && $user->activkey == $activkey)
 	{
+	    $this->layout='//pi_layouts/neutral';
 
 	    if (isset($_POST['ChangePassword']))
 	    {
@@ -73,7 +72,7 @@ class RecoveryController extends UController
 
 		    if ($user->save())
 		    {
-			$this->redirect(Yii::app()->baseUrl . "#login");
+			$this->redirect(Yii::app()->baseUrl . "/#log-in", true);
 		    }
 		    else
 		    {
@@ -108,10 +107,10 @@ class RecoveryController extends UController
 	    {
 		$user = User::model()->notsafe()->findbyPk($form->user_id);
 		$activation_url = 'http://' . $_SERVER['HTTP_HOST'] . $this->createUrl(implode(Yii::app()->controller->module->recoveryUrl), array("activkey" => $user->activkey, "email" => $user->email));
-		$subject = UserModule::t("You have requested a password recovery for {site_name}", array(
+		$subject = UserModule::t("You have requested a new password for {site_name}", array(
 			    '{site_name}' => Yii::app()->name,
 		));
-		$message = UserModule::t("You have requested a password recovery for {site_name}. To receive a new password, go to {activation_url}.", array(
+		$message = UserModule::t("You have requested a new password for {site_name}. To create a new password, please go to: {activation_url}.", array(
 			    '{site_name}' => Yii::app()->name,
 			    '{activation_url}' => $activation_url,
 		));
@@ -143,15 +142,18 @@ class RecoveryController extends UController
      */
     private function _errorsHtml($errorsArray)
     {
+//	$errorsHtml = "";
 	$errorsHtml = "<ul>";
 	foreach ($errorsArray as $attribute => $errors)
 	{
-	    $errorsHtml .= "<li>" . $attribute . "<ul>";
+	    //$errorsHtml .= "<li>" . $attribute . "<ul>";
+	    //$errorsHtml .= "<ul>";
 	    foreach ($errors as $error)
 	    {
 		$errorsHtml .= "<li>" . $error . "</li>";
 	    }
-	    $errorsHtml .= "</ul></li>";
+	    //$errorsHtml .= "</ul>";
+	    //"</li>";
 	}
 	$errorsHtml .= "</ul>";
 	return $errorsHtml;

@@ -233,9 +233,13 @@ class UserModule extends CWebModule {
 	    //$mail->SMTPDebug = 1;  // 1 = errors and messages // 2 = messages only
 	    return $mail->Send();
 	} catch (phpmailerException $e) {
-	    echo $e->errorMessage(); //Pretty error messages from PHPMailer
+	    Yii::log($e->errorMessage(), "error"); 
+	    // $e->errorMessage(); //Pretty error messages from PHPMailer
+	    //exit();
 	} catch (Exception $e) {
-	    echo $e->getMessage(); //Boring error messages from anything else!
+	    Yii::log($e->getMessage(), "error");
+	    //echo $e->getMessage(); //Boring error messages from anything else!
+	    //exit();
 	}
 	//return true;
     }
