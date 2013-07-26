@@ -44,12 +44,10 @@ define([
 	    }
 	    else
 	    {
+		Pi.dialogView.$el.empty();
 		Pi.dialog.clear();
 		Pi.dialog.set(data);
 		Pi.dialogView.refresh();
-		if (forceReload) {
-		    
-		}
 	    }
 	}
 	else if (_.isString(data)) {
@@ -82,17 +80,19 @@ define([
 	// Create the buttons object for jquery ui dialog: http://api.jqueryui.com/dialog/#option-buttons
 	var buttons = {};
 	
+	//console.log(options);
+	
 	// Create buttons
 	_.each(options.buttons, function(btn) {
 	    
-	    buttons[btn.text] = function() {
-		$(this).dialog("close");
-		if (btn.resolve !== undefined) 
+	    buttons[btn.label] = function() {
+		if (btn.resolve !== undefined && options.promise) 
 		    btn.resolve ? options.promise.resolve() : options.promise.reject();
-		if (btn.hash !== undefined) 
-		    window.location.hash = btn.hash;
-		if (btn.action !== undefined) 
-		    btn.action();
+//		if (btn.hash !== undefined) 
+//		    window.location.hash = btn.hash;
+//		if (btn.action !== undefined) 
+//		    btn.action();
+		$(this).dialog("close");
 	    };
 	    
 	});
@@ -110,7 +110,10 @@ define([
 	    "content": options.message,
 	    "buttons": buttons
 	};
-	// Open the dialog
+	
+	//console.log(dialog);
+	
+	// Open the dialog and force rerendering
 	Pi.dialog.open(dialog, true);
     };
     

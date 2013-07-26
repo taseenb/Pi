@@ -46,6 +46,7 @@ class Controller extends CController
     {
 	return array(
 	    array('allow', 'actions' => array(
+		    'contact',
 		    'page', // static pages (site controller)
 		    'bootstrap',
 		    'login',

@@ -1,13 +1,20 @@
 define([
     'Pi', //'jquery', 'backbone',
+    
+    // Templates
+    "text!tpl/static/about.html",
+    "text!tpl/static/contribute.html",
+    
     // Start Pi
     'Pi/start/startUnderscoreTemplate',
     'Pi/start/startDataBinding',
     'Pi/start/startDesktop',
     'Pi/start/startDialogs',
-    'Pi/start/startUser'
+    'Pi/start/startUser',
+    
+    
 
-], function(Pi) {
+], function(Pi, aboutHtml, contributeHtml) {
 
     var Router = Backbone.Router.extend({
 	// initialize: function() {},
@@ -113,12 +120,21 @@ define([
 		Pi.dialog.open({
 		    dataId: "about",
 		    title: 'About',
-		    content: "<p>" +
-			    "Pi is dedicated to Processing creatives. It aims to provide a comfortable space to create, exhibit and share interactive works, drawings and animations written in the <a href='http://processing.org/'>Processing</a> language (Java-like).</p>" +
-			    "Pi uses the magical javascript port of Processing, <a href='http://processingjs.org/'>Processing JS</a>, allowing users to code in javascript as well. " +
-			    "Other libraries could be added in the future (imagine <a href='http://paperjs.org/'>Paper.js</a> or <a href='http://raphaeljs.com/'>Raphael.js</a>), mixing all these possibilities together within a common environment.</p>" +
-			    "If you can embed a YouTube video or an swf Flash file in any web page, why shouldn't be as easy to embed a Processing sketch or any other canvas based application? " +
-			    "</p>"
+		    content: aboutHtml
+		});
+	    });
+	},
+	/**
+	 * Temporary about.
+	 */
+	contribute: function() {
+	    require([
+		'Pi/start/startDialogs',
+	    ], function(Pi) {
+		Pi.dialog.open({
+		    dataId: "about",
+		    title: 'Contribute to Pi',
+		    content: contributeHtml
 		});
 	    });
 	},
@@ -199,6 +215,7 @@ define([
 
     Pi.router.route("alreadyActive", "alreadyActive");
     Pi.router.route("activated", "activated");
+    Pi.router.route("contribute", "contribute");
     Pi.router.route("about", "about");
     Pi.router.route("art", "art");
     Pi.router.route("page/:page", "page");

@@ -14,10 +14,22 @@ $spinnerSketch = file_get_contents($pdePath . $spinnerFileName);
 // IMPORTANT: add \n\ at the end of every line for compatibility with javascript literals
 $demoSketch = str_replace("\n", "\\n\\\n", $demoSketch);
 $spinnerSketch = str_replace("\n", "\\n\\\n", $spinnerSketch);
+
+// Determine whether we need the local configuration or the web optimization
+$scriptsPath = app()->basePath . DS . ".." . DS . "scripts" . DS;
+$local = file_exists($scriptsPath.'/config-local.js') ? true : false;
 ?>
 
-<script type="text/javascript" src="<?php echo $baseUrl; ?>/scripts/config.js"></script>
+<?php if ($local) : ?>
+<script type="text/javascript" src="<?php echo $baseUrl; ?>/scripts/config-local.js"></script>
 <script type="text/javascript" data-main="<?php echo $baseUrl; ?>/scripts/main.js" src="<?php echo $baseUrl; ?>/scripts/lib/require/require.js"></script>
+<?php else : ?>
+<script type="text/javascript" src="<?php echo $baseUrl; ?>/scripts/config.js"></script>
+<script type="text/javascript" data-main="<?php echo $baseUrl; ?>/scripts/main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.8/require.min.js"></script>
+
+<?php endif; ?>
+
+
 
 <script>
     define('Pi', function() {

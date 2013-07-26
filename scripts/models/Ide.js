@@ -405,11 +405,11 @@ define([
 		    message: "Do you want to save before closing?",
 		    buttons: [
 			{ 
-			    text: "Save",
+			    label: "Save",
 			    resolve: true
 			},
 			{
-			    text: "Don't save",
+			    label: "Don't save",
 			    resolve: false
 			}
 		    ]
@@ -424,15 +424,15 @@ define([
 			    "If you don't have an account yet, <strong><a href='#sign-up'>sign up for Pi</a></strong>.",
 		    buttons: [
 			{
-			    text: "Just close",
+			    label: "Just close",
 			    resolve: false
 			},
 //			{
-//			    text: "Log in",
+//			    label: "Log in",
 //			    hash: "log-in"
 //			},
 //			{
-//			    text: "Sign up",
+//			    label: "Sign up",
 //			    hash: "sign-up"
 //			}
 		    ]
@@ -455,12 +455,12 @@ define([
 		message: "This sketch will be permanently deleted and cannot be recovered. Are you sure?",
 		buttons: [
 		    {
-			text: "Delete",
+			label: "Delete",
 			resolve: true
 		    }
 		]
 	    });
-	    return response;
+	    return this.promise['askForDelete' + this.getId()];
 	},
 	/**
 	 * Get code from ide tabs. Optionally adds some extra methods at the end of the code (play, pause).
