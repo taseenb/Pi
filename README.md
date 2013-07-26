@@ -24,27 +24,15 @@ Pi does not support mobile devices at the moment. A responsive, mobile-friendly 
 
 #### DONE @ 90%
 - Desktop-like development environment.
-- Original Processing ide interface emulation.
+- Original Processing ide interface emulation with tabs.
 - Ide error console.
 - Live code.
+- Javascript mode (read-only).
 - Auto save.
 - Auto resize sketches to fit the screen.
 - Full-screen presentation mode.
 - Play-pause sketches.
 - Secured log in and sign up processes.
-
-#### @TODO - IN PROGRESS:
-- Take pictures from the sketch. (50%)
-- Sketches and collections manager. (20%)
-- User profiles. (20%)
-
-#### @TODO @ 0%:
-- Image as sketch preview.
-- User public portfolio.
-- User comments on sketches. 
-- Iframe embedding.
-- User dashboard.
-- Documentation.
 
 
 ## Credits

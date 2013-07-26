@@ -19,6 +19,9 @@ var require = {
 	// Processing
 	"processing": "lib/processing/processing-1.4.1",
 		
+	// JsHint
+	"jshint": "lib/jshint/jshint-2.1.4",
+		
 	// Bootstrap
 	"bootstrap-dropdown": "lib/bootstrap/bootstrap-dropdown",
 		
@@ -37,6 +40,9 @@ var require = {
 	'ace': {
 	    //deps: ['underscore', 'jquery'],
 	    exports: 'ace'
+	},
+	'jshint': {
+		exports: 'JSHINT'
 	}
     }
 };

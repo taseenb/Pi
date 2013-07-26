@@ -27,6 +27,9 @@ var require = {
 	//"processing": "lib/processing/processing-1.4.1",
 	"processing": "//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.1/processing.min",
 		
+	// JsHint
+	"jshint": "lib/jshint/jshint.min",
+	
 	// Bootstrap
 	"bootstrap-dropdown": "lib/bootstrap/bootstrap-dropdown",
 		
@@ -57,6 +60,9 @@ var require = {
 	'ace': {
 	    //deps: ['underscore', 'jquery'],
 	    exports: 'ace'
+	},
+	'jshint': {
+		exports: 'JSHINT'
 	}
     }
 };

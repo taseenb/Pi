@@ -17,11 +17,11 @@ $spinnerSketch = str_replace("\n", "\\n\\\n", $spinnerSketch);
 
 // Determine whether we need the local configuration or the web optimization
 $scriptsPath = app()->basePath . DS . ".." . DS . "scripts" . DS;
-$local = file_exists($scriptsPath.'/config-local.js') ? true : false;
+$local = file_exists($scriptsPath.'/config_local.js') ? true : false;
 ?>
 
 <?php if ($local) : ?>
-<script type="text/javascript" src="<?php echo $baseUrl; ?>/scripts/config-local.js"></script>
+<script type="text/javascript" src="<?php echo $baseUrl; ?>/scripts/config_local.js"></script>
 <script type="text/javascript" data-main="<?php echo $baseUrl; ?>/scripts/main.js" src="<?php echo $baseUrl; ?>/scripts/lib/require/require.js"></script>
 <?php else : ?>
 <script type="text/javascript" src="<?php echo $baseUrl; ?>/scripts/config.js"></script>
