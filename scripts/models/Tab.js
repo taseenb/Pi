@@ -1,9 +1,12 @@
 define([
     // Main
-    'Pi', 'backbone', 'jquery'
+    'Pi', 'backbone', 'jquery',
     // Collections
     // Models
     // Views
+    
+    // Backbone Extensions
+    'Pi/Model',
     
 ], function(Pi, Backbone, $) {
 

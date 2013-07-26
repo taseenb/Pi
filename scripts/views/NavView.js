@@ -4,7 +4,7 @@ define([
     // Templates
     "text!tpl/NavLeft.html",
     "text!tpl/NavRight.html",
-	    // Plugins
+    // Plugins
     "bootstrap-dropdown"
 
 ], function(Pi, Backbone, $, NavLeftHtml, NavRightHtml) {
@@ -18,11 +18,10 @@ define([
 	initialize: function() {
 	    this.listenTo(this.model, "change:id", this.render);
 	    this.listenTo(this.model, "change:username change:email", this.nameState);
-	    this.listenTo(this.model, "change:lastvisit_at", this.lastvisit_atState);
+//	    this.listenTo(this.model, "change:lastvisit_at", this.lastvisit_atState);
 	},
 	events: {
 	    "mousedown": function(e) {
-		//e.preventDefault();
 		e.stopPropagation();
 		var item = $(e.target).closest('li');
 		item.addClass('active');
@@ -30,31 +29,7 @@ define([
 		    item.removeClass('active');
 		    item.off();
 		});
-	    },
-//	    "click": function(e) {
-//		//e.stopPropagation();
-//		//e.preventDefault();
-//		// Toggle Nva Dropdowns
-//		if ($(e.target).attr("data-toggle") == "dropdown") {
-//		    e.preventDefault();
-//		    var clicked = $(e.target);
-//		    var clickedId = clicked.attr('id');
-//		    var menu = this.$el.find("ul[aria-labelledby=" + clickedId + "]");
-//		    if (menu.data('active')) {
-//			this.closeDropdown(menu);
-//		    } else {
-//			this.openDropdown(menu);
-//		    }
-//		}
-//		else
-//		{
-//		    this.closeDropdown($(".dropdown-menu"));
-//		}
-//	    },
-//	    "click .dropdown-menu": function(e) {
-//		this.closeDropdown($(e.target).closest(".dropdown-menu"));
-//	    }
-
+	    }
 	},
 	/**
 	 * Render nav by pulling items to the left and right unordered lists.
@@ -103,13 +78,12 @@ define([
 	 */
 	hide: function(outputWindow, callback) {
 	    this.$el.animate({
-		top: "-30"
-	    },
-	    200, "easeOutQuad");
-	    $('#desktop_container').animate({
-		'top': 1
+		top: "-31"
 	    },
 	    200, "easeOutQuad", function() {
+		Pi.user.currentDesktop.$el.css({
+		    'top': 0
+		});
 		callback(outputWindow);
 	    });
 	},
@@ -117,22 +91,13 @@ define([
 	    this.$el.animate({
 		top: "0"
 	    },
-	    200);
-	    $('#desktop_container').animate({
-		'top': 31
-	    },
 	    200, function() {
+		Pi.user.currentDesktop.$el.css({
+		    'top': 31
+		});
 		callback(outputWindow);
 	    });
-	},
-//	openDropdown: function(menu) {
-//	    menu.show();
-//	    menu.data('active', true);
-//	},
-//	closeDropdown: function(menu) {
-//	    menu.hide();
-//	    menu.data('active', false);
-//	}
+	}
     });
 
     return NavView;
