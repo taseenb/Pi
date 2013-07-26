@@ -8,6 +8,8 @@ define([
     'views/OutputView',
     // Processing
     "processing",
+    // JsHint
+    "jshint",
     // Backbone Extensions
     'Pi/Model',
     // Other extentions
@@ -15,7 +17,7 @@ define([
     // Helpers
     'Pi/Js'
 
-], function(Pi, Backbone, $, Tab, OutputView, Processing) {
+], function(Pi, Backbone, $, Tab, OutputView, Processing, JSHINT) {
 
     "use strict";
 
@@ -169,34 +171,46 @@ define([
 	    {
 		// Get code and pass the unique id to build the extra Pi methods
 		var sketch = Processing.compile(this.getCode(this.uid));
-		// Create output view
-		if (!this.outputView)
-		{
-		    this.outputView = new OutputView({
-			model: this
-		    });
-		    this.outputView.render();
-		}
-		this.set({
-		    ouputPosition: {
-			left: this.getOutputLeft(),
-			top: this.view.$el.css('top')
-		    }
-		});
-		this.outputView.$el.show();
-		this.set({
-		    'running': true,
-		    'isPaused': false
-		});
+		
+		// JsHint test
+		//var success = JSHINT(sketch.sourceCode);
+		// if (success) {
 
-		// Start Processing Js
-		this.outputView.processingInstance = new Processing(this.outputView.canvas(), sketch);
-		this.startPjsLogger(this.outputView.processingInstance);
-		this.outputView.originalWidth = this.outputView.canvas().width;
-		this.outputView.originalHeight = this.outputView.canvas().height;
-		this.outputView.fullScreen = (options && options.fullScreen) ? true : false;
-		this.outputView.fullScreenState();
-//		this.outputView.liveCodeState();
+		    // Create output view
+		    if (!this.outputView)
+		    {
+			this.outputView = new OutputView({
+			    model: this
+			});
+			this.outputView.render();
+		    }
+		    this.set({
+			ouputPosition: {
+			    left: this.getOutputLeft(),
+			    top: this.view.$el.css('top')
+			}
+		    });
+		    this.outputView.$el.show();
+		    this.set({
+			'running': true,
+			'isPaused': false
+		    });
+
+		    // Start Processing Js
+		    this.outputView.processingInstance = new Processing(this.outputView.canvas(), sketch);
+		    this.startPjsLogger(this.outputView.processingInstance);
+		    this.outputView.originalWidth = this.outputView.canvas().width;
+		    this.outputView.originalHeight = this.outputView.canvas().height;
+		    this.outputView.fullScreen = (options && options.fullScreen) ? true : false;
+		    this.outputView.fullScreenState();
+		    // this.outputView.liveCodeState();
+//		}
+//		else
+//		{
+//		    console.log(sketch.sourceCode);
+//		    console.log(JSHINT.data());
+//		    console.log(JSHINT.errors);
+//		}
 
 	    }
 	    catch (e)
