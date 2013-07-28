@@ -1,18 +1,18 @@
 <?php
 
 
-class RecoveryController extends UController
+class RecoveryAction extends CAction
 {
 
-    public $defaultAction = 'recovery';
-
-    public $layout = '//pi_layouts/neutral';
+    private $_controller;
 
     /**
      * Password recovery.
      */
-    public function actionRecovery()
+    public function run()
     {
+	$this->_controller = $this->getController();
+
 	$defender = new Defender();
 	if (!$defender->isSafeIp())
 	{
@@ -38,7 +38,7 @@ class RecoveryController extends UController
 	}
 	else
 	{
-	    $this->redirect(Yii::app()->baseUrl);
+	    $this->_controller->redirect(Yii::app()->baseUrl);
 	}
     }
 
@@ -52,7 +52,7 @@ class RecoveryController extends UController
 
 	if (isset($user) && $user->activkey == $activkey)
 	{
-	    $this->layout='//pi_layouts/neutral';
+	    $this->_controller->layout = '//pi_layouts/neutral';
 
 	    if (isset($_POST['ChangePassword']))
 	    {
@@ -72,7 +72,7 @@ class RecoveryController extends UController
 
 		    if ($user->save())
 		    {
-			$this->redirect(Yii::app()->baseUrl . "/#log-in", true);
+			$this->_controller->redirect(Yii::app()->baseUrl . "/#log-in", true);
 		    }
 		    else
 		    {
@@ -82,10 +82,10 @@ class RecoveryController extends UController
 		else
 		{
 		    Yii::app()->user->setFlash('recoveryMessage', $this->_errorsHtml($form->getErrors()));
-		    $this->refresh();
+		    $this->_controller->refresh();
 		}
 	    }
-	    $this->render('changepassword', array('form' => $form));
+	    $this->_controller->render('changepassword', array('form' => $form));
 	}
 	else
 	{
@@ -106,11 +106,11 @@ class RecoveryController extends UController
 	    if ($form->validate())
 	    {
 		$user = User::model()->notsafe()->findbyPk($form->user_id);
-		$activation_url = 'http://' . $_SERVER['HTTP_HOST'] . $this->createUrl(implode(Yii::app()->controller->module->recoveryUrl), array("activkey" => $user->activkey, "email" => $user->email));
+		$activation_url = 'http://' . $_SERVER['HTTP_HOST'] . $this->_controller->createUrl(implode(Yii::app()->controller->module->recoveryUrl), array("activkey" => $user->activkey, "email" => $user->email));
 		$subject = UserModule::t("You have requested a new password for {site_name}", array(
 			    '{site_name}' => Yii::app()->name,
 		));
-		$message = UserModule::t("You have requested a new password for {site_name}. To create a new password, please go to: {activation_url}.", array(
+		$message = UserModule::t("You have requested a new password for {site_name}. To create a new password, please go to: {activation_url}", array(
 			    '{site_name}' => Yii::app()->name,
 			    '{activation_url}' => $activation_url,
 		));
@@ -132,7 +132,7 @@ class RecoveryController extends UController
 		throw new CHttpException(400, 'Invalid request. This email is not valid or does not exist.');
 	    }
 	}
-	$this->renderPartial('_recovery', array('form' => $form), false, true);
+	$this->_controller->renderPartial('_recovery', array('form' => $form), false, true);
     }
 
     /**

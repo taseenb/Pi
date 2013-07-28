@@ -190,7 +190,7 @@ function(Pi, Backbone) {
 	// Add the CRSF token for DELETE requests only
 	if (args[0].type === "DELETE") {
 	    args[0]['data'][Pi.csrfTokenName] = Pi.csrfToken;
-	    // A weird Firefox or jQuery bug with delete requests needs this:
+	    // A weird Firefox or jQuery bug with DELETE requests needs this workaround:
 	    args[0]['data'] = JSON.stringify(args[0]['data']);
 	}
 

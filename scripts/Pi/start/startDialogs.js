@@ -15,11 +15,7 @@ define([
      * Log in, Sign up, Password recovery, Resend activation email, Alert, etc.
      */
     Pi.dialog = new Dialog();
-    Pi.dialog.names = [
-	// available dialogs
-	"log-in", "sign-up", "password-recovery",
-	"resend-activation-email", "alert"
-    ];
+    
     Pi.dialogView = new DialogView({
 	model: Pi.dialog
     });
@@ -31,10 +27,10 @@ define([
 
     /**
      * Open the dialog.
-     * If the dialog was already loaded, just open it. Otherwise it will reload 
-     * set the new Id to fire the reload.
-     * @param {object} data	A list of key:value pairs with the dialog dataId, title, content, etc.
-     * @param {string} data	The dataId of the dialog to open.
+     * If the dialog was already loaded, just open it. Otherwise it will set 
+     * the new Id and reload data.
+     * @param {object or string} data	A list of key:value pairs with the dialog data. Or a string with the dataId value.
+     * @param {boolean} forceReload	Whether the data should be reloaded even if already loaded.
      */
     Pi.dialog.open = function(data, forceReload) {
 	if (_.isObject(data)) {
@@ -65,26 +61,33 @@ define([
      * Alert dialog.
      */
     Pi.alert = function(title, content) {
+	var buttons = {
+	    'Ok': function() {
+		$(this).dialog("close");
+	    }
+	};
 	Pi.dialog.open({
-	    dataId: "alert",
-	    title: title,
-	    content: content
+	    'dataId': "alert",
+	    'title': title,
+	    'content': content,
+	    'buttons': buttons
 	});
     };
 
     /**
      * Confirmation dialog.
-     * (Force dialog reload to avoid using cached confirmation.)
+     * @param {object} options Key:value pairs with dialog data. dataId defaults to "confirmation".
      */
     Pi.confirmation = function(options) {
 	// Create the buttons object for jquery ui dialog: http://api.jqueryui.com/dialog/#option-buttons
-	var buttons = {};
-	
+	var buttons = {
+	};
+
 	// Create buttons
 	_.each(options.buttons, function(btn) {
-	    
+
 	    buttons[btn.label] = function() {
-		if (btn.resolve !== undefined && options.promise) 
+		if (btn.resolve !== undefined && options.promise)
 		    btn.resolve ? options.promise.resolve() : options.promise.reject();
 //		if (btn.hash !== undefined) 
 //		    window.location.hash = btn.hash;
@@ -92,9 +95,9 @@ define([
 //		    btn.action();
 		$(this).dialog("close");
 	    };
-	    
+
 	});
-	
+
 	// Always add a cancel button
 	buttons['Cancel'] = function() {
 	    if (options.cancelResolve !== undefined)
@@ -111,7 +114,7 @@ define([
 	// Open the dialog and force rerendering
 	Pi.dialog.open(dialog, true);
     };
-    
+
     return Pi;
 
 });

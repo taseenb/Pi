@@ -14,14 +14,18 @@
   // Fix for IE7's bad z-indexing so dropdowns don't appear below content that follows the navbar
   *position: relative;
   *z-index: 2;
+  
+  // Pi shadow for navbar
+  -webkit-box-shadow:  0px 4px 8px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:  0px 4px 8px 0px rgba(0, 0, 0, 0.2);
 }
 
 // Inner for background effects
 // Gradient is applied to its own element because overflow visible is not honored by IE when filter is present
 .navbar-inner {
   min-height: @navbarHeight;
-  padding-left:  20px;
-  padding-right: 20px;
+  padding-left:  30px;
+  padding-right: 30px;
   #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
   border: 1px solid @navbarBorder;
   .border-radius(@baseBorderRadius);
@@ -50,7 +54,8 @@
   float: left;
   display: block;
   // Vertically center the text given @navbarHeight
-  padding: ((@navbarHeight - @baseLineHeight) / 2) 20px ((@navbarHeight - @baseLineHeight) / 2);
+  //padding: ((@navbarHeight - @baseLineHeight) / 2) 20px ((@navbarHeight - @baseLineHeight) / 2);
+  padding: ((@navbarHeight+4 - @baseLineHeight) / 2) 20px ((@navbarHeight+2 - @baseLineHeight) / 2) 20px;
   margin-left: -20px; // negative indent to left-align the text down the page
   font-size: 20px;
   font-weight: 200;
@@ -186,8 +191,8 @@
 }
 .navbar-fixed-top .navbar-inner,
 .navbar-fixed-bottom .navbar-inner {
-  padding-left:  0;
-  padding-right: 0;
+  //padding-left:  0;
+  //padding-right: 0;
   .border-radius(0);
 }
 
@@ -246,6 +251,7 @@
   color: @navbarLinkColor;
   text-decoration: none;
   text-shadow: 0 1px 0 @navbarBackgroundHighlight;
+  height:21px;
 }
 .navbar .nav .dropdown-toggle .caret {
   margin-top: 8px;

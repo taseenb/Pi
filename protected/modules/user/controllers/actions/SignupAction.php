@@ -1,17 +1,16 @@
 <?php
 
 
-class SignupController extends UController
+class SignupAction extends CAction
 {
-
-    public $defaultAction = 'signup';
 
     /**
      * User registration.
      */
-    public function actionSignup()
+    public function run()
     {
-
+	$controller = $this->getController();
+	
 	$user = new SignupForm; // Create a new User (SignupForm extends from User)
 	$profile = new Profile; // Create a new Profile for the user
 	$profile->regMode = true;
@@ -53,7 +52,7 @@ class SignupController extends UController
 	    }
 
 	    // Display registration form
-	    $this->renderPartial(
+	    $controller->renderPartial(
 		    '/user/_signup', array('model' => $user, 'profile' => $profile), false, true // whether the rendering result should be postprocessed using processOutput
 	    );
 	}
@@ -71,6 +70,8 @@ class SignupController extends UController
 	$user->verifyPassword = UserModule::encrypting($user->verifyPassword);
 	$user->superuser = 0;
 	$user->status = User::UNACTIVE;
+	// Create a username shuffling the characters of the email before @
+	$user->username = Helper::removeSpecialChars(str_shuffle(current(explode("@", $user->email))));
 
 	// Save new User
 	// Do not validate, since it was already validated: 

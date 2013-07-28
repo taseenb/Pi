@@ -1,0 +1,13 @@
+/* Ajax
+------------------------------------------ */
+
+#ajax-spinner {
+    width:36px;
+    height:20px;
+    position: absolute;
+    top:7px;
+    left:50%;
+    right:50%;
+    z-index:1500;
+    display:none;
+}

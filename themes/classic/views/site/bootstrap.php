@@ -38,6 +38,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    pjsVersion: "Processing.js 1.4.1", // http://processingjs.org
 	    logo: "piLogo.svg",
 	    logoMono: "piMonoLogo.svg",
+	    defaultSketchIcon: "piSketchIcon.svg",
 	    sessions: 0, // total number of ide windows opened
 	    maxIdeSessions: 5, // max number of ide windows open at the same time
 	    maxConsoleLogs: 250, // max number of items kept in the console of every ide 
@@ -46,6 +47,10 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    liveCodeInterval: 1000, // interval between sketch updates during live code mode (only when code is new)
 	    demoCode: "<?php echo $demoSketch ?>",
 	    spinnerCode: "<?php echo $spinnerSketch ?>",
+	    defaultAvatarFileName: "<?php echo app()->params['defaultAvatarFileName'] ?>",
+	    defaultPreviewFileName: "<?php echo app()->params['defaultPreviewFileName'] ?>",
+	    previewFileName: "<?php echo app()->params['previewFileName'] ?>",
+	    publicDir: "<?php echo app()->baseUrl; ?>/<?php echo app()->params['publicDirName'] ?>",
 	    basePath: "<?php echo app()->baseUrl; ?>",
 	    themePath: "<?php echo $t; ?>",
 	    imgPath: "<?php echo $t; ?>/img/",
@@ -76,7 +81,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
     <div id="nav" class="navbar navbar-fixed-top">
 	<canvas id="ajax-spinner"></canvas>
 	<div class="navbar-inner">
-	    <a class="brand no_select" href="#art"><img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas"></a>
+	    <a class="brand no_select" href="#art"><img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" class="pi_logo"></a>
 
 	    <!--<div class="nav-collapse">-->
 	    <ul class="nav pull-left no_select"></ul>
@@ -85,11 +90,41 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	</div>
     </div>
 
-    <!--Manager-->
-    <div id="manager" class="manager"></div>
 
     <!-- Desktop -->
     <div id="desktop" class="desktop">
+
+	<!--Finder-->
+	<div id="finder" class="popup finder ui-dialog">
+	    <a class="exit close" title="Close">
+		<i class="icon-remove-sign"></i>
+	    </a>
+
+	    <div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content">
+		<div class="tabbable">
+		    <ul id="finder_tabs" class="nav nav-pills"></ul>
+		    <div id="finder_tabs_content" class="main_content">
+			<div class="collections_wrapper tab-content"></div>
+		    </div>
+		</div>
+	    </div>
+
+	    <div class="alternative-area">
+		<span>
+		    Don't have an account yet?
+		    <a class="btn btn-small btn-success" href="#sign-up">Sign Up for Pi</a>
+		</span>
+	    </div>
+
+	</div>
+
+
+	<!--Popup-->
+	<div id="popup" class="popup ui-dialog">
+	    
+	</div>
+
+
 	<div id="icon_main" class="icon no_select new">
 	    <img src="<?php echo $t; ?>/img/piLogo.svg" alt="Processing Ideas">
 	    <span>Processing Ideas (alpha)</span>

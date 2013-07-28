@@ -1,0 +1,38 @@
+/* Desktop
+------------------------------------------ */
+
+.desktop {
+    position: absolute;
+    top:31px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    z-index: -500;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+.desktop-background {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    z-index: -501;
+}
+.desktop-background.image {
+    background-image: url("../img/background/gradient_spring.jpg");
+    background-color: transparent;
+}
+
+.desktop-background.color {
+    background-image: none;
+}
+
+.desktop-background.fill {
+    background-position: top left;
+    background-repeat: no-repeat;
+    background-size:100% 100%;
+}

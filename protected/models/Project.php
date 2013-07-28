@@ -64,6 +64,7 @@ class Project extends ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'preview' => array(self::HAS_ONE, 'File', 'preview_id'),
 			'tabs' => array(self::HAS_MANY, 'Tab', 'project_id'),
 			'collection' => array(self::BELONGS_TO, 'Collection', 'collection_id'),
 		);

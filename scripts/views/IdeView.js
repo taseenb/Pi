@@ -34,6 +34,7 @@ define([
 	initialize: function()
 	{
 	    // Listen to
+	    this.listenTo(this.model, "change:open", this.openState);
 	    this.listenTo(this.model, "change:minimized", this.minimizedState);
 //	    this.listenTo(this.model, "change:saved", this.saveState);
 	    this.listenTo(this.model, "change:active", this.activeState);
@@ -166,8 +167,8 @@ define([
 			var activeTab = this.model.getActiveTab();
 			if (activeTab.isMain()) {
 			    Pi.alert(
-				    "That is the main tab!",
-				    "You are trying to delete the main tab of the project. You should delete the project instead."
+				    "That is the main tab",
+				    "You are trying to delete the main tab of the project. You should delete the project instead ( <i class='icon-trash'></i> )."
 				    );
 			    return false;
 			}
@@ -203,6 +204,9 @@ define([
 			    left: ui.position.left
 			});
 		    },
+//		    "dragstart": function(event, ui) {
+//			console.log(event);
+//		    },
 		    "dragstop": function(event, ui)
 		    {
 			// Update model
@@ -218,7 +222,7 @@ define([
 	render: function()
 	{
 	    var that = this,
-		    ideModel = this.model.attributes;
+		ideModel = this.model.attributes;
 
 	    this.$el.addClass('window-background')
 		    .attr({
@@ -241,7 +245,7 @@ define([
 		autoHide: true
 	    })
 		    .draggable({
-		cancel: '.code_wrapper, .tabs, .console',
+		cancel: '.code_wrapper, .tabs, .console, .nav_container, .tools li'
 	    });
 
 	    // Update states
@@ -261,6 +265,15 @@ define([
 	    {
 		tab.view.editor.resize(true);
 	    });
+	},
+	/**
+	 * Show the ide if open, hide if not.
+	 */
+	openState: function() {
+	    if (this.model.get('open'))
+	    	this.$el.show();
+	    else
+		this.$el.hide();
 	},
 	/**
 	 * Active state.
@@ -294,7 +307,7 @@ define([
 	bringToFront: function()
 	{
 	    var that = this;
-	    Pi.openIdes.each(function(model)
+	    Pi.ides.each(function(model)
 	    {
 		if (model.cid !== that.model.cid) {
 		    var z = model.attributes.zIndex;
@@ -306,7 +319,7 @@ define([
 		}
 	    });
 	    this.model.set({
-		zIndex: Pi.openIdes.length + 1,
+		zIndex: Pi.ides.length + 1,
 		front: true
 	    });
 	},

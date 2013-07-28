@@ -1,0 +1,29 @@
+<a class="exit close" title="Close">
+    <i class="icon-remove-sign"></i>
+</a>
+
+<div class="content_wrapper">
+
+    <div class="main_content">
+	<% if (title) { %><h1>{{title}}</h1><% } %>
+
+	{{content}}
+	
+	
+
+    </div>
+</div>
+
+
+<% if (buttons || alternativeContent) { %>
+<div class="popup_footer">
+    <p>
+	
+    <%  if (buttons) { _.each(buttons, function(key) { %>
+	<button class="btn">{{key}}</button>
+    <% }); } else { %>
+    	{{alternativeContent}}
+    <% } %>
+    </p>
+</div>
+<% } %>

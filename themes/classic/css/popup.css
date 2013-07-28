@@ -1,0 +1,87 @@
+.popup {
+    display:none;
+    position: absolute;
+    z-index:101;
+    /* Size + position */
+    width: 60%;
+    height: 60%;
+    right:20%;
+    left:20%;
+    top: 20%;
+    bottom: 20%;
+}
+
+.popup.active {
+    display:block;
+}
+
+.popup .close {
+    position: absolute;
+    top: 25px;
+    right: 30px;
+    z-index: 100;
+}
+
+.popup .close:hover {
+    color: #049CDB;
+}
+
+.popup .content_wrapper {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    overflow: hidden;
+}
+
+/* Content with scroll bars*/
+.popup .content_wrapper .main_content {
+    bottom: 57px;
+    left: 30px;
+    right: 30px;
+    top: 30px;
+    overflow: auto;
+    position: absolute;
+}
+
+
+/*Alternative area (footer)*/
+
+.alternative-area,
+.popup_footer {
+    position: absolute;
+    height: 42px;
+    bottom: 15px;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #CCC;
+    display: block;
+}
+.alternative-area span,
+.popup_footer span {
+    text-align: right;
+    display: block;
+    position:relative;
+    padding: 15px 30px 0 30px;
+}
+
+.alternative-area a,
+.popup_footer a {
+    margin-left: 15px;
+}
+
+.popup h1 {
+    margin: 0 0 30px 0;
+    padding: 0;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: normal;
+}
+
+.popup_footer p {
+    margin: 0;
+    line-height: normal;
+    text-align: right;
+    padding: 13px 30px 0 30px;
+}

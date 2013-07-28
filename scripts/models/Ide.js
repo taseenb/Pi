@@ -9,7 +9,7 @@ define([
     // Processing
     "processing",
     // JsHint
-    "jshint",
+    //"jshint", // JSHINT
     // Backbone Extensions
     'Pi/Model',
     // Other extentions
@@ -17,7 +17,7 @@ define([
     // Helpers
     'Pi/Js'
 
-], function(Pi, Backbone, $, Tab, OutputView, Processing, JSHINT) {
+], function(Pi, Backbone, $, Tab, OutputView, Processing) {
 
     "use strict";
 
@@ -36,23 +36,23 @@ define([
 	    isPaused: true,
 	    jsMode: false,
 	    fullScreen: false,
-	    iconImg: "piSketchIcon.svg",
 	    iconClasses: "maximize",
 	    outputResized: false,
 	    ouputPosition: {
 		left: 0,
 		top: 0
 	    },
-	    saved: true,
+	    saved: false,
 	    front: true,
 	    active: true, // must be true, otherwise ide will not be active when initialized
 	    // db "projects"
 	    collection_id: undefined,
+//	    preview_id: undefined,
 	    name: undefined,
 	    description: undefined,
 	    minimized: false,
 	    maximized: false,
-	    open: undefined,
+	    open: false,
 	    public: true,
 	    left: undefined,
 	    top: undefined,
@@ -69,6 +69,7 @@ define([
 	 */
 	safeAttributes: [
 	    "collection_id",
+	    "preview_id",
 	    "name",
 	    "description",
 	    "minimized",
@@ -121,7 +122,7 @@ define([
 	{
 	    // Size and position
 	    var width, height, top, left, zIndex, margin = 40,
-		    ideCount = Pi.openIdes.length,
+		    ideCount = Pi.ides.length,
 		    $desktop = Pi.desktopView.$el,
 		    zIndex = ideCount + 1;
 	    if ($desktop.width() < (500 + margin * 4))
@@ -153,65 +154,49 @@ define([
 	    };
 	},
 	/**
+	 * Create an unique Id to attach extra Pi methods (play, pause)
+	 * @returns {string} Uid for this ide.
+	 */
+	getUid: function() {
+
+	    if (!this.uid)
+		this.uid = Pi.js.generateUid();
+	    return this.uid;
+	},
+	/**
 	 * Run the Processing sketch in a new output window. 
+	 * @param {object} options A list of key:value pairs containing options.
 	 */
 	playSketch: function(options)
 	{
 	    this.stopSketch();
 	    var $console = this.view.$console;
-	    // If not in liveCode mode clear the console before play.
-	    if (!(options && options.live)) {
-		$console.html('');
-	    }
-	    // Create an unique Id to attach extra Pi methods (play, pause)
-	    if (!this.uid) {
-		this.uid = Pi.js.generateUid();
-	    }
+	    $console.html('');
 	    try
 	    {
+		if (!this.outputView)
+		    this.outputView = new OutputView({
+			model: this
+		    });
+		this.set({
+		    ouputPosition: {
+			left: this.getOutputLeft(),
+			top: this.view.$el.css('top')
+		    },
+		    'running': true,
+		    'isPaused': false
+		});
+		this.outputView.$el.show();
+
+		// Start Processing Js
 		// Get code and pass the unique id to build the extra Pi methods
-		var sketch = Processing.compile(this.getCode(this.uid));
-		
-		// JsHint test
-		//var success = JSHINT(sketch.sourceCode);
-		// if (success) {
-
-		    // Create output view
-		    if (!this.outputView)
-		    {
-			this.outputView = new OutputView({
-			    model: this
-			});
-			this.outputView.render();
-		    }
-		    this.set({
-			ouputPosition: {
-			    left: this.getOutputLeft(),
-			    top: this.view.$el.css('top')
-			}
-		    });
-		    this.outputView.$el.show();
-		    this.set({
-			'running': true,
-			'isPaused': false
-		    });
-
-		    // Start Processing Js
-		    this.outputView.processingInstance = new Processing(this.outputView.canvas(), sketch);
-		    this.startPjsLogger(this.outputView.processingInstance);
-		    this.outputView.originalWidth = this.outputView.canvas().width;
-		    this.outputView.originalHeight = this.outputView.canvas().height;
-		    this.outputView.fullScreen = (options && options.fullScreen) ? true : false;
-		    this.outputView.fullScreenState();
-		    // this.outputView.liveCodeState();
-//		}
-//		else
-//		{
-//		    console.log(sketch.sourceCode);
-//		    console.log(JSHINT.data());
-//		    console.log(JSHINT.errors);
-//		}
-
+		var sketch = Processing.compile(this.getCode(this.getUid()));
+		this.outputView.processingInstance = new Processing(this.outputView.canvas(), sketch);
+		this.startPjsLogger(this.outputView.processingInstance);
+		this.outputView.originalWidth = this.outputView.canvas().width;
+		this.outputView.originalHeight = this.outputView.canvas().height;
+		this.set('fullScreen', (options && options.fullScreen) ? true : false);
+		this.outputView.fullScreenState();
 	    }
 	    catch (e)
 	    {
@@ -324,19 +309,45 @@ define([
 	 */
 	exitSketch: function()
 	{
-	    var that = this;
+	    // Data needed to simply save the open/close state of the sketch
+	    var that = this,
+		    closedState = {
+		open: false
+	    };
+	    closedState[Pi.csrfTokenName] = Pi.csrfToken;
+
 	    if (!this.get('saved')) {
 		$.when(this.askForSave())
 			.done(function() {
-		    that.saveSketch();
-		    Pi.openIdes.remove(that);
+		    if (!Pi.isGuest && !that.isNew()) {
+			that.saveSketch();
+			that.set('open', false);
+		    } else {
+			Pi.ides.remove(that);
+		    }
 		})
 			.fail(function() {
-		    Pi.openIdes.remove(that);
+		    if (!Pi.isGuest && !that.isNew()) {
+			that.save(closedState, {
+			    patch: true
+			});
+			that.set('open', false);
+		    }
+		    else {
+			Pi.ides.remove(that);
+		    }
 		});
 	    }
 	    else {
-		Pi.openIdes.remove(that);
+		this.set('open', false);
+		if (!Pi.isGuest && !that.isNew()) {
+		    this.save(closedState, {
+			patch: true
+		    });
+		}
+		else {
+		    Pi.ides.remove(this);
+		}
 	    }
 	},
 	/**
@@ -365,27 +376,27 @@ define([
 	/**
 	 * Save ide tabs
 	 */
-//	saveTabs: function()
-//	{
-//	    var saved = $.Deferred(),
-//		    that = this,
-//		    tabsLength = this.tabs.length,
-//		    saveCounter = 0;
-//
-//	    this.tabs.each(function(tab) {
-//		tab.set('project_id', that.get('id'));
-//		$.when(tab.smartSave())
-//			.done(function() {
-//		    saveCounter++;
-//		    if (tabsLength === saveCounter)
-//			saved.resolve();
-//		})
-//			.fail(function() {
-//		    saved.reject();
-//		});
-//	    });
-//	    return saved.promise;
-//	},
+	saveTabs: function()
+	{
+	    var saved = $.Deferred(),
+		    that = this,
+		    tabsLength = this.tabs.length,
+		    saveCounter = 0;
+
+	    this.tabs.each(function(tab) {
+		tab.set('project_id', that.get('id'));
+		$.when(tab.smartSave())
+			.done(function() {
+		    saveCounter++;
+		    if (tabsLength === saveCounter)
+			saved.resolve();
+		})
+			.fail(function() {
+		    saved.reject();
+		});
+	    });
+	    return saved.promise;
+	},
 	/**
 	 * Delete the sketch.
 	 */

@@ -1,4 +1,28 @@
+/* Main */
 @import "bootstrap.css";
 @import "responsive.css";
-@import "main_style.css";
 @import "jquery-ui-custom.css";
+
+/* General */
+@import "pi_style.css";
+
+/* Elements */
+@import "ajax.css";
+@import "code.css";
+@import "collection.css";
+@import "console.css";
+@import "desktop.css";
+@import "dialog.css";
+@import "finder.css";
+@import "fork_github.css";
+@import "form.css";
+@import "icon.css";
+@import "ide_tabs.css";
+@import "ide_tools.css";
+@import "ide_window.css";
+@import "output.css";
+@import "page.css";
+@import "popup.css";
+@import "user.css";
+
+

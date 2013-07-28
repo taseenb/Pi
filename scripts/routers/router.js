@@ -1,10 +1,5 @@
 define([
     'Pi', 'jquery', 'backbone',
-    
-    // Templates
-    "text!tpl/static/about.html",
-    "text!tpl/static/contribute.html",
-    
     // Start Pi
     'Pi/start/startUnderscoreTemplate',
     'Pi/start/startDataBinding',
@@ -12,21 +7,23 @@ define([
     'Pi/start/startDialogs',
     'Pi/start/startUser'
 
-], function(Pi, $, Backbone, aboutHtml, contributeHtml) {
+], function(Pi, $, Backbone) {
+
+    // Start events and site title
+    require([
+	'Pi/start/startTitle',
+	'Pi/start/startEvents'
+    ]);
 
     var Router = Backbone.Router.extend({
 	// initialize: function() {},
-	routes: {
-	    "": "start",
-	    ":anything": "redirect"
-	},
-	start: function()
-	{
-	    require([
-		'Pi/start/startTitle',
-		'Pi/start/startEvents'
-	    ]);
-	},
+	// routes: {
+	//     //"": "start"
+	// },
+	// start: function()
+	// {
+	//
+	// },
 	/**
 	 * Open user's personal space.
 	 */
@@ -40,81 +37,104 @@ define([
 	/**
 	 * Open or bring to front a particular ide (and a tab, if defined).
 	 */
-	openProject: function(ideId, tabId, fullScreen)
+	openProject: function(ideId, action, tabId)
 	{
-	    var ide = Pi.openIdes.get(ideId.replace("/", ""));
-	    if (ide)
-	    {
-		ide.set('active', true);
-		if (tabId)
-		    var tab = ide.tabs.get(tabId.replace("/", ""));
-		if (tab)
-		    tab.set('active', true);
-	    }
-	    else
-	    {
-		this.goHome();
-	    }
-	    //console.log(fullScreen);
-	    if (fullScreen === "fs") {
-		ide.playSketch({
-		    fullScreen: true
-		});
-	    } else if (fullScreen === "play") {
-		ide.playSketch({
-		    fullScreen: false
-		});
-	    }
-	},
-	/**
-	 * Redirects.
-	 * @param {string} route The name of the route.
-	 */
-	redirect: function(route)
-	{
-	    if ($.inArray(route, Pi.dialog.names) > -1) {
-		this.dialog(route);
-		return;
-	    }
-	    this.goHome();
+	    var router = this;
+	    require([
+		'Pi/start/startUser',
+		'models/Ide',
+		'views/IdeView',
+		'Pi/Model'
+	    ], function(Pi, Ide) {
+		var ide = Pi.ides.get(ideId.replace("/", ""));
+
+		if (ide && action === "fs")
+		{
+		    ide.playSketch({
+			'fullScreen': true
+		    });
+		    ide.set('fullScreen', true);
+		}
+		else if (ide && action === "play") {
+		    ide.playSketch({
+			'fullScreen': false
+		    });
+		}
+		else if (ide)
+		{
+		    // Open the Ide and save its open state
+		    if (!ide.get('active'))
+			ide.set('active', true);
+		    if (!ide.get('open')) {
+			ide.set('open', true);
+			if (!ide.isNew() && !ide.get('saved'))
+			    ide.saveSketch();
+		    }
+		    if (tabId)
+			var tab = ide.tabs.get(tabId.replace("/", ""));
+		    if (tab && !tab.get('active'))
+			tab.set('active', true);
+		}
+		else
+		{
+		    // Try to load ide from the server
+		    var project = new Ide({id: ideId});
+		    $.when(project.fetch())
+		    .done(function(e) {
+			var ide = Pi.user.createIde(
+			    project.get('name'),
+			    project.get('tabs'),
+			    project.id, 
+			    project.get('collection_id'), 
+			    project.get('preview_id'),
+			    true // open
+			);
+			// Recurse to open the ide with the requested action and tab
+			if (ide)
+			    router.openProject(ideId, action, tabId);
+		    });
+		}
+	    });
 	},
 	/**
 	 * Show desktop coding environment.
 	 */
-	art: function() {
-	    // Nothing special.
-	},
+//	art: function() {
+//	    // Nothing special.
+//	},
 	/**
-	 * Manager.
+	 * Finder.
 	 */
-	find: function() {
+	find: function(collectionId) {
 	    require([
-		'Pi/start/startManager'
+		'Pi/start/startFinder'
 	    ], function() {
-		Pi.managerView.open();
+		Pi.finderView.show();
+		//console.log(collectionId);
 	    });
 	},
 	/**
 	 * Static page.
 	 * @param {string} page Template file name (without the .html part). This file must be located in tpl/pages/
 	 */
-	page: function(page) {
-	    require([
-		'Pi/start/startPages'
-	    ], function() {
-		Pi.page.set({
-		    "template": page
-		});
-		Pi.pageView.show();
-	    });
-	},
+//	page: function(page) {
+//	    require([
+//		'Pi/start/startPages'
+//	    ], function() {
+//		Pi.page.set({
+//		    "template": page
+//		});
+//		Pi.pageView.show();
+//	    });
+//	},
 	/**
 	 * Temporary about.
 	 */
 	about: function() {
 	    require([
 		'Pi/start/startDialogs',
-	    ], function(Pi) {
+		"text!tpl/static/about.html"
+	    ], function(Pi, aboutHtml) {
 		Pi.dialog.open({
 		    dataId: "about",
 		    title: 'About',
@@ -128,7 +148,8 @@ define([
 	contribute: function() {
 	    require([
 		'Pi/start/startDialogs',
-	    ], function(Pi) {
+		"text!tpl/static/contribute.html"
+	    ], function(Pi, contributeHtml) {
 		Pi.dialog.open({
 		    dataId: "about",
 		    title: 'Contribute to Pi',
@@ -179,32 +200,38 @@ define([
 	    }
 	},
 	/**
-	 * Fill a Dialog model and/or directly open a modal dialog from cache.
-	 * @param {string} id The name of the dialog to open (must be one of this.dialogs).
-	 */
-	dialog: function(id)
-	{
-	    if ($.inArray(id, Pi.dialog.names) > -1)
-	    {
-		Pi.dialog.open({
-		    dataId: id,
-		    title: Pi.dialog.data[id].title
-		});
-		Pi.user.nav.activate(id);
-	    }
-	    else
-		this.goHome();
-	}
-	,
-	/**
 	 * Reset the location hash. 
 	 */
 	goHome: function()
 	{
 	    window.location.hash = "";
+	},
+	/**
+	 * Add route paths for guest dialogs (login, signup, password recovery, 
+	 * resend activation, etc.)
+	 */
+	addRoutesForGuests: function() {
+	    _.each(Pi.dialog.forGuests, function(id) {
+		Pi.router.route(id, function() {
+		    Pi.dialog.open({
+			'dataId': id,
+			'title': Pi.dialog.data[id].title
+		    });
+		    Pi.user.nav.activate(id);
+		});
+	    });
+	},
+	/**
+	 * Remove route paths for guest dialogs.
+	 */
+	removeRoutesForGuests: function() {
+	    _.each(Pi.dialog.forGuests, function(id) {
+		Pi.router.route(id, function() {
+		    return;
+		});
+	    });
 	}
     });
-
 
     /**
      * Routes.
@@ -214,25 +241,27 @@ define([
     Pi.router.route("activated", "activated");
     Pi.router.route("contribute", "contribute");
     Pi.router.route("about", "about");
-    Pi.router.route("art", "art");
-    Pi.router.route("page/:page", "page");
-    Pi.router.route("find", "find");
+//    Pi.router.route("art", "art");
+//    Pi.router.route("page/:page(/)", "page");
+    Pi.router.route("find(/:collectionId)(/)", "find");
+    Pi.router.route(Pi.action.openProject + "/:ideId(/:action)(/:tabId)(/)", "openProject");
     Pi.router.route("me", "me");
-    Pi.router.route(Pi.action.openProject + "/:ideId(/:tabId)(/:fullScreen)", "openProject");
-
+    if (Pi.isGuest) {
+	Pi.router.addRoutesForGuests();
+    }
 
     /**
      * Router events.
      */
-    Pi.router.on("route", function(route) {
-	if (route !== "page") {
-	    require([
-		'Pi/start/startPages'
-	    ], function(Pi) {
-		Pi.pageView.hide();
-	    });
-	}
-    });
+//    Pi.router.on("route", function(route) {
+//	if (route !== "page") {
+//	    require([
+//		'Pi/start/startPages'
+//	    ], function(Pi) {
+//		Pi.pageView.hide();
+//	    });
+//	}
+//    });
 
     Backbone.history.start();
 

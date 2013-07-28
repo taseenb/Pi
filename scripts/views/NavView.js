@@ -2,23 +2,20 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Templates
-    "text!tpl/NavLeft.html",
+    "text!tpl/NavRightGuest.html",
     "text!tpl/NavRight.html",
+    "text!tpl/NavLeft.html",
     // Plugins
     "bootstrap-dropdown"
 
-], function(Pi, Backbone, $, NavLeftHtml, NavRightHtml) {
+], function(Pi, Backbone, $, NavRightGuestHtml, NavRightHtml, NavLeftHtml) {
 
     "use strict";
-
-    var navLeftTemplate = _.template(NavLeftHtml);
-    var navRightTemplate = _.template(NavRightHtml);
 
     var NavView = Backbone.View.extend({
 	initialize: function() {
 	    this.listenTo(this.model, "change:id", this.render);
 	    this.listenTo(this.model, "change:username change:email", this.nameState);
-//	    this.listenTo(this.model, "change:lastvisit_at", this.lastvisit_atState);
 	},
 	events: {
 	    "mousedown": function(e) {
@@ -35,20 +32,25 @@ define([
 	 * Render nav by pulling items to the left and right unordered lists.
 	 */
 	render: function() {
-
 	    // Nav left side
-	    this.$el.find('.pull-left')
-		    .html(navLeftTemplate({
-		isGuest: Pi.isGuest,
-	    }));
+	    this.$el.find('.pull-left').html(NavLeftHtml);
 
 	    // Nav right side
-	    this.$el.find('.pull-right')
-		    .html(navRightTemplate({
-		isGuest: Pi.isGuest,
-		basePath: Pi.basePath,
-		fullName: this.model.getFullName()
-	    }));
+	    if (!Pi.isGuest) {
+		this.$el.find('.pull-right')
+			.html(_.template(NavRightHtml, {
+		    basePath: Pi.basePath,
+		    username: this.model.getFullName(),
+		    userId: Pi.user.id,
+		    avatar: Pi.user.getAvatar()
+		}));
+	    }
+	    else
+	    {	
+		this.$el.find('.pull-right')
+		    .html(NavRightGuestHtml);
+	    }
+	    
 
 	    return this;
 	},

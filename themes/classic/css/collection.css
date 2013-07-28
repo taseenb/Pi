@@ -1,0 +1,222 @@
+/* Collection (within the finder)
+------------------------------------------ */
+
+.collection {
+    position: relative;
+    overflow: hidden;
+}
+
+/*  Project  */
+
+.collection .project {
+    margin: 10px;
+    padding: 5px;
+    position:relative;
+    float:left;
+    top: 0;
+    height: 236px;
+    width: 200px;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    /*border: 1px solid #CCC;*/
+    background-color: #F6F6F6;
+}
+.collection .project:hover {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.collection .project a:hover {
+    text-decoration: none;
+}
+.collection .project.open {
+    background-color: #eaeaea;
+}
+
+.collection .project .project_block {
+    padding: 8px 0;
+}
+
+.collection .project .project_info .title {
+    font-weight: bold;
+    overflow: hidden;
+    margin-top: 3px;
+    color: #999;
+}
+
+.collection .project .project_info .description {
+    display: none;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+/* Authors */
+
+.authors {
+    /*margin: 5px 0;*/
+    margin-top: 3px;
+    display:none;
+}
+.author_info {
+    background-color: #F6F6F6;
+}
+
+.author_info a.author_link {
+    color: #3B3B3B;
+    text-decoration: none;
+}
+
+.author_info a.author_link:hover {
+    color: #3B3B3B;
+    text-decoration: none;
+}
+
+
+/*  Project appreciation  */
+.collection .project.open .project_appreciation {
+    border-top: 1px solid #DDD;
+    box-shadow: 0 1px 0 0 #FFF inset;
+}
+
+.collection .project .project_appreciation {
+    margin-top: 5px;
+    border-top: 1px solid #E7E7E7;
+    box-shadow: 0 1px 0 0 white inset;
+    /*background-color: #F6F6F6;*/
+    padding: 5px 8px;
+    color: #7D7D7D;
+}
+
+.collection .project .vote_up,
+.collection .project .views {
+    font-size: 15px !important;
+}
+
+.collection .project .project_likes,
+.collection .project .project_views {
+    margin-right: 12px;
+}
+.collection .project .project_likes_count,
+.collection .project .project_views_count {
+    margin-left: 5px;
+}
+
+
+/* Cover image and tools */
+
+.collection .project .cover_img {
+    /*opacity: 0.72;*/
+    width: 200px;
+    height: 160px;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.collection .project .cover_img img {
+    width: 100%;
+}
+
+.collection .project:hover .project_tools {
+    /*display:block;*/
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.collection .project .project_tools {
+    /*display:none;*/
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right: 0;
+    z-index: 100;
+    background-color: rgba(0,0,0,0.4);
+    /*background-color: #000;*/
+    width:100%;
+    height:100%;
+}
+
+.collection .project .project_tools:hover a {
+    display:block;
+}
+
+.collection .project .project_tools a {
+    display:none;
+    background-color: #FFF;
+    color: #333;
+    font-size:16px;
+    text-decoration: none;
+    position: absolute;
+    padding: 3%;
+    height: 11%;
+    width: 16%;
+}
+
+.collection .project .project_tools a:hover {
+    background-color: #049cdb;
+    color: #FFF;
+    text-decoration: none;
+}
+
+.collection .project .project_tools a:hover:after {
+    content: attr(title);
+    position: absolute;
+    width: 400%;
+    padding:0;
+    top: 120%;
+    color: #FFF !important;
+    font-size: 12px;
+    z-index: 500;
+}
+
+.collection .project .project_tools a.code:hover:after {
+    left:0;
+    text-align: left;
+}
+.collection .project .project_tools a.play:hover:after {
+    /*margin-left:-50%;*/
+    left:-150%;
+    text-align: center;
+}
+.collection .project .project_tools a.fs:hover:after {
+    /*margin-right:-25%;*/
+    right:0;
+    text-align: right;
+}
+
+/*
+.collection .project .project_tools a.fs:hover .text  {
+    display:block;
+}
+
+.collection .project .project_tools a.play:hover .text {
+    display:block;
+}
+
+.collection .project .project_tools a.code:hover .text {
+    display:block;
+}*/
+
+.collection .project .project_tools a.fs {
+    top: 39%;
+    right:10%;
+}
+
+.collection .project .project_tools a.play {
+    top: 39%;
+    left:39%;
+}
+
+.collection .project .project_tools a.code {
+    top: 39%;
+    left:10%;
+}
+
+
+
+
+.circle {
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}

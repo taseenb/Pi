@@ -49,6 +49,9 @@ class UController extends Controller {
 		    'delete',
 			// User
 			'save',
+//			'avatar',
+			// Profile
+//			'edit'
 		),
 		'users' => array('@'),
 	    ),
@@ -62,8 +65,17 @@ class UController extends Controller {
      */
     public function actions() {
 	return CMap::mergeArray(parent::actions(), array(
+		'login' => array(
+		    'class' => 'application.modules.user.controllers.actions.LoginAction'
+		),
+		'signup' => array(
+		    'class' => 'application.modules.user.controllers.actions.SignupAction'
+		),
 		'activation' => array(
 		    'class' => 'application.modules.user.controllers.actions.ActivationAction'
+		),
+		'recovery' => array(
+		    'class' => 'application.modules.user.controllers.actions.RecoveryAction'
 		)
 	));
     }

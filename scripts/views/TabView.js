@@ -93,7 +93,7 @@ define([
 	 * Html for tab.
 	 */
 	renderTab: function() {
-	    var tabHref = '#' + Pi.action.openProject + '/' + this.model.get('project_id') + '/' + this.model.getId();
+	    var tabHref = '#' + Pi.action.openProject + '/' + this.model.get('project_id') + '/code/' + this.model.getId();
 	    this.$el.attr({
 		'id': 'tab' + this.uniqueId,
 		'class': this.model.isMain() ? "main" : ""
@@ -105,6 +105,8 @@ define([
 		"fileNameMaxLength": Pi.fileNameMaxLength
 	    })
 		    );
+			
+	    this.savedState();
 	},
 	/**
 	 * Html for editor.
@@ -229,7 +231,7 @@ define([
 	 */
 	nameState: function() {
 	    var name = this.model.get('name'),
-		ide = this.model.getIde();
+		    ide = this.model.getIde();
 	    this.$el.find('.tab-name').text(name);
 	    if (this.model.isMain()) {
 		ide.set('name', name);
@@ -239,13 +241,14 @@ define([
 	},
 	/**
 	 * Save state.
+	 * If this is the main tab, it will appear unsaved if the ide is not saved.
 	 */
 	savedState: function() {
 	    //console.log(this.model.get('id') + ": " + this.model.get('saved'));
-	    if (this.model.get('saved'))
-		this.$el.find('.unsaved').hide();
-	    else
+	    if (!this.model.get('saved') || (this.model.isMain() && !this.model.getIde().get('saved')))
 		this.$el.find('.unsaved').show();
+	    else
+		this.$el.find('.unsaved').hide();
 	},
 	/**
 	 * Update code state: show code was saved.

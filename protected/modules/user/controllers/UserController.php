@@ -6,6 +6,12 @@ class UserController extends UController {
      * @var CActiveRecord the currently loaded data model instance.
      */
     private $_model;
+    
+    public function actionLogout()
+    {
+	    Yii::app()->user->logout();
+	    $this->redirect(Yii::app()->homeUrl);
+    }
 
     /**
      * Displays a particular model.
@@ -39,15 +45,15 @@ class UserController extends UController {
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      */
-    public function loadModel() {
-	if ($this->_model === null) {
-	    if (isset($_GET['id']))
-		$this->_model = User::model()->findbyPk($_GET['id']);
-	    if ($this->_model === null)
-		throw new CHttpException(404, 'The requested page does not exist.');
-	}
-	return $this->_model;
-    }
+//    public function loadModel() {
+//	if ($this->_model === null) {
+//	    if (isset($_GET['id']))
+//		$this->_model = User::model()->findbyPk($_GET['id']);
+//	    if ($this->_model === null)
+//		throw new CHttpException(404, 'The requested page does not exist.');
+//	}
+//	return $this->_model;
+//    }
 
     /**
      * Returns the data model based on the primary key given in the GET variable.
@@ -64,6 +70,21 @@ class UserController extends UController {
 	return $this->_model;
     }
 
+    /**
+     * 
+     */
+//    public function actionAvatar() {
+//	
+//	//echo "avatar";
+//	
+//	if (Yii::app()->request->isPostRequest) {
+//	    //file_put_contents('img.png', base64_decode($base64string));
+//	    // upload avatar
+//	} else {
+//	    // get avatar url
+//	}
+//	
+//    }
     
 
 }

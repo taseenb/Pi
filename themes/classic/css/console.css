@@ -1,0 +1,47 @@
+/* Console
+------------------------------------------ */
+
+.win .console {
+    position: absolute;
+    padding: 2px 5px;
+    top:0;
+    left:0;
+    right:0;
+    bottom:24px;
+    background-color: #000;
+    font-size: 11px;
+    color: #FF0000;
+    border:none;
+    margin:0 10px;
+    -webkit-border-radius: 0px 0px 3px 3px;
+    border-radius: 0px 0px 3px 3px; 
+    overflow: auto;
+    line-height: normal;
+
+    /* @TODO : console is not active for the moment*/
+    /*    display:none; */
+}
+
+.win .console p {
+    margin: 0;
+}
+.win .console i {
+    font-style:normal;
+}
+
+.win.active .status {
+    visibility: visible;
+}
+.win .status {
+    visibility: hidden;
+    position: absolute;
+    bottom: 3px;
+    left:0;
+    right:0;
+    margin:0 10px;
+    /*padding: 7px;*/
+    /*background-color: #35434d;*/
+    color: #333;
+    font-size: 11px;
+    /*border-radius: 0 0 4px 4px;*/
+}

@@ -65,7 +65,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <p id="login-form-message"></p>
 
 <!--Alternative message-->
-<div id="login-form-alternative" class="alternative-button">
+<div id="login-form-alternative" class="alternative-area">
     <span>Don't have an account yet? <a class="btn btn-small btn-success" href="#sign-up">Sign Up for Pi</a></span>
 </div>
 
@@ -198,6 +198,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
 		$btn.click(function(e) {
 		    e.preventDefault(); // important! do not submit the form
+		    $btn.attr('disabled', 'disabled').removeClass('btn-primary');
 		    $.ajax({
 			url: url,
 			method: 'post',
@@ -226,6 +227,7 @@ $form = $this->beginWidget('CActiveForm', array(
 			// USER SUCCESSFULLY LOGGED IN
 			// console.log(data);
 			Pi.user.update(data, true); // load user and update sketches
+			Pi.router.removeRoutesForGuests();
 			Pi.dialogView.close();
 		    });
 		}
@@ -237,7 +239,6 @@ $form = $this->beginWidget('CActiveForm', array(
 			    captchaRefresh();
 			    showCaptcha();
 			}
-			$btn.attr('disabled', 'disabled').removeClass('btn-primary');
 			$message.fadeOut(200, function() {
 			    $(this).removeClass('text-info')
 				    .addClass('text-error')

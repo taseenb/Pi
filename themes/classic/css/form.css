@@ -1,0 +1,11 @@
+/* Forms
+------------------------------------------ */
+.form_message span {
+    display:block;
+    margin: 8px 0;
+}
+
+.errorMessage {
+    display:none !important;
+}
+

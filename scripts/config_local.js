@@ -13,7 +13,8 @@ var require = {
 	//"rivets": 'lib/rivets/rivets.min',
 	
 	// Jquery plugins	
-	"jquery-ui": "lib/jquery-ui/jquery-ui-1.10.3.custom.min",
+	//"jquery-ui": "lib/jquery-ui/jquery-ui-1.10.3.custom.min",
+	"jquery-ui": "lib/jquery-ui/jquery-ui.min",
 	"jquery-easing": "lib/plugins/jquery.easing.min",
 	
 	// Processing
@@ -24,6 +25,7 @@ var require = {
 		
 	// Bootstrap
 	"bootstrap-dropdown": "lib/bootstrap/bootstrap-dropdown",
+	"bootstrap-tab": "lib/bootstrap/bootstrap-tab",
 		
 	// Ace
 	"ace": "lib/ace-builds/src-noconflict/ace",

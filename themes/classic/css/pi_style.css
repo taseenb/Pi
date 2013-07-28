@@ -1,0 +1,65 @@
+@CHARSET "UTF-8";
+
+/* Pi logo
+------------------------------------------ */
+#nav img.pi_logo {
+    width:19px;
+}
+
+
+/* Pi helpers 
+------------------------------------------ */
+
+.clear {
+    clear:both;
+}
+
+.text_overflow {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.title-shadow {
+    text-shadow: 1px 1px #f2f2f2, 1px 1px #f2f2f2 !important;
+}
+
+.no_select { 
+/*    Avoid text selection  */
+    user-select: none; 
+    -o-user-select: none; 
+    -moz-user-select: none; 
+    -khtml-user-select: none; 
+    -webkit-user-select: none; 
+    -ms-user-select:none;
+}
+
+
+
+/* Pi tool buttons
+------------------------------------------ */
+
+.p5_icons {
+    background-color: #abb5bd;
+}
+
+.p5_icons:hover {
+    background-color: #FFF;
+}
+
+.p5_icons.box-shadow
+{
+    -webkit-box-shadow:  0px 1px 1px 0px rgba(255, 255, 255, 0.2);
+    box-shadow:  0px 1px 1px 0px rgba(255, 255, 255, 0.2);
+}
+
+.text_shadow,
+.p5_icons {
+    text-shadow: 0px 1px 0px rgba(255, 255, 255, 0.40);
+}
+
+.text_shadow:hover,
+.p5_icons:hover {
+    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.15);
+}
+

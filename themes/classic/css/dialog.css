@@ -1,0 +1,8 @@
+/* Dialog (extra style for jquery UI dialog).
+------------------------------------------ */
+
+.dialog_content {
+    text-align:center; 
+    margin-top:30px
+}
+

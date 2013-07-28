@@ -29,6 +29,9 @@ define([
 	    this.$el.html(OutputHtml).attr({
 		'data-e-bind': "active:active,front:front"
 	    });
+	    
+	    // Render view
+	    this.render();
 	},
 	/**
 	 * Data binding.
@@ -53,6 +56,8 @@ define([
 		});
 	    },
 	    "click .stop": function(e) {
+		this.model.set('fullScreen', false);
+		Pi.router.navigate("/art");
 		this.model.stopSketch({
 		    liveCode: false,
 		    hide: true
@@ -109,18 +114,18 @@ define([
 	fullScreenState: function() {
 	    if (this.model.get('fullScreen')) {
 		this.enterFullScreen();
+		Pi.router.navigate(Pi.action.openProject + "/" + this.model.getId() + "/fs");
 	    }
 	    else {
 		this.exitFullScreen();
+		Pi.router.navigate(Pi.action.openProject + "/" + this.model.getId() + "/play");
 	    }
 	},
 	/**
 	 * Exit full screen.
-	 * @returns {undefined}
 	 */
 	exitFullScreen: function() {
 	    var that = this;
-	    this.fullScreen = false;
 	    this.adjustSize();
 	    Pi.user.nav.show(that, function(output) {
 		output.$el.removeClass('fullscreen');
@@ -130,11 +135,9 @@ define([
 	},
 	/**
 	 * Enter full screen.
-	 * @returns {undefined}
 	 */
 	enterFullScreen: function() {
 	    var that = this;
-	    this.fullScreen = true;
 	    this.adjustSize();
 	    Pi.user.nav.hide(that, function(output) {
 		output.$el.css({

@@ -33,7 +33,7 @@ define([
 	{
 	    if (this.model.get('active')) {
 		// console.log('desktop active');
-		Pi.openIdes.each(function(model) {
+		Pi.ides.each(function(model) {
 		    model.set({
 			active: false
 		    });

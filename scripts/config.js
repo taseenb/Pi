@@ -32,6 +32,7 @@ var require = {
 	
 	// Bootstrap
 	"bootstrap-dropdown": "lib/bootstrap/bootstrap-dropdown",
+	"bootstrap-tab": "lib/bootstrap/bootstrap-tab",
 		
 	// Ace
 	//"ace": "lib/ace-builds/src-noconflict/ace",

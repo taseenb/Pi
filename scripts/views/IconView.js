@@ -35,7 +35,7 @@ define([
 	},
 	render: function() {
 	    var ide = this.model.attributes,
-		    img = Pi.imgPath + ide.iconImg;
+		    img = Pi.imgPath + Pi.defaultSketchIcon;
 
 	    this.id = "icon" + this.model.getId();
 

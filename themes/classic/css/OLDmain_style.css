@@ -303,7 +303,7 @@ a:focus,
 /*New nav*/
 #nav .brand img {
     width:19px;
-    margin: 0 0 0 24px;
+    /*margin: 0 0 0 24px;*/
 }
 #nav {
     -webkit-box-shadow:  0px 4px 8px 0px rgba(0, 0, 0, 0.2);
@@ -582,13 +582,15 @@ a:focus,
 }
 .tools ul li {
     color: #5b6770;
-    cursor:pointer;
     float:left;
     margin-right:6px;
     font-size: 14px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
     border-radius: 2px;
+}
+.tools ul li span {
+    cursor: pointer;
 }
 .tools ul li:hover .icon-stack-base{
     color: #FFF;
@@ -933,7 +935,7 @@ a:focus,
     margin-top:30px
 }
 
-.alternative-button {
+.alternative-area {
     position: absolute;
     height: 42px;
     bottom: 15px;
@@ -942,14 +944,14 @@ a:focus,
     border-top: 1px solid #CCC;
     display: block;
 }
-.alternative-button span {
+.alternative-area span {
     text-align: right;
     display: block;
     position:relative;
     padding: 15px 30px 0 30px;
 }
 
-.alternative-button a {
+.alternative-area a {
     margin-left: 15px;
 }
 

@@ -148,7 +148,7 @@ class Pi extends CComponent
      * @param {boolean} $json Whether to encode the resulting array in json. Default true;
      * @return {json or array} Json or array representation of the records.
      */
-    public static function getCollectionsFromUser($withProjects = true, $json = true, $onlyOpenProjects = true)
+    public static function getCollectionsFromUser($withProjects = true, $json = true, $onlyOpenProjects = false)
     {
 	$user = self::getUser();
 	$c = array();

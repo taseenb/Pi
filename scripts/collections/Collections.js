@@ -3,17 +3,20 @@ define([
     'Pi', 'backbone', 'jquery',
     // Collections
     // Models
+    "models/Collection",
     // Views
     
     // Backbone Extensions
     'Pi/Collection'
     
-], function(Pi, Backbone, $) {
+], function(Pi, Backbone, $, Collection) {
 
     "use strict";
 
     var Collections = Backbone.Collection.extend({
-	UrlRoot: Pi.basePath + '/collections/',
+	
+	url: Pi.basePath + '/collections/',
+		
 	model: Collection,
 	/**
 	 * Init collection.

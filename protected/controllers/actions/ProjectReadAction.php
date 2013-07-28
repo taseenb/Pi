@@ -14,12 +14,11 @@
 class ProjectReadAction extends CAction
 {
 
-    public function run($id=null)
+    public function run($id=null, $children=null, $parents=null)
     {
-	
-	// Get children and parent optional parameters through GET or POST
-	$children = (integer) request()->getParam('children');
-	$parents = (integer) request()->getParam('parents');
+	// Set defaults (get children, not parent)
+	is_null($children) ? $children = 1 : (integer) $children;
+	is_null($parents) ? $parents = 0 : (integer) $parents;
 
 	if(Pi::isValidUser())
 	{
@@ -40,7 +39,7 @@ class ProjectReadAction extends CAction
 	    }
 	}
 	else
-	    echo "You should log in to see this project.";
+	    echo "You should log in to see this/these project/s.";
     }
 
 }

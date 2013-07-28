@@ -1,0 +1,116 @@
+
+/* Pi Tools (play, stop, find, save, etc...)
+------------------------------------------ */
+.win.active .tools {
+    display:block;
+}
+.win .tools {
+    padding: 12px 12px 10px 12px;
+    height: 31px;
+    display:none;
+}
+.win .tools ul {
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+.win .tools ul li {
+    color: #5b6770;
+    float:left;
+    margin-right:6px;
+    font-size: 14px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+.win .tools ul li span {
+    cursor: pointer;
+}
+.win .tools ul li:hover.icon-stack-base{
+    color: #FFF;
+}
+.win .tools ul li.active {
+    background-color: #CCFF66;
+}
+.win .tools ul li.circle {
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+}
+/* Pause button is hidden by default */
+.win .tools ul li.pause,
+.win .tools ul li.refresh {
+    display: none;
+}
+
+/* Corrections for particular icons
+------------------------------------------ */
+.win .tools ul li .icon-play {
+    font-size:10px;
+    margin-left:1px;
+}
+
+.win .tools ul li .icon-stop {
+    font-size:9px;
+}
+
+.win .tools ul li .icon-pause {
+    font-size:10px;
+}
+
+.win .tools ul li em {
+    float:left;
+    margin:0 5px;
+    cursor: default;
+}
+.win .tools ul li.save.disabled {
+    cursor:default;
+    opacity: 0.4;
+    background-color: #CCC;
+}
+.win .tools ul li.save.disabled:hover {
+    background-color: #CCC;
+    text-shadow: none;
+}
+
+/* Window secondary buttons (max, min, exit, play, pause)
+------------------------------------------ */
+
+.secondary_tools a {
+    margin-top:2px;
+    margin-left:12px;
+    font-size: 14px;
+    color: #5b6770;
+    cursor: pointer;
+    text-decoration: none;
+}
+.secondary_tools a:hover {
+    color: #FFF;
+    text-decoration: none;
+}
+
+.secondary_tools a.small_size {
+    font-size: 13px;
+}
+.secondary_tools a.medium_size {
+    font-size: 15px;
+}
+.secondary_tools a.large_size {
+    font-size: 18px;
+}
+.secondary_tools a.xl_size {
+    font-size: 21px !important;
+}
+.secondary_tools span.spacer {
+    width:20px;
+}
+
+/* Tools titles
+------------------------------------------ */
+.win .tools ul li.tools_title {
+    width: auto;
+    padding-top:5px;
+    margin-left:4px;
+    color:#5b6770;
+    font-size: 12px;
+}

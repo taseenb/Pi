@@ -1,0 +1,91 @@
+/* Ide Tabs
+------------------------------------------ */
+
+.win.active .nav_container {
+    display:block;
+}
+
+.win .nav_container {
+    display:none;
+    margin: 0 65px 0 10px;
+    float:left;
+    position:absolute;
+    z-index:100;
+
+}
+.win.active .nav-tabs > .active > a,
+.nav-tabs > .active > a:hover,
+.nav-tabs > .active > a:focus {
+    background-color: #FFF;
+}
+.win .nav {
+    margin-bottom: 0;
+}
+.win .nav-tabs > li.main {
+    font-weight: bold;
+}
+.nav-tabs .tab_editor {
+    padding:4px;
+    display:none;
+    background-color: #FFF;
+    border-radius: 4px;
+    margin-right: 2px;
+    position:absolute;
+    z-index: 2000;
+}
+
+.nav-tabs .tab_editor .input-append {
+    margin: 0;
+}
+.nav-tabs .tab_editor input {
+    padding: 2px 4px !important;
+}
+.nav-tabs .tab_editor .btn {
+    padding: 2px 8px !important;
+    font-size: 12px;
+}
+.nav-tabs .tab_editor a {
+    margin: 12px 6px 0px 0px;
+    font-size: 15px;
+    cursor: pointer;
+    color: #000
+}
+
+/* Plus and Tab selector
+------------------------------------------ */
+.win.active .nav-tabs li.plus_tab,
+.win.active .nav-tabs li.list_tab {
+    visibility: visible;
+}
+.win .nav-tabs li.plus_tab,
+.win .nav-tabs li.list_tab {
+    visibility: hidden;
+    float: left;
+    margin-left: 5px;
+    margin-top: 7px;
+    position:absolute;
+
+}
+.win .nav-tabs li.plus_tab {
+    right: -25px;
+}
+.win .nav-tabs li.list_tab {
+    right: -55px;
+}
+.win .nav-tabs li.plus_tab i,
+.win .nav-tabs li.list_tab i {
+    font-size: 22px;
+    padding:0px;
+    margin: 3px 0 4px 4px;
+    background:none;
+    color: #999;
+    cursor: pointer;
+}
+.win .nav-tabs li.list_tab i:hover,
+.win .nav-tabs li.plus_tab i:hover {
+    color: #FFF;
+}
+
+.win .nav-tabs > li.tab_selector > a {
+    background-color: transparent;
+}

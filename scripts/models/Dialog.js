@@ -22,13 +22,18 @@ define([
 	    require: undefined
 	},
 	/**
+	 * List of available route names for dialogs used by guests only.
+	 */
+	forGuests: [
+	    "log-in", "sign-up", "resend-activation-email", "password-recovery"
+	],
+	/**
 	 * Loop through dialog data and apply it to each dialog model attribute.
 	 * If 'url' property is set, make a POST request 
 	 * and apply the response to the content.
 	 * Otherwise just set the attribute in the model.
 	 */
 	reload: function() {
-
 	    var data = this.data[this.get('dataId')],
 		    that = this;
 	    _.each(data, function(value, key) {
@@ -52,9 +57,7 @@ define([
 	data: {
 	    'alert': {
 		width: 360,
-		height: 180,
-//		title: 'Alert',
-//		content: 'This is an alert.'
+		height: 200
 	    },
 	    'confirmation': {
 		width: 420,

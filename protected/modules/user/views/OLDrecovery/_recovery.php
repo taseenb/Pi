@@ -25,7 +25,7 @@ endif;
 
 <p id="recovery-form-message"></p>
 
-<div id="recovery-form-alternative" class="alternative-button">
+<div id="recovery-form-alternative" class="alternative-area">
     <span>Did you remember your password? <a class="btn btn-small btn-success" href="#log-in">Log In to Pi</a></span>
 </div>
 

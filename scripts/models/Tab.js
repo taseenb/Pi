@@ -19,7 +19,7 @@ define([
 	    'code': "",
 	    'main': 0, // READ ONLY
 	    // app
-	    'saved': true,
+	    'saved': false,
 	    'active': true,
 	    'editMode': false
 	},
@@ -81,7 +81,7 @@ define([
 	 * Get the containing Ide model of this tab.
 	 */
 	getIde: function() {
-	    return Pi.openIdes.get(this.get('project_id'));
+	    return Pi.ides.get(this.get('project_id'));
 	},
 	/**
 	 * Get the jQuery representation of Ide view of this tab.

@@ -1,0 +1,17 @@
+/* Finder (overrides Popup.css)
+--------------------------- */
+
+#finder {
+    width: 80%;
+    height: 80%;
+    right:10%;
+    left:10%;
+    top: 10%;
+    bottom: 10%;
+}
+
+#finder_tabs_content {
+    top: 80px;
+    left: 20px;
+    right: 20px;
+}

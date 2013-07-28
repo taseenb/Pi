@@ -32,15 +32,17 @@
 
   Tab.prototype = {
 
-    constructor: Tab
+    constructor: Tab,
 
-  , show: function () {
+    show: function () {
       var $this = this.element
         , $ul = $this.closest('ul:not(.dropdown-menu)')
         , selector = $this.attr('data-target')
         , previous
         , $target
-        , e
+        , e;
+
+	//console.log(selector);
 
       if (!selector) {
         selector = $this.attr('href')

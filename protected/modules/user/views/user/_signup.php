@@ -63,7 +63,7 @@ $form = $this->beginWidget('CActiveForm', array(
 <input id="signup-button2" type="submit" class="btn btn-large step2" value="<?php echo UserModule::t("Finish") ?>" style="display:none" disabled>
 <?php $this->endWidget(); ?>
 
-<div id="signup-alternative" class="alternative-button">
+<div id="signup-alternative" class="alternative-area">
     <span>Already have an account? <a class="btn btn-small btn-success" href="#log-in">Log In to Pi</a></span>
 </div>
 

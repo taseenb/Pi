@@ -37,6 +37,9 @@ class UpdateAction extends CAction
 	    $modelAttrs = array_intersect_key($patch, $model->attributes);
 	    // Only get safe attributes
 	    $safeAttrs = array_diff($modelAttrs, $this->_protectedAttrs);
+	    
+	    // Convert booleans to integers
+	    $safeAttrs = Helper::boolToInt($safeAttrs);
 
 	    if (!empty($safeAttrs))
 	    {

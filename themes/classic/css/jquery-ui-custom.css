@@ -50,6 +50,12 @@
 }
 
 
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled {
+	cursor: default !important;
+}
+
 /* Misc visuals
 ----------------------------------*/
 
@@ -170,25 +176,26 @@
 }
 .ui-dialog .ui-dialog-titlebar {
     /*padding: .4em 1em;*/
-    border-bottom: 1px solid #CCC;
+    /*border-bottom: 1px solid #CCC;*/
     position: relative;
 }
 .ui-dialog .ui-dialog-title {
     float: left;
-    margin-bottom: 10px;
     white-space: nowrap;
-    /*width: 90%;*/
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-bottom: 0;
+    font-size: 18px;
+    font-weight: normal;
+    line-height: normal;
+    
 }
 
 .ui-dialog .ui-dialog-titlebar-close {
     position: absolute;
-    top: 2px;
+    top:-2px;
     right: 0;
     background: none;
-    /*	height: 23px;
-	    width: 23px;*/
     padding:0;
     margin:0;
     border:none;
@@ -196,17 +203,14 @@
     width: auto !important;
 }
 .ui-dialog .ui-dialog-titlebar-close:hover {
-    /*	border:none;
-	    background: none;*/
     color: #049CDB;
 }
 .ui-dialog .ui-dialog-content {
     position: relative;
     border: 0;
-    /*	padding: .5em 1em;*/
     background: none;
     overflow: auto;
-    padding: 20px 30px;
+    padding: 30px 30px 20px 30px;
 }
 .ui-dialog .ui-dialog-buttonpane {
     text-align: left;
@@ -289,13 +293,12 @@
     background-color: #000;
     /*background: #eeeeee url(images/ui-bg_flat_0_eeeeee_40x100.png) 50% 50% repeat-x;*/
     opacity: .4;
-    filter: Alpha(Opacity=40);
 }
 .ui-widget-shadow {
     margin: -4px 0 0 -4px;
     padding: 4px;
     background: #aaaaaa url(images/ui-bg_flat_0_aaaaaa_40x100.png) 50% 50% repeat-x;
     opacity: .6;
-    filter: Alpha(Opacity=60);
     border-radius: 0px;
 }
+

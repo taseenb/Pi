@@ -1,24 +1,14 @@
-<% if (isGuest) { %>
-    
-    <li>
-	<a href="#sign-up">Sign Up</a>
-    </li>
-    <li>
-	<a href="#log-in"><i class="icon-signin"></i> Log In</a>
-    </li>
-
-<% } else { %>
-
-    <li class="bold">
-	<a href="#me" id="username">
-	    {{fullName}}
-	</a>
-    </li>
-    
-    <li class="last">
-	<a href="{{basePath}}/user/logout/">
-	    <i class="icon-signout"></i> Log Out
-	</a>
-    </li>  
-
-<% } %>
+<li class="bold">
+    <a href="#user/{{userId}}">
+	<span class="user_info">
+	    <span class="username text_overflow">
+		<img class="avatar" src="{{avatar}}" title="{{username}}"> {{username}}
+	    </span>
+	</span>
+    </a>
+</li>
+<li class="last">
+    <a href="{{basePath}}/user/logout/">
+	<i class="icon-signout"></i> Log Out
+    </a>
+</li>

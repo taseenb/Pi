@@ -78,7 +78,8 @@ define([
 	 */
 	convertCanvasToImage: function(canvas) {
 	    var image = new Image();
-	    image.src = canvas.toDataURL("image/png");
+	    //image.src = canvas.toDataURL("image/png");
+	    image.src = canvas.toDataURL("image/jpeg");
 	    return image;
 	},
 	/**

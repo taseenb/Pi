@@ -75,10 +75,10 @@ define([
 	    _.each(data.profile, function(value, key) {
 		this.profile.attributes[key] = value; // avoid backbone change event
 	    }, this);
-	    
+
 	    if (updateSketches)
 		this.updateSketches(data);
-	    
+
 	    if (this.nav)
 		this.nav.render();
 	},
@@ -97,9 +97,7 @@ define([
 		if (collection.projects)
 		{
 		    _.each(collection.projects, function(project) {
-			if (project.open) {
-			    this.openIde(project.name, project.tabs, project.id, collection.id);
-			}
+			this.createIde(project.name, project.tabs, project.id, collection.id, project.preview_id, project.open);
 		    }, this);
 		}
 	    }, this);
@@ -121,21 +119,50 @@ define([
 	getFullName: function() {
 	    if (this.profile && (this.profile.firstname || this.profile.lastname)) {
 		return this.profile.firstname + " " + this.profile.lastname;
+	    } else {
+		return this.getUsername();
 	    }
-	    return this.get('email');
+	},
+	getPublicDir: function() {
+	    return Pi.publicDir + "/" + this.id;
+	},
+	/**
+	 * Get the full name of the user or his username.
+	 */
+	getUsername: function() {
+	    if (this.get('username')) {
+		return this.get('username');
+	    } else {
+		var email = this.get('email');
+		this.set('username', email.substr(0, email.indexOf('@')));
+		return this.get('username');
+	    }
+	},
+	getAvatar: function() {
+	    if (this.get('avatar')) {
+		Pi.user.getPublicDir() + "/avatar.jpg";
+	    }
+	    else
+	    {
+		return Pi.imgPath + "/" + Pi.defaultAvatarFileName;
+	    }
+
 	},
 	/**
 	 * Start a basic sketch for a guest, with demo code.
 	 */
 	newSketch: function()
 	{
-	    this.openIde(
+	    this.createIde(
 		    undefined, // _name: is set on ide model initilization
 		    [{
 			    'code': Pi.demoCode,
 			    'main': 1
-			}], // _tabs: tabs collection
-	    undefined // _id: id will be generated automatically by backbone
+			}],
+		    undefined,  // _id: id will be generated automatically by backbone
+		    undefined,  // _collectionId
+		    undefined,  // _previewId
+		    1		// _open (open immediatly)
 		    );
 	},
 	/**
@@ -143,17 +170,21 @@ define([
 	 * @param {string} _name Project name.
 	 * @param {object} _tabs Tabs data.
 	 * @param {number} _id The id field in the database.
+	 * @param {number} _collectionId The id of the collection.
+	 * @param {number} _previewId The id of the image file.
+	 * @param {boolean or string or int} _open Whether the ide is open.
 	 */
-	openIde: function(_name, _tabs, _id, _collectionId)
+	createIde: function(_name, _tabs, _id, _collectionId, _previewId, _open)
 	{
-	    if (Pi.openIdes.length < Pi.maxIdeSessions)
+	    if (Pi.ides.length < Pi.maxIdeSessions)
 	    {
 		// Create a new ide model with needed attributes
 		var ide = new Ide({
 		    // If id is undefined then ide.isNew() == true
-		    id: _id ? parseInt(_id) : undefined,
+		    id: _id && parseInt(_id),
+		    preview_id: _previewId && parseInt(_previewId),
 		    collection_id: _collectionId ? parseInt(_collectionId) : parseInt(this.get("default_collection")),
-		    open: true,
+		    open: _open && parseInt(_open) ? true : false,
 		    name: _name,
 		    iconTop: 100,
 		    iconLeft: 100
@@ -169,28 +200,27 @@ define([
 		ide.view = new IdeView({
 		    model: ide
 		});
-		ide.view.render();
+		ide.view.render().openState(); // render and show if open
 
 		// Add to the OpenIdes collection
-		Pi.openIdes.add(ide);
-		
-		
+		Pi.ides.add(ide);
+
 		// Create a tabs selector view
 		ide.tabsSelector = new TabsSelectorView({
 		    model: ide
 		});
-		
+
 		// Fill the Tabs collection
 		_.each(_tabs, function(_tab) {
 		    _tab['project_id'] = ide.getId();
 		    ide.tabs.add(new Tab(_tab));
 		});
-		
+
 		// IMPORTANT: always set first the main tab active when loading
 		// a project and set the hash to this project, unless there is 
 		// another path already set
 		ide.setMainTabActive();
-		
+
 		if (!window.location.hash)
 		{
 		    window.location.hash = "project/" + ide.getId();
@@ -202,12 +232,12 @@ define([
 		});
 		ide.icon.render();
 		
+		return ide;
 	    }
 	    else
 	    {
-		Pi.alert("Too Many Windows!", "<p>Please, save and close at least one window.<br>"
-			+
-			"Otherwise your browser could explode!</p>"
+		Pi.alert("Too Many Windows!", 
+		"<p>Please, save and close at least one window.<br>Otherwise your browser could explode!</p>"
 			);
 	    }
 	},

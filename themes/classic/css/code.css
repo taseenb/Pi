@@ -1,0 +1,52 @@
+/* Code editor (ACE)
+------------------------------------------ */
+
+.win.active .code {
+    background-color: #FFF;
+}
+
+.code {
+    margin: 0;
+    position: absolute !important;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #DDD;
+}
+
+.js-code {
+    display:none; /* IMPORTANT */
+}
+
+.win.active .js-code {
+    background-color: #eff7fd;
+}
+.win.active .nav-tabs > .active.js > a,
+.nav-tabs > .active.js > a:hover,
+.nav-tabs > .active.js > a:focus {
+    background-color: #eff7fd;
+}
+
+.win.active .nav-tabs .active.js .js-mode {
+    display:inline;
+}
+.win.active .nav-tabs li .js-mode,
+.win.active .nav-tabs li .unsaved {
+    display:none;
+}
+
+.code_wrapper {
+    position:absolute;
+    min-height:80px;
+    top: 84px;
+    /* bottom:25px; */
+    bottom: 24px;
+    left:10px;
+    right:10px;
+    z-index:99;
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    -webkit-box-shadow:  0px 0px 7px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:  0px 0px 7px 0px rgba(0, 0, 0, 0.2);
+}
