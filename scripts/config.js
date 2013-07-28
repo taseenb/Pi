@@ -41,7 +41,8 @@ var require = {
 		
 	// Require.js plugins
 	//"text": "lib/require/text"
-	"text": "//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.min"
+	"text": "//cdnjs.cloudflare.com/ajax/libs/require-text/2.0.5/text.min",
+	"domReady": "//cdnjs.cloudflare.com/ajax/libs/require-domReady/2.0.1/domReady.min"
 	
     },
     // Traditional browser globals scripts

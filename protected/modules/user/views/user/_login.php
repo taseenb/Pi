@@ -73,9 +73,11 @@ $form = $this->beginWidget('CActiveForm', array(
     // Disable submit button if input is empty.
     define(
 	    'login-form',
-	    ['Pi', 'jquery', 'Pi/start/startDialogs'],
-	    function(Pi, $) {
-
+	    ['domReady!', 'Pi', 'jquery', 'Pi/start/startDialogs'],
+	    function(doc, Pi, $) {
+		
+		console.log(doc);
+		
 		var action = "login",
 			leftLogins = 1000,
 			url = Pi.basePath + '/user/' + action + '/',

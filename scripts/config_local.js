@@ -31,7 +31,8 @@ var require = {
 	"ace": "lib/ace-builds/src-noconflict/ace",
 		
 	// Require.js plugins
-	"text": "lib/require/text"
+	"text": "lib/require/text",
+	"domReady": "lib/require/domReady"
     },
     // Traditional browser globals scripts
     shim: {
