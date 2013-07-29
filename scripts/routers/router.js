@@ -113,6 +113,9 @@ define([
 		//console.log(collectionId);
 	    });
 	},
+	signout: function() {
+	    window.location.href = Pi.basePath + "/user/logout/";
+	},
 	/**
 	 * Static page.
 	 * @param {string} page Template file name (without the .html part). This file must be located in tpl/pages/
@@ -237,6 +240,7 @@ define([
      * Routes.
      */
     Pi.router = new Router();
+    Pi.router.route("signout", "signout");
     Pi.router.route("alreadyActive", "alreadyActive");
     Pi.router.route("activated", "activated");
     Pi.router.route("contribute", "contribute");
@@ -249,6 +253,8 @@ define([
     if (Pi.isGuest) {
 	Pi.router.addRoutesForGuests();
     }
+
+
 
     /**
      * Router events.

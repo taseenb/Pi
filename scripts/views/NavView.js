@@ -39,9 +39,9 @@ define([
 	    if (!Pi.isGuest) {
 		this.$el.find('.pull-right')
 			.html(_.template(NavRightHtml, {
-		    basePath: Pi.basePath,
+		    //basePath: Pi.basePath,
 		    username: this.model.getFullName(),
-		    userId: Pi.user.id,
+		    //userId: Pi.user.id,
 		    avatar: Pi.user.getAvatar()
 		}));
 	    }

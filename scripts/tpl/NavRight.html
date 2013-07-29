@@ -1,14 +1,38 @@
-<li class="bold">
-    <a href="#user/{{userId}}">
+<li class="bold dropdown">
+    <a id="usermenu" class="dropdown-toggle" data-toggle="dropdown" role="button" href="#">
 	<span class="user_info">
 	    <span class="username text_overflow">
 		<img class="avatar" src="{{avatar}}" title="{{username}}"> {{username}}
 	    </span>
 	</span>
     </a>
-</li>
-<li class="last">
-    <a href="{{basePath}}/user/logout/">
-	<i class="icon-signout"></i> Log Out
-    </a>
+
+    <ul class="dropdown-menu" role="menu" aria-labelledby="usermenu">
+	
+	<li role="presentation">
+	    <a href="#user/account">
+		<i class="icon-wrench"></i> Account settings
+	    </a>
+	</li>
+	
+<!--	<li role="presentation">
+	    <a href="#user/password">
+		<i class="icon-key"></i> Change your avatar
+	    </a>
+	</li>
+	
+	<li role="presentation">
+	    <a href="#user/password">
+		<i class="icon-key"></i> Change your password
+	    </a>
+	</li>-->
+
+	<li class="divider" role="presentation"></li>
+	<li>
+	    <a href="#signout">
+		<i class="icon-signout"></i> Sign out
+	    </a>
+	</li>
+    </ul>
+
 </li>
