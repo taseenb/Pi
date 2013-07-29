@@ -60,9 +60,9 @@ class HttpRequest extends CHttpRequest
 	    }
 
 	    //CVarDumper::dump($json);
-	    Yii::log("Method: " . $this->getRequestType(), "warning");
-	    Yii::log("User token: " . $userToken, "warning");
-	    Yii::log("Session token: " . $tokenFromSession, "warning");
+//	    Yii::log("Method: " . $this->getRequestType(), "warning");
+//	    Yii::log("User token: " . $userToken, "warning");
+//	    Yii::log("Session token: " . $tokenFromSession, "warning");
 //	    
 	    // Check if the token in the request is equal to the token stored in the session
 	    if ($session->contains($this->csrfTokenName) && !empty($userToken))

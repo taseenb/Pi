@@ -27,6 +27,7 @@ class LoginAction extends CAction
 		if ($defender->failedLogins >= $defender->maxLoginsBeforeCaptcha)
 		    $form->captcha = true;
 
+
 		if (isset($_POST['LoginForm']))
 		{
 		    $form->attributes = $_POST['LoginForm'];
@@ -75,7 +76,7 @@ class LoginAction extends CAction
 	else
 	{
 	    header('Content-type: application/json');
-	    echo CJSON::encode(["message" => "Already logged in."]);
+	    echo CJSON::encode(array("message" => "Already logged in."));
 	}
     }
 

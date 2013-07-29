@@ -29,24 +29,21 @@ class UController extends Controller {
     public function accessRules() {
 	return array(
 	    array('allow', 'actions' => array(
-		    'bootstrap',
 		    'login',
 		    'logout',
 		    'signup',
 		    'activation',
 		    'resendEmail',
-		    'error',
-		    'captcha',
 		    'recovery'
 		),
 		'users' => array('*'),
 	    ),
 	    array('allow', 'actions' => array(
-		    'index',
+//		    'index',
 		    'view',
-		    'update',
-		    'admin',
-		    'delete',
+//		    'update',
+//		    'admin',
+//		    'delete',
 			// User
 			'save',
 //			'avatar',

@@ -49,21 +49,15 @@ class Controller extends CController
 		    'contact',
 		    'page', // static pages (site controller)
 		    'bootstrap',
-		    'login',
-		    'logout',
-		    'signup',
-		    'activation',
-		    'resendEmail',
 		    'error',
 		    'captcha',
-		    'recovery',
 		    // REST
 		    'read',
 		),
 		'users' => array('*'),
 	    ),
 	    array('allow', 'actions' => array(
-		    'admin',
+		    'view',
 		    // REST
 		    'create',
 		    'update',

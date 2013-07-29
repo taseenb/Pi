@@ -13,6 +13,11 @@ class UserController extends UController {
 	    $this->redirect(Yii::app()->homeUrl);
     }
 
+    
+//    public function actionIndex() {
+//	echo 1;
+//    }
+    
     /**
      * Displays a particular model.
      */
@@ -85,6 +90,8 @@ class UserController extends UController {
 //	}
 //	
 //    }
+    
+    
     
 
 }

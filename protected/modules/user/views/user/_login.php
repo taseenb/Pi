@@ -76,7 +76,7 @@ $form = $this->beginWidget('CActiveForm', array(
 	    ['domReady!', 'Pi', 'jquery', 'Pi/start/startDialogs'],
 	    function(doc, Pi, $) {
 		
-		console.log(doc);
+//		console.log(doc);
 		
 		var action = "login",
 			leftLogins = 1000,
@@ -200,6 +200,7 @@ $form = $this->beginWidget('CActiveForm', array(
 
 		$btn.click(function(e) {
 		    e.preventDefault(); // important! do not submit the form
+		    e.stopPropagation();
 		    $btn.attr('disabled', 'disabled').removeClass('btn-primary');
 		    $.ajax({
 			url: url,
