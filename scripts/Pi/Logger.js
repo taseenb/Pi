@@ -29,7 +29,7 @@ define([
 		// @TODO - SOLUTION NOT FOUND YET FOR print and println in setup()
 		// Canvas id not yet defined in void setup()
 		// Log messages before draw() are lost
-		console.log(message);
+		//console.log(message);
 		return false;
 	    }
 

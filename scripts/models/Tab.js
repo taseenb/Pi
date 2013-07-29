@@ -19,7 +19,7 @@ define([
 	    'code': "",
 	    'main': 0, // READ ONLY
 	    // app
-	    'saved': false,
+	    'saved': undefined,
 	    'active': true,
 	    'editMode': false
 	},
@@ -38,6 +38,8 @@ define([
 	    this.set('main', this.isMain());
 	    // Set the main tab as active
 	    this.set('active', this.isMain());
+	    // Set saved state
+	    this.set('saved', !this.isNew());
 	    // Start tracking changes and unsaved attributes.
 //	    if (!Pi.isGuest)
 	    this.trackUnsaved(this.safeAttributes);
@@ -57,12 +59,7 @@ define([
 	    // Set the new name.
 	    this.set('name', newName);
 	    //console.log(this.changed);
-
-	    // If this is the main tab, also change the ide name.
-//	if (this.isMain()) this.getIde().set('name', newName);
-
-
-	    // Set ide as not saved.
+	    
 	    this.getIde().set('saved', false);
 
 	    return true;

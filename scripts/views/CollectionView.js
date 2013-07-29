@@ -28,13 +28,8 @@ define([
 		"class": "tab-pane collection"
 	    });
 	    
-	    //console.log(this.el);
-	    
 	    // Append projects
 	    _.each(this.model.get('projects'), function(project) {
-		//console.log(project);
-		console.log(Pi.ides.get(project.id));
-		
 		$collection
 		.append(_.template(CollectionItemHtml, {
 		    id: project.id,

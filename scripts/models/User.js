@@ -176,7 +176,7 @@ define([
 	 */
 	createIde: function(_name, _tabs, _id, _collectionId, _previewId, _open)
 	{
-	    if (Pi.ides.length < Pi.maxIdeSessions)
+	    if (Pi.ides.getOpen().length < Pi.maxIdeSessions)
 	    {
 		// Create a new ide model with needed attributes
 		var ide = new Ide({

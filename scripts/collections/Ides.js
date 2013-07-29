@@ -108,6 +108,16 @@ define([
 		     first = ide;
 	     });
 	     return first;
+	 },
+	 /**
+	  * Get only the open ides.
+	  */
+	 getOpen: function() {
+	    var openIdes = [];
+	    _.each(this.models, function(model) {
+		if (model.get('open')) openIdes.push(model);
+	    });
+	    return openIdes;
 	 }
     });
     

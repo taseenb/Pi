@@ -42,7 +42,7 @@ define([
 		left: 0,
 		top: 0
 	    },
-	    saved: false,
+	    saved: undefined,
 	    front: true,
 	    active: true, // must be true, otherwise ide will not be active when initialized
 	    // db "projects"
@@ -110,6 +110,9 @@ define([
 		    'name': this.createNewTitle(Pi.sessions)
 		});
 	    }
+	    
+	    // Set saved state
+	    this.set('saved', !this.isNew());
 
 	    // Start tracking changes and unsaved attributes.
 	    this.trackUnsaved(this.safeAttributes);
@@ -444,8 +447,8 @@ define([
 		Pi.confirmation({
 		    promise: this.promise['askForSave' + this.getId()],
 		    title: "Do you want to save?",
-		    message: "If you want to save your data, please <strong><a href='#log-in'>log in</a></strong>.<br>" +
-			    "If you don't have an account yet, <strong><a href='#sign-up'>sign up for Pi</a></strong>.",
+		    message: "If you want to save your work, please <strong><a href='#log-in'>log in</a></strong>.<br>" +
+			    "Don't have an account yet? <strong><a href='#sign-up'>Sign up for Pi</a></strong>.",
 		    buttons: [
 			{
 			    label: "Just close",
