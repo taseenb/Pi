@@ -13,6 +13,7 @@ define([
     "use strict";
 
     var Dialog = Backbone.Model.extend({
+	modelName: "Dialog",
 	defaults: {
 	    title: "",
 	    content: "",

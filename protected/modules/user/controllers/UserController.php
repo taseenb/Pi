@@ -6,17 +6,24 @@ class UserController extends UController {
      * @var CActiveRecord the currently loaded data model instance.
      */
     private $_model;
-    
+
+
     public function actionLogout()
     {
 	    Yii::app()->user->logout();
 	    $this->redirect(Yii::app()->homeUrl);
     }
 
+
     
-//    public function actionIndex() {
-//	echo 1;
+    /**
+     * Test action. (FOR DEBUG)
+     */
+//    public function actionTest() {
+//	$form = new LoginForm;
+//	$this->render("test", array('model'=>$form, 'captcha' => $form->captcha,));
 //    }
+
     
     /**
      * Displays a particular model.

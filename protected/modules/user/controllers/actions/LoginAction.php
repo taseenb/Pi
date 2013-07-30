@@ -27,7 +27,6 @@ class LoginAction extends CAction
 		if ($defender->failedLogins >= $defender->maxLoginsBeforeCaptcha)
 		    $form->captcha = true;
 
-
 		if (isset($_POST['LoginForm']))
 		{
 		    $form->attributes = $_POST['LoginForm'];

@@ -22,6 +22,7 @@ define([
     "use strict";
 
     var Ide = Backbone.Model.extend({
+	modelName: "Ide",
 	urlRoot: Pi.basePath + '/project',
 	/**
 	 * Ide is the model for projects (projects table in the db).

@@ -3,10 +3,10 @@ define([
     'Pi', 'backbone', 'jquery',
     
     // Templates
-    "text!tpl/Ide.html",
+    "text!tpl/IdeView.html",
     
     // Models
-    "models/Ide",
+    "models/Project",
     
     // Backbone Extensions
     'Pi/Model',
@@ -15,14 +15,14 @@ define([
     // Plugins
     'jquery-ui'
 
-], function(Pi, Backbone, $, IdeHtml, Ide) {
+], function(Pi, Backbone, $, IdeViewHtml, Project) {
 
     "use strict";
 
 //    var ideTemplate = _.template(IdeHtml);
 
     var IdeView = Backbone.Epoxy.View.extend({
-	model: Ide,
+	model: Project,
 	/**
 	 * Data binding.
 	 */
@@ -48,7 +48,7 @@ define([
 	    this.listenTo(this.model, "change:consoleOpen", this.consoleState);
 //	    this.listenTo(this.model, "change:running", this.runningState);
 
-	    this.$el.html(IdeHtml).attr({
+	    this.$el.html(IdeViewHtml).attr({
 		'data-e-bind': "active:active,front:front"
 	    });
 	},
@@ -307,7 +307,7 @@ define([
 	bringToFront: function()
 	{
 	    var that = this;
-	    Pi.ides.each(function(model)
+	    Pi.projects.each(function(model)
 	    {
 		if (model.cid !== that.model.cid) {
 		    var z = model.attributes.zIndex;
@@ -319,7 +319,7 @@ define([
 		}
 	    });
 	    this.model.set({
-		zIndex: Pi.ides.length + 1,
+		zIndex: Pi.projects.length + 1,
 		front: true
 	    });
 	},

@@ -42,11 +42,11 @@ define([
 	    var router = this;
 	    require([
 		'Pi/start/startUser',
-		'models/Ide',
+		'models/Project',
 		'views/IdeView',
 		'Pi/Model'
-	    ], function(Pi, Ide) {
-		var ide = Pi.ides.get(ideId.replace("/", ""));
+	    ], function(Pi, Project) {
+		var ide = Pi.projects.get(ideId.replace("/", ""));
 
 		if (ide && action === "fs")
 		{
@@ -78,7 +78,7 @@ define([
 		else
 		{
 		    // Try to load ide from the server
-		    var project = new Ide({id: ideId});
+		    var project = new Project({id: ideId});
 		    $.when(project.fetch())
 		    .done(function(e) {
 			var ide = Pi.user.createIde(

@@ -2,13 +2,13 @@ define([
     // Main scripts
     'Pi', 'jquery',
     // Collections
-    "collections/Ides",
+    "collections/Projects",
     "collections/Collections",
     // Models
     "models/User",
     // Views
     "views/NavView",
-], function(Pi, $, Ides, Collections, User, NavView) {
+], function(Pi, $, Projects, Collections, User, NavView) {
 
     /**
      * Determine if user is authenticated.
@@ -16,9 +16,9 @@ define([
     Pi.isGuest = Pi.bootstrap.isGuest;
 
     /**
-     * Create an Ide collection to store all open projects (in the form of IDE windows).
+     * Create an Project collection to store all open projects (in the form of IDE windows).
      */
-    Pi.ides = new Ides();
+    Pi.projects = new Projects();
 
     /**
      * Create the user model.

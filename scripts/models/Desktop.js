@@ -9,6 +9,7 @@ define([
     "use strict";
 
     var Desktop = Backbone.Model.extend({
+	modelName: "Desktop",
 	defaults: {
 	    visible: true,
 	    active: true

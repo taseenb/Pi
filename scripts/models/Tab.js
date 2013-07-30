@@ -13,6 +13,7 @@ define([
     "use strict";
 
     var Tab = Backbone.Model.extend({
+	modelName: "Tab",
 	urlRoot: Pi.basePath + '/tab',
 	defaults: {
 	    'name': "",
@@ -78,7 +79,7 @@ define([
 	 * Get the containing Ide model of this tab.
 	 */
 	getIde: function() {
-	    return Pi.ides.get(this.get('project_id'));
+	    return Pi.projects.get(this.get('project_id'));
 	},
 	/**
 	 * Get the jQuery representation of Ide view of this tab.

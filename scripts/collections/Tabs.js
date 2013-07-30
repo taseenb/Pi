@@ -18,7 +18,7 @@ define([
 	model: Tab,
 	/**
 	 * Init
-	 * "Add" event handler set parent model (Ide) and container (IdeView.$el).
+	 * "Add" event handler set parent model (Project) and container (IdeView.$el).
 	 * 
 	 */
 	initialize: function() {

@@ -7,13 +7,13 @@ define([
 
     Pi.logger = {
 	/**
-	 * List of Ide instances.
+	 * List of IdeView instances.
 	 */
 	ide: [],
 	/**
 	 * Log a message in the ide console.
 	 * @param {string} message The message to log.
-	 * @param {string} canvas The canvas Id of the output. Used to find the related Ide and its console. Set undefined if not available.
+	 * @param {string} canvas The canvas Id of the output. Used to find the related IdeView and its console. Set undefined if not available.
 	 * @param {boolean} inline Whether the message should be appended inline (for print() method).
 	 * @param {jqeury} $console The jQuery object of the console.
 	 * @returns {Boolean} True if successfully logged in the console. False if console could not be found.

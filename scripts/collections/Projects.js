@@ -2,18 +2,18 @@ define([
     // Main
     'Pi', 'backbone', 'jquery',
     // Models
-    "models/Ide",
+    "models/Project",
     
     // Backbone Extensions
     'Pi/Collection'
     
-], function(Pi, Backbone, $, Ide) {
+], function(Pi, Backbone, $, Project) {
 
     "use strict";
 
-    var Ides = Backbone.Collection.extend({
+    var Projects = Backbone.Collection.extend({
 	UrlRoot: Pi.basePath + '/projects/',
-	model: Ide,
+	model: Project,
 	/**
 	 * Init collection.
 	 */
@@ -121,6 +121,6 @@ define([
 	 }
     });
     
-    return Ides;
+    return Projects;
 
 });

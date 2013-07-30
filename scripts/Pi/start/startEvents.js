@@ -41,7 +41,7 @@ define([
 	    if (Pi.isGuest)
 		window.location.hash = "#log-in";
 	    else
-		Pi.ides.getFirst().saveSketch();
+		Pi.projects.getFirst().saveSketch();
 	}
     });
 

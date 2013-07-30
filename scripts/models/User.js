@@ -4,18 +4,19 @@ define([
     // Collections
     "collections/Tabs",
     // Models
-    "models/Ide",
+    "models/Project",
     "models/Tab",
     // Views
     "views/IdeView",
     "views/IconView",
     "views/TabsSelectorView"
 
-], function(Pi, Backbone, $, Tabs, Ide, Tab, IdeView, IconView, TabsSelectorView) {
+], function(Pi, Backbone, $, Tabs, Project, Tab, IdeView, IconView, TabsSelectorView) {
 
     "use strict";
 
     var User = Backbone.Model.extend({
+	modelName: "User",
 	url: Pi.basePath + '/user',
 	defaults: {
 	},
@@ -176,10 +177,10 @@ define([
 	 */
 	createIde: function(_name, _tabs, _id, _collectionId, _previewId, _open)
 	{
-	    if (Pi.ides.getOpen().length < Pi.maxIdeSessions)
+	    if (Pi.projects.getOpen().length < Pi.maxIdeSessions)
 	    {
 		// Create a new ide model with needed attributes
-		var ide = new Ide({
+		var ide = new Project({
 		    // If id is undefined then ide.isNew() == true
 		    id: _id && parseInt(_id),
 		    preview_id: _previewId && parseInt(_previewId),
@@ -203,7 +204,7 @@ define([
 		ide.view.render().openState(); // render and show if open
 
 		// Add to the OpenIdes collection
-		Pi.ides.add(ide);
+		Pi.projects.add(ide);
 
 		// Create a tabs selector view
 		ide.tabsSelector = new TabsSelectorView({

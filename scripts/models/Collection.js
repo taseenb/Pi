@@ -13,9 +13,8 @@ define([
     "use strict";
 
     var Collection = Backbone.Model.extend({
-	
+	modelName: "Collection",
 	urlRoot: Pi.basePath + '/collection',
-		
 	initialize: function() {
 	    
 	}

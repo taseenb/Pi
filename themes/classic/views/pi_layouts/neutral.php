@@ -2,6 +2,8 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,17 +21,23 @@
 	      href="<?php echo $t; ?>/img/logo/touch-icon-ipad-precomposed.png" />
 	<link rel="apple-touch-icon-precomposed" 
 	      href="<?php echo $t; ?>/img/logo/touch-icon-iphone-precomposed.png" />
-
+	
 	<link rel="icon" type="image/x-icon" 
 	      href="<?php echo $t; ?>/img/logo/piLogo_64x64.png" />
 	<link rel="shortcut icon" type="image/x-icon" 
 	      href="<?php echo $t; ?>/img/logo/piLogo_64x64.png" />
+	
+	<style>
+	    body {
+		overflow: auto !important;
+	    }
+	</style>
 
     </head>
     <body>
 
 	<div class="container">
-	    <?php echo $content; ?>
+	    	<?php echo $content; ?>
 	</div>
 
     </body>

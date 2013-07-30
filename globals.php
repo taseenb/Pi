@@ -23,12 +23,12 @@ function request()
 /**
  * This is the shortcut to Yii::app()->clientScript
  */
-//function cs()
-//{
-//    // You could also call the client script instance via Yii::app()->clientScript
-//    // But this is faster
-//    return Yii::app()->getClientScript();
-//}
+function cs()
+{
+    // You could also call the client script instance via Yii::app()->clientScript
+    // But this is faster
+    return Yii::app()->getClientScript();
+}
  
 /**
  * This is the shortcut to Yii::app()->user.

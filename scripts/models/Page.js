@@ -13,6 +13,7 @@ define([
     "use strict";
 
     var Page = Backbone.Model.extend({
+	modelName: "Page",
 	default: {
 		"active": false,
 	    "template": "default"

@@ -6,8 +6,8 @@ var require = {
 	"jquery": "lib/jquery/jquery-2.0.3.min",
 		
 	// Backbone + Underscore
-	"backbone": "lib/backbone-amd/backbone",
-	"underscore": "lib/underscore-amd/underscore",
+	"backbone": "lib/backbone/backbone",
+	"underscore": "lib/underscore/underscore",
 	"relational": 'lib/backbone/backbone-relational',
 	"epoxy": 'lib/backbone-epoxy/backbone.epoxy', // data binding
 	//"rivets": 'lib/rivets/rivets.min',
@@ -36,16 +36,21 @@ var require = {
     },
     // Traditional browser globals scripts
     shim: {
+	'underscore': {
+		exports: '_'
+	},
+	'backbone': {
+		deps: ['underscore', 'jquery'],
+		exports: 'Backbone'
+	},
 	'processing': {
-	    //deps: ['underscore', 'jquery'],
 	    exports: 'Processing'
 	},
 	'ace': {
-	    //deps: ['underscore', 'jquery'],
 	    exports: 'ace'
 	},
 	'jshint': {
-		exports: 'JSHINT'
+	    exports: 'JSHINT'
 	}
     }
 };

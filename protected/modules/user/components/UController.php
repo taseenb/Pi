@@ -1,21 +1,18 @@
 <?php
 
+
 /**
  * UController is the customized base controller class for the User module.
  * All controller classes for this module should extend from this base class.
  */
-class UController extends Controller {
-    
-    /**
-     * @var string the default layout for the controller view. Defaults to '//layouts/column1',
-     * meaning using a single column layout. See 'protected/views/layouts/column1.php'.
-     */
-    public $layout = '//layouts/neutral';
+class UController extends Controller
+{
 
     /**
      * @return array action filters
      */
-    public function filters() {
+    public function filters()
+    {
 	return CMap::mergeArray(parent::filters(), array(
 		    'accessControl', // perform access control for CRUD operations
 	));
@@ -26,28 +23,31 @@ class UController extends Controller {
      * This method is used by the 'accessControl' filter.
      * @return array access control rules
      */
-    public function accessRules() {
+    public function accessRules()
+    {
 	return array(
 	    array('allow', 'actions' => array(
+		    'test', // actionTest in UserController.php
 		    'login',
 		    'logout',
 		    'signup',
 		    'activation',
 		    'resendEmail',
-		    'recovery'
+		    'recovery',
+		    'captcha'
 		),
 		'users' => array('*'),
 	    ),
 	    array('allow', 'actions' => array(
 //		    'index',
 		    'view',
-//		    'update',
+		    'update',
 //		    'admin',
 //		    'delete',
-			// User
-			'save',
+		    // User
+		    'save',
 //			'avatar',
-			// Profile
+		// Profile
 //			'edit'
 		),
 		'users' => array('@'),
@@ -60,22 +60,22 @@ class UController extends Controller {
      * Action classes used by controllers.
      * @return array
      */
-    public function actions() {
+    public function actions()
+    {
 	return CMap::mergeArray(parent::actions(), array(
-		'login' => array(
-		    'class' => 'application.modules.user.controllers.actions.LoginAction'
-		),
-		'signup' => array(
-		    'class' => 'application.modules.user.controllers.actions.SignupAction'
-		),
-		'activation' => array(
-		    'class' => 'application.modules.user.controllers.actions.ActivationAction'
-		),
-		'recovery' => array(
-		    'class' => 'application.modules.user.controllers.actions.RecoveryAction'
-		)
+		    'login' => array(
+			'class' => 'application.modules.user.controllers.actions.LoginAction'
+		    ),
+		    'signup' => array(
+			'class' => 'application.modules.user.controllers.actions.SignupAction'
+		    ),
+		    'activation' => array(
+			'class' => 'application.modules.user.controllers.actions.ActivationAction'
+		    ),
+		    'recovery' => array(
+			'class' => 'application.modules.user.controllers.actions.RecoveryAction'
+		    )
 	));
     }
-
 
 }

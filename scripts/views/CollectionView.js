@@ -5,11 +5,11 @@ define([
 //    "collections/Collections",
 
     // Templates
-    "text!tpl/CollectionItem.html",
+    "text!tpl/ProjectView.html",
     // Bootstrap
     "bootstrap-tab"
 
-], function(Pi, Backbone, $, CollectionItemHtml) {
+], function(Pi, Backbone, $, ProjectViewHtml) {
 
     "use strict";
 
@@ -31,9 +31,9 @@ define([
 	    // Append projects
 	    _.each(this.model.get('projects'), function(project) {
 		$collection
-		.append(_.template(CollectionItemHtml, {
+		.append(_.template(ProjectViewHtml, {
 		    id: project.id,
-		    open: Pi.ides.get(project.id) ? true : false,
+		    open: Pi.projects.get(project.id) ? true : false,
 		    name: project.name,
 		    preview: that.getPreview(project.preview_id, project.id),
 		    description: project.description,

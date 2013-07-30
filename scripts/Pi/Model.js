@@ -5,7 +5,7 @@ define([
     'Pi', 'backbone'
 ], 
 function(Pi, Backbone) {
-
+    
     "use strict";
 
     Backbone.Model = Backbone.Model.extend({
@@ -122,8 +122,8 @@ function(Pi, Backbone) {
 
 		// Add csrf token
 		attrs[Pi.csrfTokenName] = Pi.csrfToken;
-
 		//console.log(attrs);
+
 		// Save
 		this.save(attrs,
 			{
@@ -147,6 +147,7 @@ function(Pi, Backbone) {
 				saved.reject();
 				return false;
 			    },
+			    // IE 9 and 10 fail with patch
 			    patch: that.isNew() ? false : true
 			}
 		);
@@ -154,7 +155,7 @@ function(Pi, Backbone) {
 	    }
 	    else
 	    {
-		console.log('ID: ' + this.id + ' - Nothing to save.');
+		console.log(this.modelName + " " + this.id + ' - Nothing to save.');
 		saved.resolve();
 		return true;
 	    }
