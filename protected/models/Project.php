@@ -46,13 +46,13 @@ class Project extends ActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, collection_id, open', 'required'),
-			array('collection_id, public, maximized, minimized, open', 'numerical', 'integerOnly'=>true),
+			array('name, user_id, open', 'required'),
+			array('user_id, public, maximized, minimized, open', 'numerical', 'integerOnly'=>true),
 			array('name', 'length', 'max'=>255),
 			array('description', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, collection_id, name, description, public, open, minimized, maximized, create_time, update_time', 'safe', 'on'=>'search'),
+			array('id, user_id, name, description, public, open, minimized, maximized, create_time, update_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -64,9 +64,9 @@ class Project extends ActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'user' => array(self::HAS_ONE, 'User', 'user_id'),
 			'preview' => array(self::HAS_ONE, 'File', 'preview_id'),
 			'tabs' => array(self::HAS_MANY, 'Tab', 'project_id'),
-			'collection' => array(self::BELONGS_TO, 'Collection', 'collection_id'),
 		);
 	}
 

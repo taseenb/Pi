@@ -1,14 +1,14 @@
-/* Collection (within the finder)
+/* Project items in the finder
 ------------------------------------------ */
 
-.collection {
+.projects {
     position: relative;
     overflow: hidden;
 }
 
 /*  Project  */
 
-.collection .project {
+.projects .project {
     margin: 10px;
     padding: 5px;
     position:relative;
@@ -21,29 +21,29 @@
     /*border: 1px solid #CCC;*/
     background-color: #F6F6F6;
 }
-.collection .project:hover {
+.projects .project:hover {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
-.collection .project a:hover {
+.projects .project a:hover {
     text-decoration: none;
 }
-.collection .project.open {
+.projects .project.open {
     background-color: #eaeaea;
 }
 
-.collection .project .project_block {
+.projects .project .project_block {
     padding: 8px 0;
 }
 
-.collection .project .project_info .title {
+.projects .project .project_info .title {
     font-weight: bold;
     overflow: hidden;
     margin-top: 3px;
     color: #999;
 }
 
-.collection .project .project_info .description {
+.projects .project .project_info .description {
     display: none;
     margin-bottom: 8px;
     overflow: hidden;
@@ -72,12 +72,12 @@
 
 
 /*  Project appreciation  */
-.collection .project.open .project_appreciation {
+.projects .project.open .project_appreciation {
     border-top: 1px solid #DDD;
     box-shadow: 0 1px 0 0 #FFF inset;
 }
 
-.collection .project .project_appreciation {
+.projects .project .project_appreciation {
     margin-top: 5px;
     border-top: 1px solid #E7E7E7;
     box-shadow: 0 1px 0 0 white inset;
@@ -86,24 +86,24 @@
     color: #7D7D7D;
 }
 
-.collection .project .vote_up,
-.collection .project .views {
+.projects .project .vote_up,
+.projects .project .views {
     font-size: 15px !important;
 }
 
-.collection .project .project_likes,
-.collection .project .project_views {
+.projects .project .project_likes,
+.projects .project .project_views {
     margin-right: 12px;
 }
-.collection .project .project_likes_count,
-.collection .project .project_views_count {
+.projects .project .project_likes_count,
+.projects .project .project_views_count {
     margin-left: 5px;
 }
 
 
 /* Cover image and tools */
 
-.collection .project .cover_img {
+.projects .project .cover_img {
     /*opacity: 0.72;*/
     width: 200px;
     height: 160px;
@@ -112,17 +112,17 @@
     position: relative;
 }
 
-.collection .project .cover_img img {
+.projects .project .cover_img img {
     width: 100%;
 }
 
-.collection .project:hover .project_tools {
+.projects .project:hover .project_tools {
     /*display:block;*/
     cursor: pointer;
     background-color: rgba(0,0,0,0.1);
 }
 
-.collection .project .project_tools {
+.projects .project .project_tools {
     /*display:none;*/
     position:absolute;
     top:0;
@@ -136,11 +136,11 @@
     height:100%;
 }
 
-.collection .project .project_tools:hover a {
+.projects .project .project_tools:hover a {
     display:block;
 }
 
-.collection .project .project_tools a {
+.projects .project .project_tools a {
     display:none;
     background-color: #FFF;
     color: #333;
@@ -161,16 +161,16 @@
     background: linear-gradient(to bottom,  rgba(237,237,237,1) 0%,rgba(255,255,255,1) 50%); /* W3C */
 }
 
-.collection .project .project_tools a:hover {
+.projects .project .project_tools a:hover {
     color: #049cdb;
     text-decoration: none;
 }
 
-.collection .project .project_tools a:active {
+.projects .project .project_tools a:active {
     margin-top: 1px;
 }
 
-.collection .project .project_tools a:hover:after {
+.projects .project .project_tools a:hover:after {
     content: attr(title);
     position: absolute;
     width: 400%;
@@ -184,38 +184,38 @@
     text-shadow: 0px 0px 3px rgba(0, 0, 0, 0.8);
 }
 
-.collection .project .project_tools a.code:hover:after {
+.projects .project .project_tools a.code:hover:after {
     left:0;
     text-align: left;
 }
-.collection .project .project_tools a.play:hover:after {
+.projects .project .project_tools a.play:hover:after {
     /*margin-left:-50%;*/
     left:-150%;
     text-align: center;
 }
-.collection .project .project_tools a.fs:hover:after {
+.projects .project .project_tools a.fs:hover:after {
     /*margin-right:-25%;*/
     right:0;
     text-align: right;
 }
 
-.collection .project .project_tools a.code:active:after,
-.collection .project .project_tools a.play:active:after,
-.collection .project .project_tools a.fs:active:after {
+.projects .project .project_tools a.code:active:after,
+.projects .project .project_tools a.play:active:after,
+.projects .project .project_tools a.fs:active:after {
     margin-top: -1px;
 }
 
-.collection .project .project_tools a.fs {
+.projects .project .project_tools a.fs {
     top: 39%;
     right:10%;
 }
 
-.collection .project .project_tools a.play {
+.projects .project .project_tools a.play {
     top: 39%;
     left:39%;
 }
 
-.collection .project .project_tools a.code {
+.projects .project .project_tools a.code {
     top: 39%;
     left:10%;
 }

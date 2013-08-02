@@ -102,9 +102,13 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 
 	    <div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content">
 		<div class="tabbable">
-		    <ul id="finder_tabs" class="nav nav-pills"></ul>
+		    <ul id="finder_tabs" class="nav nav-pills">
+			<li><a data-target="my_projects" data-toggle="tab" href="#find/my_projects">My Projects</a></li>
+		    </ul>
 		    <div id="finder_tabs_content" class="main_content">
-			<div class="collections_wrapper tab-content"></div>
+			<div class="projects_wrapper tab-content">
+			    <div id="my_projects" class="tab-pane projects"></div>
+			</div>
 		    </div>
 		</div>
 	    </div>

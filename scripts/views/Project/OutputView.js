@@ -2,7 +2,7 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Templates
-    "text!tpl/Output.html",
+    "text!tpl/Project/Output.html",
     // Backbone add-ons
     'Pi/start/startDataBinding',
     // Plugins
@@ -84,7 +84,7 @@ define([
 		top: this.model.get('top'),
 		zIndex: this.model.get('zIndex') + 1
 	    })
-		    .appendTo(this.model.container)
+		    .appendTo(this.model.ideView.container)
 		    .draggable({
 		handle: '.title'
 	    })

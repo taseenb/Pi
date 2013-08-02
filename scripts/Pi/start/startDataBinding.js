@@ -22,6 +22,9 @@ define([
 	},
 	disabled: function($element, value) {
 	    value ? $element.addClass('disabled') : $element.removeClass('disabled');
+	},
+	open: function($element, value) {
+	    value ? $element.addClass('open') : $element.removeClass('open');
 	}
     };
     

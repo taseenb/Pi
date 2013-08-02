@@ -55,7 +55,10 @@ var require = {
 		deps: ['underscore', 'jquery'],
 		exports: 'Backbone'
 	},
-	
+	'relational': {
+	    deps: ['backbone'],
+	    exports: 'relational'
+	},
 	'processing': {
 	    //deps: ['underscore', 'jquery'],
 	    exports: 'Processing'

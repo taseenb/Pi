@@ -5,7 +5,7 @@ define([
     // Models
     "models/Dialog",
     // Views
-    "views/DialogView"
+    "views/Dialog/DialogView"
 
 ], function(Pi, Backbone, $, Dialog, DialogView) {
 

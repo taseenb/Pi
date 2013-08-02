@@ -1,25 +1,23 @@
 define([
     // Main scripts
-    'Pi', 'backbone', 'jquery',
-    
+    'Pi', 'backbone', 'jquery', 
     // Templates
-    "text!tpl/IdeView.html",
-    
+    "text!tpl/Project/Ide.html",
     // Models
     "models/Project",
-    
+    // Views
+    "views/Tab/TabView",
+    "views/Project/TabsSelectorView",
     // Backbone Extensions
+    'epoxy',
     'Pi/Model',
     'Pi/start/startDataBinding',
-    
     // Plugins
     'jquery-ui'
 
-], function(Pi, Backbone, $, IdeViewHtml, Project) {
+], function(Pi, Backbone, $, IdeViewHtml, Project, TabView, TabsSelectorView) {
 
     "use strict";
-
-//    var ideTemplate = _.template(IdeHtml);
 
     var IdeView = Backbone.Epoxy.View.extend({
 	model: Project,
@@ -27,27 +25,23 @@ define([
 	 * Data binding.
 	 */
 	bindings: "data-e-bind",
-	bindingHandlers: _.extend(Pi.bindingHandlers,{}),
+	bindingHandlers: _.extend(Pi.bindingHandlers, {
+	}),
 	/**
 	 * Init view.
 	 */
 	initialize: function()
 	{
-	    // Listen to
 	    this.listenTo(this.model, "change:open", this.openState);
 	    this.listenTo(this.model, "change:minimized", this.minimizedState);
-//	    this.listenTo(this.model, "change:saved", this.saveState);
 	    this.listenTo(this.model, "change:active", this.activeState);
 	    this.listenTo(this.model, "change:zIndex", function() {
 		this.$el.css('z-index', this.model.get('zIndex'));
 	    });
-//	    this.listenTo(this.model, "change:front", this.frontState);
 	    this.listenTo(this.model, "change:jsMode", this.jsModeState);
 	    this.listenTo(this.model, "change:autoSave", this.autoSaveState);
 	    this.listenTo(this.model, "change:liveCode", this.liveCodeState);
 	    this.listenTo(this.model, "change:consoleOpen", this.consoleState);
-//	    this.listenTo(this.model, "change:running", this.runningState);
-
 	    this.$el.html(IdeViewHtml).attr({
 		'data-e-bind': "active:active,front:front"
 	    });
@@ -114,7 +108,7 @@ define([
 			    if (Pi.isGuest)
 				window.location.hash = "#log-in";
 			    else
-				this.model.saveSketch();
+				this.model.saveSketch(true);
 			}
 
 		    },
@@ -144,7 +138,7 @@ define([
 		    "click .delete": function(e)
 		    {
 			e.stopPropagation();
-			this.model.deleteSketch();
+			this.model.deleteModel();
 		    },
 		    "click .add_tab": function(e)
 		    {
@@ -172,7 +166,8 @@ define([
 				    );
 			    return false;
 			}
-			this.model.tabs.remove(activeTab);
+			this.model.get('tabs').get(activeTab).deleteModel();
+			//this.model.get('tabs').remove(activeTab);
 		    },
 		    "mouseover .tools li": function(e)
 		    {
@@ -191,7 +186,7 @@ define([
 			    active: true
 			});
 			var href = $(e.target).attr('href');
-			window.location.hash = href ? href : this.$el.attr('data-href');
+			Pi.router.navigate(href ? href : this.$el.attr('data-href'));
 		    },
 		    "resizestop": function(event, ui)
 		    {
@@ -204,9 +199,6 @@ define([
 			    left: ui.position.left
 			});
 		    },
-//		    "dragstart": function(event, ui) {
-//			console.log(event);
-//		    },
 		    "dragstop": function(event, ui)
 		    {
 			// Update model
@@ -221,22 +213,22 @@ define([
 	 */
 	render: function()
 	{
-	    var that = this,
-		ideModel = this.model.attributes;
+	    var project = this.model;
+	    var id = project.getId();
 
 	    this.$el.addClass('window-background')
 		    .attr({
-		'id': "ide" + this.model.getId(),
-		'data-href': '#' + Pi.action.openProject + '/' + this.model.getId()
+		'id': "ide" + id,
+		'data-href': '#' + Pi.action.openProject + '/' + id
 	    })
 		    .css({
-		width: ideModel.width,
-		height: ideModel.height,
-		top: ideModel.top,
-		left: ideModel.left,
-		zIndex: ideModel.zIndex
+		width: project.get('width'),
+		height: project.get('height'),
+		top: project.get('top'),
+		left: project.get('left'),
+		zIndex: project.get('zIndex')
 	    })
-		    .appendTo(this.model.container)
+		    .appendTo(this.container)
 		    .resizable({
 		minWidth: 400,
 		minHeight: 450,
@@ -248,6 +240,11 @@ define([
 		cancel: '.code_wrapper, .tabs, .console, .nav_container, .tools li'
 	    });
 
+	    // Add tabs and update the tabs selector
+	    project.get('tabs').each(function(tab) {
+		this.addNewTab(tab);
+	    }, this);
+
 	    // Update states
 	    this.activeState();
 	    this.autoSaveState();
@@ -258,10 +255,34 @@ define([
 	    return this;
 	},
 	/**
+	 * Creates a new tab view from a tab model.
+	 * @param {type} tab The tab model to be added.
+	 */
+	addNewTab: function(tab) {
+	    tab.view = new TabView({
+		model: tab
+	    });
+	    tab.view.render();
+	    this.updateTabsSelectorView(tab);
+	},
+	/**
+	 * Update the tab selector (create it if not available yet).
+	 * @param {object} tab The tab model to be added to the tabs selector list.
+	 */
+	updateTabsSelectorView: function(tab) {
+	    var project = this.model;
+	    if (!project.tabsSelectorView) {
+		project.tabsSelectorView = new TabsSelectorView({
+		    model: project
+		});
+	    }
+	    project.tabsSelectorView.add(tab);
+	},
+	/**
 	 * Refresh Ace editor size. Needed after any resize of the editor container.
 	 */
 	refreshAceEditorSize: function() {
-	    this.model.tabs.each(function(tab)
+	    this.model.get('tabs').each(function(tab)
 	    {
 		tab.view.editor.resize(true);
 	    });
@@ -271,7 +292,7 @@ define([
 	 */
 	openState: function() {
 	    if (this.model.get('open'))
-	    	this.$el.show();
+		this.$el.show();
 	    else
 		this.$el.hide();
 	},
@@ -306,12 +327,13 @@ define([
 	 */
 	bringToFront: function()
 	{
-	    var that = this;
-	    Pi.projects.each(function(model)
+	    var that = this,
+		    projects = Pi.user.get('projects');
+	    projects.each(function(project)
 	    {
-		if (model.cid !== that.model.cid) {
-		    var z = model.attributes.zIndex;
-		    model.set({
+		if (project.cid !== that.model.cid) {
+		    var z = project.attributes.zIndex;
+		    project.set({
 			zIndex: z - 1,
 			active: false,
 			front: false
@@ -319,7 +341,7 @@ define([
 		}
 	    });
 	    this.model.set({
-		zIndex: Pi.projects.length + 1,
+		zIndex: Pi.user.openProjectsCount() + 1,
 		front: true
 	    });
 	},

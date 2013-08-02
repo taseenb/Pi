@@ -5,7 +5,7 @@ define([
     // Models
     "models/Page",
     // Views
-    "views/PageView",
+    "views/Page/PageView",
     
 ], function(Pi, $, Page, PageView) {
 

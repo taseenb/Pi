@@ -2,22 +2,34 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Collections
+    "collections/Projects",
     "collections/Tabs",
     // Models
     "models/Project",
     "models/Tab",
     // Views
-    "views/IdeView",
-    "views/IconView",
-    "views/TabsSelectorView"
-
-], function(Pi, Backbone, $, Tabs, Project, Tab, IdeView, IconView, TabsSelectorView) {
+    "views/Project/IdeView",
+    "views/Project/IconView",
+    // Backbone Extensions
+    'relational',
+    'Pi/Model',
+], function(Pi, Backbone, $, Projects, Tabs, Project, Tab, IdeView, IconView) {
 
     "use strict";
 
-    var User = Backbone.Model.extend({
+    var User = Backbone.RelationalModel.extend({
 	modelName: "User",
 	url: Pi.basePath + '/user',
+	relations: [{
+		type: Backbone.HasMany,
+		key: 'projects',
+		relatedModel: Project,
+		collectionType: Projects,
+		reverseRelation: {
+		    key: 'user_id',
+		    includeInJSON: 'id'
+		}
+	    }],
 	defaults: {
 	},
 	/**
@@ -34,7 +46,6 @@ define([
 	{
 	    // Set current desktop
 	    this.currentDesktop = Pi.desktopView;
-	    this.bootstrap(Pi.bootstrap);
 	},
 	/**
 	 * Start the desktop playground with user's Processing sketches or, if guest, a demo sketch.
@@ -44,7 +55,7 @@ define([
 	    if (Pi.isGuest && !Pi.guestBootstrapped)
 	    {
 		// Start a demo sketch for the guest
-		this.newSketch();
+		this.newProject();
 		Pi.guestBootstrapped = true;
 	    }
 	    else if (!Pi.isGuest && !Pi.userBootstrapped)
@@ -54,11 +65,11 @@ define([
 	    }
 	},
 	/**
-	 * Bootstrap the user with starting data loaded from server.
-	 * @param data {json object} User model data with its profile and collections.
-	 * @param updateSketches {boolean} Whether to update the sketches with the same data.
+	 * Update the user with data loaded from server.
+	 * @param data {json object} User model data with its profile and projects.
+	 * @param updateProjects {boolean} Whether to update the projects as well with that data.
 	 */
-	update: function(data, updateSketches) {
+	update: function(data, updateProjects) {
 	    // Reset user model before loading bootstrap data
 	    this.reset();
 
@@ -77,30 +88,23 @@ define([
 		this.profile.attributes[key] = value; // avoid backbone change event
 	    }, this);
 
-	    if (updateSketches)
-		this.updateSketches(data);
+	    if (updateProjects)
+		this.updateProjects(data.projects);
 
 	    if (this.nav)
 		this.nav.render();
 	},
 	/**
-	 * Open user sketches (from bootstrap data).
-	 * @param {json} data User model data with its profile and collections (containing only open projects).
+	 * Update projects.
+	 * @param {json} projectsJson Json data with projects.
 	 */
-	updateSketches: function(data)
+	updateProjects: function(projectsJson)
 	{
-	    // Get user data if available or load the first bootstrap (Pi.bootstrap)
-	    var bootstrap = data ? data : Pi.bootstrap;
-	    // Get collections from boostrap
-	    var collections = bootstrap.collections;
-	    _.each(collections, function(collection)
-	    {
-		if (collection.projects)
-		{
-		    _.each(collection.projects, function(project) {
-			this.createIde(project.name, project.tabs, project.id, collection.id, project.preview_id, project.open);
-		    }, this);
-		}
+	    // Get user json data or load the bootstrap data (Pi.bootstrap)
+	    var projects = projectsJson ? projectsJson : Pi.bootstrap.projects;
+	    _.each(projects, function(project) {
+		var projectModel = new Project(project);
+		this.createIdeView(projectModel);
 	    }, this);
 	},
 	/**
@@ -115,20 +119,19 @@ define([
 	    this.off();
 	},
 	/**
-	 * 
+	 * Return fullname (firstname and lastname) if available or the username.
 	 */
 	getFullName: function() {
-	    if (this.profile && (this.profile.firstname || this.profile.lastname)) {
+	    if (this.profile && (this.profile.firstname || this.profile.lastname))
 		return this.profile.firstname + " " + this.profile.lastname;
-	    } else {
+	    else
 		return this.getUsername();
-	    }
 	},
 	getPublicDir: function() {
 	    return Pi.publicDir + "/" + this.id;
 	},
 	/**
-	 * Get the full name of the user or his username.
+	 * Return username or set the username as the first part of the mail and return it.
 	 */
 	getUsername: function() {
 	    if (this.get('username')) {
@@ -140,108 +143,162 @@ define([
 	    }
 	},
 	getAvatar: function() {
-	    if (this.get('avatar')) {
+	    if (this.get('avatar'))
 		Pi.user.getPublicDir() + "/avatar.jpg";
-	    }
 	    else
-	    {
 		return Pi.imgPath + "/" + Pi.defaultAvatarFileName;
+	},
+	/**
+	 * Start a new project with a demo sketch.
+	 */
+	newProject: function()
+	{
+	    // Create a new project
+	    var project = new Project({
+		'user_id': this.getId(),
+		'open': 1
+	    });
+	    // Add a tab with the new Project ID (cid) and the demo code
+	    project.get('tabs').add(new Tab({
+		'name': project.get('name'),
+		'project_id': project,
+		'code': Pi.demoCode,
+		'main': 1
+	    }));
+	    this.createIdeView(project);
+	},
+	/**
+	 * Show a project if already loaded or try to load it from the server.
+	 * @param {integer} id Project id.
+	 * @param {string} action Action to perform.
+	 * @param {integer} tabId Optional: tab id to open.
+	 */
+	openProject: function(id, action, tabId)
+	{
+	    var that = this,
+		    project = this.get('projects').get(id);
+	    //console.log(project);
+
+	    if (project && project.get('tabs').length) { // project model already exists
+		switch (action) {
+		    case "fs":
+			project.playSketch({
+			    'fullScreen': true
+			});
+			project.set('fullScreen', true);
+			break;
+		    case "play":
+			project.playSketch({
+			    'fullScreen': false
+			});
+			break;
+		    case "code":
+			// @TODO open the ide and activate the requested tab
+			
+			break;
+		    default:
+			// Create the Ide if it does not exist. Save the new 'open' state, if changed
+			if (!project.ideView) {
+			    that.createIdeView(project);
+			    project.saveOpenState();
+			}
+			if (!project.get('open')) {
+			    project.set('open', 1);
+			    project.saveOpenState();
+			}
+			project.set('active', 1);
+		}
 	    }
-
-	},
-	/**
-	 * Start a basic sketch for a guest, with demo code.
-	 */
-	newSketch: function()
-	{
-	    this.createIde(
-		    undefined, // _name: is set on ide model initilization
-		    [{
-			    'code': Pi.demoCode,
-			    'main': 1
-			}],
-		    undefined,  // _id: id will be generated automatically by backbone
-		    undefined,  // _collectionId
-		    undefined,  // _previewId
-		    1		// _open (open immediatly)
-		    );
-	},
-	/**
-	 * Create an Ide (new or loaded from db).
-	 * @param {string} _name Project name.
-	 * @param {object} _tabs Tabs data.
-	 * @param {number} _id The id field in the database.
-	 * @param {number} _collectionId The id of the collection.
-	 * @param {number} _previewId The id of the image file.
-	 * @param {boolean or string or int} _open Whether the ide is open.
-	 */
-	createIde: function(_name, _tabs, _id, _collectionId, _previewId, _open)
-	{
-	    if (Pi.projects.getOpen().length < Pi.maxIdeSessions)
+	    else // try to load the project from server and create the model
 	    {
-		// Create a new ide model with needed attributes
-		var ide = new Project({
-		    // If id is undefined then ide.isNew() == true
-		    id: _id && parseInt(_id),
-		    preview_id: _previewId && parseInt(_previewId),
-		    collection_id: _collectionId ? parseInt(_collectionId) : parseInt(this.get("default_collection")),
-		    open: _open && parseInt(_open) ? true : false,
-		    name: _name,
-		    iconTop: 100,
-		    iconLeft: 100
+		if (!project) {
+		    var project = new Project({
+			'id': id
+		    });
+		}
+		project.fetch({
+		    success: function(model, response, options) {
+			// project successfully loaded - recurse to open the ide
+			that.openProject(id, action);
+		    },
+		    error: function(model, response, options) {
+			// project does not exist
+			project.clear({silent:true});
+		    }
 		});
-
-		// Create a new Tabs collection for this Ide
-		ide.tabs = new Tabs(); // tabs collection
-
-		// Set the container (desktop) for this ide
-		ide.container = this.currentDesktop.$el;
-
+	    }
+	},
+	/**
+	 * Create a Project model (new or from db data).
+	 * @param {object} data Json data of the project.
+	 * @returns {object} The project model.
+	 */
+//	createProject: function(data) {
+//	    // Convert strings containing numbers to integers
+////	    var data = Pi.js.stringsToInts(data);
+////	    data.tabs = Pi.js.stringsToInts(data.tabs);
+//	    return new Project(data);
+//	},
+//	
+	/**
+	 * Create an ide with all its views from a Project model.
+	 * If data is not a Backbone model, a Project model will be created from the data.
+	 * @param {object} project A Project model or json data to create the Project Model.
+	 */
+	createIdeView: function(project)
+	{
+	    if (this.openProjectsCount() <= Pi.maxIdeSessions)
+	    {
 		// Create an IdeView
-		ide.view = new IdeView({
-		    model: ide
+		project.ideView = new IdeView({
+		    model: project
 		});
-		ide.view.render().openState(); // render and show if open
-
-		// Add to the OpenIdes collection
-		Pi.projects.add(ide);
-
-		// Create a tabs selector view
-		ide.tabsSelector = new TabsSelectorView({
-		    model: ide
-		});
-
-		// Fill the Tabs collection
-		_.each(_tabs, function(_tab) {
-		    _tab['project_id'] = ide.getId();
-		    ide.tabs.add(new Tab(_tab));
-		});
+		// Set the container (desktop) for this ide
+		project.ideView.container = this.currentDesktop.$el;
+		project.ideView.render().openState(); // render and show if open
 
 		// IMPORTANT: always set first the main tab active when loading
-		// a project and set the hash to this project, unless there is 
-		// another path already set
-		ide.setMainTabActive();
-
+		// a project and set the location.hash with this project id, 
+		// unless there is another path already set
+		project.setMainTabActive();
 		if (!window.location.hash)
-		{
-		    window.location.hash = "project/" + ide.getId();
-		}
+		    window.location.hash = "project/" + project.getId();
 
 		// Create an icon view
-		ide.icon = new IconView({
-		    model: ide
+		project.iconTop = 100;
+		project.iconLeft = 100;
+		project.iconView = new IconView({
+		    model: project
 		});
-		ide.icon.render();
-		
-		return ide;
+		project.iconView.render();
+
+		// Set project open
+		project.set('open', 1);
+		return project;
 	    }
 	    else
 	    {
-		Pi.alert("Too Many Windows!", 
-		"<p>Please, save and close at least one window.<br>Otherwise your browser could explode!</p>"
+		if (project.isNew())
+		    Pi.user.get('projects').remove(project);
+		else
+		    project.set('open', 0);
+		Pi.alert("Too Many Windows!",
+			"<p>Please, save and close at least one window.<br>Otherwise your browser could explode!</p>"
 			);
 	    }
 	},
+	/**
+	 * Count all open projects available in all the collections of the user.
+	 * @returns {integer} The number of projects currently open.
+	 */
+	openProjectsCount: function() {
+	    var count = 0;
+	    this.get('projects').each(function(project) {
+		if (project.get('open'))
+		    count++;
+	    });
+	    return count;
+	}
 	/**
 	 * Updates user data on the server. Only sends changed and safe attributes.
 	 */

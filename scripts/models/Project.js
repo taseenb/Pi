@@ -2,28 +2,40 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Collections
+    'collections/Tabs',
     // Models
     'models/Tab',
     // Views
-    'views/OutputView',
+    'views/Project/OutputView',
     // Processing
     "processing",
     // JsHint
     //"jshint", // JSHINT
     // Backbone Extensions
+    'relational',
     'Pi/Model',
     // Other extentions
     'Pi/Logger',
     // Helpers
     'Pi/Js'
 
-], function(Pi, Backbone, $, Tab, OutputView, Processing) {
+], function(Pi, Backbone, $, Tabs, Tab, OutputView, Processing) {
 
     "use strict";
 
-    var Project = Backbone.Model.extend({
+    var Project = Backbone.RelationalModel.extend({
 	modelName: "Project",
 	urlRoot: Pi.basePath + '/project',
+	relations: [{
+		type: Backbone.HasMany,
+		key: 'tabs',
+		relatedModel: Tab,
+		collectionType: Tabs,
+		reverseRelation: {
+		    key: 'project_id',
+		    includeInJSON: 'id'
+		}
+	    }],
 	/**
 	 * Ide is the model for projects (projects table in the db).
 	 */
@@ -43,11 +55,11 @@ define([
 		left: 0,
 		top: 0
 	    },
-	    saved: undefined,
+	    saved: false,
 	    front: true,
 	    active: true, // must be true, otherwise ide will not be active when initialized
 	    // db "projects"
-	    collection_id: undefined,
+	    user_id: undefined,
 //	    preview_id: undefined,
 	    name: undefined,
 	    description: undefined,
@@ -69,7 +81,7 @@ define([
 	 * Attributes that can be updated on the server side.
 	 */
 	safeAttributes: [
-	    "collection_id",
+	    "user_id",
 	    "preview_id",
 	    "name",
 	    "description",
@@ -86,14 +98,13 @@ define([
 		    //	"zIndex"
 	],
 	/**
-	 * Array to store promises.
-	 */
-	promise: [],
-	/**
 	 * Init.
 	 */
 	initialize: function()
 	{
+	    // Convert all strings containing numbers to integer types.
+	    Pi.js.stringsToInts(this.attributes);
+	    
 	    // Setup ide window size and position
 	    var setup = this.setupWindow();
 	    this.set({
@@ -111,7 +122,7 @@ define([
 		    'name': this.createNewTitle(Pi.sessions)
 		});
 	    }
-	    
+
 	    // Set saved state
 	    this.set('saved', !this.isNew());
 
@@ -126,7 +137,7 @@ define([
 	{
 	    // Size and position
 	    var width, height, top, left, zIndex, margin = 40,
-		    ideCount = Pi.projects.length,
+		    ideCount = Pi.user.openProjectsCount(),
 		    $desktop = Pi.desktopView.$el,
 		    zIndex = ideCount + 1;
 	    if ($desktop.width() < (500 + margin * 4))
@@ -174,7 +185,7 @@ define([
 	playSketch: function(options)
 	{
 	    this.stopSketch();
-	    var $console = this.view.$console;
+	    var $console = this.ideView.$console;
 	    $console.html('');
 	    try
 	    {
@@ -185,7 +196,7 @@ define([
 		this.set({
 		    ouputPosition: {
 			left: this.getOutputLeft(),
-			top: this.view.$el.css('top')
+			top: this.ideView.$el.css('top')
 		    },
 		    'running': true,
 		    'isPaused': false
@@ -314,63 +325,63 @@ define([
 	exitSketch: function()
 	{
 	    // Data needed to simply save the open/close state of the sketch
-	    var that = this,
-		    closedState = {
-		open: false
-	    };
-	    closedState[Pi.csrfTokenName] = Pi.csrfToken;
+	    var that = this;
 
 	    if (!this.get('saved')) {
 		$.when(this.askForSave())
 			.done(function() {
-		    if (!Pi.isGuest && !that.isNew()) {
-			that.saveSketch();
+		    if (!Pi.isGuest) {
 			that.set('open', false);
-		    } else {
-			Pi.projects.remove(that);
+			that.saveSketch();
 		    }
 		})
 			.fail(function() {
-		    if (!Pi.isGuest && !that.isNew()) {
-			that.save(closedState, {
-			    patch: true
-			});
-			that.set('open', false);
-		    }
-		    else {
-			Pi.projects.remove(that);
-		    }
+		    that.set('open', false);
+		    that.saveOpenState();
 		});
 	    }
 	    else {
 		this.set('open', false);
-		if (!Pi.isGuest && !that.isNew()) {
-		    this.save(closedState, {
-			patch: true
-		    });
-		}
-		else {
-		    Pi.projects.remove(this);
-		}
+		that.saveOpenState();
+	    }
+	    Pi.router.goHome();
+	},
+	/**
+	 * Save the 'open' attribute of the Project in the db. Open must be 0 or 1;
+	 */
+	saveOpenState: function() {
+	    if (!Pi.isGuest && !this.isNew()) {
+		var openState = {
+		};
+		openState['open'] = this.get('open');
+		openState[Pi.csrfTokenName] = Pi.csrfToken;
+		this.save(openState, {
+		    patch: true
+		});
 	    }
 	},
 	/**
 	 * Save sketch. Deactivate autosave if save() fails.
+	 * @param {boolean} saveTabs Whether to also save tabs. (Defaults to true).
 	 */
-	saveSketch: function()
+	saveSketch: function(saveTabs)
 	{
 	    if (!Pi.isGuest) {
 		var that = this;
 		$.when(this.smartSave())
 			.done(function() {
+			    console.log('project saved');
 		    // only save tabs when ide is saved (needed for new projects)
-		    $.when(that.saveTabs())
-			    .done(function() {
-			that.set('saved', true);
-		    })
-			    .fail(function() {
-			that.set('autoSave', false);
-		    });
+		    if (saveTabs !== false) {
+			console.log('saving tabs');
+			$.when(that.saveTabs())
+				.done(function() {
+			    that.set('saved', true);
+			})
+				.fail(function() {
+			    that.set('autoSave', false);
+			});
+		    }
 		})
 			.fail(function() {
 		    that.set('autoSave', false);
@@ -384,10 +395,10 @@ define([
 	{
 	    var saved = $.Deferred(),
 		    that = this,
-		    tabsLength = this.tabs.length,
+		    tabsLength = this.get('tabs').length,
 		    saveCounter = 0;
 
-	    this.tabs.each(function(tab) {
+	    this.get('tabs').each(function(tab) {
 		tab.set('project_id', that.get('id'));
 		$.when(tab.smartSave())
 			.done(function() {
@@ -400,23 +411,6 @@ define([
 		});
 	    });
 	    return saved.promise;
-	},
-	/**
-	 * Delete the sketch.
-	 */
-	deleteSketch: function() {
-	    var that = this;
-	    $.when(this.askForDelete())
-		    .done(function() {
-		that.destroy({
-		    success: function(model, response, options) {
-			console.log("Destroyed.");
-		    },
-		    error: function(model, xhr, options) {
-			console.log(xhr);
-		    }
-		});
-	    });
 	},
 	/**
 	 * Ask a confirmation to save the sketch.
@@ -460,35 +454,14 @@ define([
 	    }
 	    return this.promise['askForSave' + this.getId()];
 	},
-	/**
-	 * Ask a confirmation to delete the sketch.
-	 * @return {promise} confirmation Returns a deferred object with user's response.
-	 */
-	askForDelete: function() {
-	    // Store in the promise array to overwrite later
-	    this.promise['askForDelete' + this.getId()] = $.Deferred();
-	    // Setup confirmation dialog
-	    Pi.confirmation({
-		promise: this.promise['askForDelete' + this.getId()],
-		cancelResolve: false,
-		title: "Delete sketch",
-		message: "This sketch will be permanently deleted and cannot be recovered. Are you sure?",
-		buttons: [
-		    {
-			label: "Delete",
-			resolve: true
-		    }
-		]
-	    });
-	    return this.promise['askForDelete' + this.getId()];
-	},
+	
 	/**
 	 * Get code from ide tabs. Optionally adds some extra methods at the end of the code (play, pause).
 	 * @param {string} uid Unique id: if set, the extra methods will be added.
 	 */
 	getCode: function(uid)
 	{
-	    var tabs = this.tabs,
+	    var tabs = this.get('tabs'),
 		    code = "";
 	    if (tabs.length)
 	    {
@@ -510,9 +483,9 @@ define([
 	 */
 	getOutputLeft: function()
 	{
-	    var desktopWidth = this.container.width();
-	    var bestPosition = this.view.$el.width()
-		    + parseInt(this.view.$el.css('left')) + 50;
+	    var desktopWidth = this.ideView.container.width();
+	    var bestPosition = this.ideView.$el.width()
+		    + parseInt(this.ideView.$el.css('left')) + 50;
 	    var left = bestPosition < desktopWidth ? bestPosition : 100;
 	    return left;
 	},
@@ -544,14 +517,16 @@ define([
 	 * Add a new tab with an emtpy page and a generic name to be edited by the user.
 	 */
 	addNewTab: function() {
-	    this.tabs.add(new Tab({
-		project_id: this.getId(),
-		name: "New",
-		editMode: true,
-		active: true,
-		main: false,
-		code: " "
-	    }));
+	    var tab = new Tab({
+		'project_id': this,
+		'name': "New",
+		'editMode': true,
+		'active': true,
+		'main': false,
+		'code': " "
+	    });
+	    this.get('tabs').add(tab);
+	    this.ideView.addNewTab(tab);
 	    this.set('saved', false);
 	},
 	/**
@@ -559,7 +534,7 @@ define([
 	 * @return {model} The tab model instance that is currently active.
 	 */
 	getActiveTab: function() {
-	    return this.tabs.find(function(tab) {
+	    return this.get('tabs').find(function(tab) {
 		return tab.get('active') === true;
 	    });
 	},
@@ -567,7 +542,7 @@ define([
 	 * Get the (only) main tab.
 	 */
 	getMainTab: function() {
-	    return this.tabs.find(function(tab) {
+	    return this.get('tabs').find(function(tab) {
 		return tab.isMain() === true;
 	    });
 	},
@@ -600,7 +575,6 @@ define([
 		window.clearInterval(this.autoSaveInterval);
 	    }
 	}
-
     });
 
     return Project;

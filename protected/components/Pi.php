@@ -40,7 +40,7 @@ class Pi extends CComponent
     }
 
     /**
-     * Get a json string from a Collection active record, with related parents and children models.
+     * Get a json string from a User active record, with related projects.
      * @param object $collection Collection active record object.
      * @param {int} $parents Levels of parent models (ie: collection is 2 levels from a tab).
      * @param {int} $children Levels of children models (ie: projects are 1 level from collection).
@@ -48,29 +48,22 @@ class Pi extends CComponent
      * @param {boolean} $onlyOpenProjects Whether to exclude closed projects from results. Defaults to true.
      * @return {json or array} Json or array representation of the records.
      */
-    public static function getDataFromCollection($collection, $parents = 0, $children = 0, $json = true, $onlyOpenProjects = true)
-    {
-	$c = $collection->attributes;
-	if ($children > 0)
-	{
-	    foreach ($collection->projects as $project)
-	    {
-		if (!$onlyOpenProjects || $project->open)
-		{
-		    $c['projects'][$project->id] = $project->attributes;
-		    if ($children > 1)
-		    {
-			foreach ($project->tabs as $tab)
-			{
-			    $c['projects'][$project->id]['tabs'][$tab->id] = $tab->attributes;
-			}
-		    }
-		}
-	    }
-	}
-
-	return $json ? CJSON::encode($c) : $c;
-    }
+//    public static function getDataFromUser($user, $children = 0, $json = true, $onlyOpenProjects = true)
+//    {
+//	$u = $user->attributes;
+//	if ($children > 0)
+//	{
+//	    $u['projects'] = array();
+//	    foreach ($user->projects as $project)
+//	    {
+//		if (!$onlyOpenProjects || $project->open)
+//		{
+//		    array_push($u['projects'], self::getDataFromProject($project, 0, $children-1, false));
+//		}
+//	    }
+//	}
+//	return $json ? CJSON::encode($c) : $c;
+//    }
 
     /**
      * Get a json string from a Project active record, with related parents and children models.
@@ -80,20 +73,17 @@ class Pi extends CComponent
      * @param {boolean} $json Whether to encode the resulting array in json. Default true;
      * @return {json or array} Json or array representation of the records.
      */
-    public static function getDataFromProject($project, $parents = 0, $children = 0, $json = true)
+    public static function getDataFromProject($project, $tabs = true, $json = true)
     {
 	$p = $project->attributes;
 	// Add tabs if children are requested
-	if ($children > 0)
+	if ($tabs)
 	{
+	    $p['tabs'] = array();
 	    foreach ($project->tabs as $tab)
 	    {
-		$p['tabs'][$tab->id] = $tab->attributes;
+		array_push($p['tabs'], $tab->attributes);
 	    }
-	}
-	if ($parents > 0)
-	{
-	    $p['collection'] = $project->collection->attributes;
 	}
 	return $json ? CJSON::encode($p) : $p;
     }
@@ -106,17 +96,9 @@ class Pi extends CComponent
      * @param {boolean} $json Whether to encode the resulting array in json. Default true;
      * @return {json or array} Json or array representation of the records.
      */
-    public static function getDataFromTab($tab, $parents = 0, $children = 0, $json = true)
+    public static function getDataFromTab($tab, $json = true)
     {
 	$t = $tab->attributes;
-	if ($parents > 0)
-	{
-	    $t['project'] = $tab->project->attributes;
-	}
-	if ($parents > 1)
-	{
-	    $t['collection'] = $tab->project->collection->attributes;
-	}
 	return $json ? CJSON::encode($t) : $t;
     }
 
@@ -125,19 +107,15 @@ class Pi extends CComponent
      * @param {boolean} $json Whether to encode the resulting array in json. Default true;
      * @return {json or array} Json or array representation of the records.
      */
-    public static function getProjectsFromUser($withTabs = true, $json = true, $onlyOpenProjects = true)
+    public static function getProjectsFromUser($user, $withTabs = false, $json = true, $onlyOpenProjects = false)
     {
-	$user = self::getUser();
 	$p = array();
-	foreach ($user->collections as $collection)
+	foreach ($user->projects as $project)
 	{
-	    foreach ($collection->projects as $project)
+	    if (!$onlyOpenProjects || $project->open)
 	    {
-		if (!$onlyOpenProjects || $project->open)
-		{
-		    $projectArray = self::getDataFromProject($project, 0, $withTabs ? 1 : 0, false);
-		    array_push($p, $projectArray);
-		}
+		$projectArray = self::getDataFromProject($project, $withTabs ? 1 : 0, false);
+		array_push($p, $projectArray);
 	    }
 	}
 	return $json ? CJSON::encode($p) : $p;
@@ -148,17 +126,17 @@ class Pi extends CComponent
      * @param {boolean} $json Whether to encode the resulting array in json. Default true;
      * @return {json or array} Json or array representation of the records.
      */
-    public static function getCollectionsFromUser($withProjects = true, $json = true, $onlyOpenProjects = false)
-    {
-	$user = self::getUser();
-	$c = array();
-	foreach ($user->collections as $collection)
-	{
-	    $collectionArray = self::getDataFromCollection($collection, 0, $withProjects ? 1 : 0, false, $onlyOpenProjects);
-	    array_push($c, $collectionArray);
-	}
-	return $json ? CJSON::encode($c) : $c;
-    }
+//    public static function getCollectionsFromUser($withProjects = true, $json = true, $onlyOpenProjects = false)
+//    {
+//	$user = self::getUser();
+//	$c = array();
+//	foreach ($user->collections as $collection)
+//	{
+//	    $collectionArray = self::getDataFromCollection($collection, $withProjects ? 1 : 0, false, $onlyOpenProjects);
+//	    array_push($c, $collectionArray);
+//	}
+//	return $json ? CJSON::encode($c) : $c;
+//    }
 
     /**
      * Get User data + his/her collections and open projects.
@@ -199,10 +177,10 @@ class Pi extends CComponent
 		}
 	    }
 
-	    // Collections + open Projects + Tabs (array)
-	    foreach($user->collections as $collection) {
-		$array['collections'][$collection->id] = self::getDataFromCollection($collection, 0, 2, false);
-	    }
+	    // Projects (only open)
+	    $array['projects'] = self::getProjectsFromUser(self::getUser(), true, false, true);
+	    //$array['collections'][$collection->id] = self::getDataFromCollection($collection, 0, 2, false);
+	    
 	}
 	else
 	{

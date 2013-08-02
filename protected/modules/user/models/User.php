@@ -97,19 +97,19 @@ class User extends ActiveRecord
 		'Profile',
 		'user_id'
 	    );
-	if (!isset($relations['collections']))
-	    $relations['collections'] = array(
+	if (!isset($relations['projects']))
+	    $relations['projects'] = array(
 		self::HAS_MANY,
-		'Collection',
+		'Project',
 		'user_id',
-		'with' => 'projects'
+		'with' => 'tabs'
 	    );
-	if (!isset($relations['defaultCollection']))
-	    $relations['defaultCollection'] = array(
-		self::HAS_ONE,
-		'Collection',
-		'default_collection'
-	    );
+//	if (!isset($relations['defaultCollection']))
+//	    $relations['defaultCollection'] = array(
+//		self::HAS_ONE,
+//		'Collection',
+//		'default_collection'
+//	    );
 	return $relations;
     }
 

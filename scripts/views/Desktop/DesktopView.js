@@ -33,7 +33,7 @@ define([
 	{
 	    if (this.model.get('active')) {
 		// console.log('desktop active');
-		Pi.projects.each(function(model) {
+		Pi.user.get('projects').each(function(model) {
 		    model.set({
 			active: false
 		    });

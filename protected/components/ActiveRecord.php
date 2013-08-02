@@ -69,14 +69,11 @@ class ActiveRecord extends CActiveRecord {
 	$userId = Yii::app()->user->getId();
 	switch ($class)
 	{
-	    case "Collection":
+	    case "Project":
 		return $userId == $this->user_id;
 		break;
-	    case "Project":
-		return $userId == $this->collection->user_id;
-		break;
 	    case "Tab":
-		return $userId == $this->project->collection->user_id;
+		return $userId == $this->project->user_id;
 		break;
 	    default:
 		return null;

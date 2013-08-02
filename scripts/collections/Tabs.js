@@ -5,7 +5,7 @@ define([
     // Models
     "models/Tab",
     // Views
-    "views/TabView",
+    "views/Tab/TabView",
     // Backbone Extensions
     'Pi/Collection'
 
@@ -14,7 +14,7 @@ define([
     "use strict";
 
     var Tabs = Backbone.Collection.extend({
-	UrlRoot: '/tabs/',
+	url: Pi.basePath + '/tabs/',
 	model: Tab,
 	/**
 	 * Init
@@ -26,42 +26,41 @@ define([
 	    /**
 	     * ADD event.
 	     */
-	    this.on('add', function(tab) {
-		var ide = tab.getIde();
-		this.setAll({
-		    active: false
-		},
-		tab.getId());
-		tab.set({
-		    'name': tab.isMain() ? ide.get('name') : tab.get('name')
-		});
-		
-		// Create and render the tab view
-		tab.view = new TabView({
-		    model: tab
-		});
-		tab.view.render();
-		
-		// Update the tab selector
-		ide.tabsSelector.add(tab);
-	    }, this);
+//	    this.on('add', function(tab) {
+//		var ide = tab.getIde();
+//		this.setAll({
+//		    active: false
+//		},
+//		tab.getId());
+////		tab.set({
+////		    'name': tab.isMain() ? ide.get('name') : tab.get('name')
+////		});
+//		
+//		// Create and render the tab view
+//		tab.view = new TabView({
+//		    model: tab
+//		});
+//		tab.view.render();
+//		
+//		// Update the tab selector
+//		ide.tabsSelector.add(tab);
+//	    }, this);
 
 	    /**
 	     * REMOVE event.
 	     */
 	    this.on('remove', function(tab) {
 		// Get ide
-		var ide = tab.getIde();
+		var project = tab.getProject();
 		
 		// Set another tab active, unless the whole ide is being removed
-		if (ide && ide.tabs.length) {
-		    ide.getMainTab().set('active', true);
+		if (project && project.get('tabs').length) {
+		    project.getMainTab().set('active', true);
 		    // Remove the editor fromt the DOM
-		    tab.getIde$().find("#" + tab.getTabUniqueId()).remove();
+		    tab.getIdeView$().find("#" + tab.getTabUniqueId()).remove();
 		    tab.set('active', false);
-		    
 		    // Remove the relative item in the tab selector if ide still exists
-		    ide.tabsSelector.remove(tab);
+		    project.tabsSelectorView.remove(tab);
 		}
 
 		// Remove Ace editor and its listeners

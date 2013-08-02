@@ -12,7 +12,7 @@ define([
     "use strict";
 
     var Projects = Backbone.Collection.extend({
-	UrlRoot: Pi.basePath + '/projects/',
+	url: Pi.basePath + '/projects?tabs=0',
 	model: Project,
 	/**
 	 * Init collection.
@@ -32,49 +32,42 @@ define([
 	     *  is important to avoid memory leaks!
 	     *  @param {model} ide The ide model removed from the collection.
 	     */
-	    this.on("remove", function(ide)
+	    this.on("remove", function(project)
 	    {
-		if (ide.get('front'))
+		if (project.get('front'))
 		    this.bringNextToFront();
 
-		// Remove Icon
-		ide.icon.$el.draggable('destroy');
-		ide.icon.remove();
-		delete ide.icon.model;
-		delete ide.icon;
-
-		// Remove Output
-		ide.stopSketch({ liveCode: false, hide: true });
-		if (ide.outputView) {
-		    ide.outputView.$el.draggable('destroy');
-		    ide.outputView.remove();
-		    delete ide.outputView.model;
-		    delete ide.outputView.processingInstance;
-		    delete ide.outputView;
+		// Remove Icon View
+		if (project.iconView) {
+		    project.iconView.$el.draggable('destroy');
+		    project.iconView.remove();
+		    delete project.iconView.model;
+		    delete project.iconView;
 		}
 
-		// Remove all tabs
-		var tabs = ide.tabs;
-		_.each(tabs.models, function(tab)
-		{
-		    tabs.remove(tab);
-		});
+		// Remove Output View
+		project.stopSketch({ liveCode: false, hide: true });
+		if (project.outputView) {
+		    project.outputView.$el.draggable('destroy');
+		    project.outputView.remove();
+		    delete project.outputView.model;
+		    delete project.outputView.processingInstance;
+		    delete project.outputView;
+		}
 
-		// Remove events from Tabs collection
-		tabs.off();
-		delete ide.tabs;
-		// Destroy Jquery UI elements
-		ide.view.$el.resizable('destroy');
-		ide.view.$el.draggable('destroy');
-		// Remove ide view
-		ide.view.remove();
-		delete ide.view;
-		delete ide.container;
+		// Destroy Ide View
+		if (project.ideView) {
+		    project.ideView.$el.resizable('destroy');
+		    project.ideView.$el.draggable('destroy');
+		    // Remove ide view
+		    project.ideView.remove();
+		    delete project.ideView;
+		}
 		// Remove all ide listeners
 //		ide.clear();
 //		ide.off();
 		// Stop auto save interval.
-		ide.stopAutoSave();
+		project.stopAutoSave();
 	    });
 	},
 	/**

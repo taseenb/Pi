@@ -2,9 +2,9 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Templates
-    "text!tpl/NavRightGuest.html",
-    "text!tpl/NavRight.html",
-    "text!tpl/NavLeft.html",
+    "text!tpl/User/NavRightGuest.html",
+    "text!tpl/User/NavRight.html",
+    "text!tpl/User/NavLeft.html",
     // Plugins
     "bootstrap-dropdown"
 

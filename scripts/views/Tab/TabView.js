@@ -2,7 +2,7 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Templates
-    "text!tpl/Tab.html",
+    "text!tpl/Tab/Tab.html",
     // Ace
     "ace",
     // Plugins
@@ -15,31 +15,32 @@ define([
     var tabTemplate = _.template(TabHtml);
 
     var TabView = Backbone.View.extend({
-	/**
-	 * Init view.
-	 */
 	initialize: function() {
-	    // Listen to
 	    this.listenTo(this.model, "change:active", this.activeState);
 	    this.listenTo(this.model, "change:editMode", this.editModeState);
 	    this.listenTo(this.model, "change:name", this.nameState);
 	    this.listenTo(this.model, "change:code", this.codeChange);
 	    this.listenTo(this.model, "change:saved", this.savedState);
-
 	    // Create a unique Id for the Tab $el
 	    this.uniqueId = this.model.getTabUniqueId();
 	},
-	/**
-	 * Tab tag is a "<li>".
-	 */
 	tagName: "li",
 	/**
 	 * Render view.
 	 * Create the tab and store into $el
 	 */
 	render: function() {
-	    var $tabs = this.model.getIde$().find('.nav-tabs');
+	    var project = this.model.getProject();
+	    var $tabs = project.ideView.$el.find('.nav-tabs');
 	    $tabs.find('#new_tab').before(this.$el);
+
+	    // Deactivate all other tabs but this one
+	    project.get('tabs').setAll({
+		active: false
+	    },
+	    this.model.getId());
+
+	    // Render the tab and the editor
 	    this.renderTab();
 	    this.renderEditor();
 
@@ -63,7 +64,7 @@ define([
 	    {
 		if (!this.model.get('editMode'))
 		{
-		    this.model.getIde().tabs.setAll({
+		    this.model.getProject().get('tabs').setAll({
 			editMode: false
 		    },
 		    this.model.getId());
@@ -87,13 +88,15 @@ define([
 		    // Esc
 		    this.cancelRename();
 		}
-	    },
+	    }
 	},
 	/**
 	 * Html for tab.
 	 */
 	renderTab: function() {
-	    var tabHref = '#' + Pi.action.openProject + '/' + this.model.get('project_id') + '/code/' + this.model.getId();
+	    var projectId = this.model.getProject().getId();
+	    //console.log(projectId);
+	    var tabHref = '#' + Pi.action.openProject + '/' + projectId + '/code/' + this.model.getId();
 	    this.$el.attr({
 		'id': 'tab' + this.uniqueId,
 		'class': this.model.isMain() ? "main" : ""
@@ -105,7 +108,6 @@ define([
 		"fileNameMaxLength": Pi.fileNameMaxLength
 	    })
 		    );
-			
 	    this.savedState();
 	},
 	/**
@@ -113,8 +115,8 @@ define([
 	 */
 	renderEditor: function() {
 	    var that = this,
-		    ide = this.model.getIde(),
-		    $ideView = this.model.getIde$(),
+		    project = this.model.getProject(),
+		    $ideView = this.model.getIdeView$(),
 		    tab = this.model.attributes,
 		    codeId = 'code' + this.uniqueId,
 		    javascriptId = 'js' + this.uniqueId;
@@ -154,8 +156,8 @@ define([
 	    this.editor.getSession().on('change', function(e) {
 		that.model.set('code', that.editor.getValue());
 		that.model.set('saved', false);
-		if (ide.get('liveCode'))
-		    ide.set('codeIsNew', true);
+		if (project.get('liveCode'))
+		    project.set('codeIsNew', true);
 	    });
 	    this.editor.getSession().selection.on('changeCursor', function(e) {
 		$ideView.find('.status')
@@ -186,21 +188,21 @@ define([
 	 * Change active state. 
 	 */
 	activeState: function() {
-	    var ide = this.model.getIde();
+	    var project = this.model.getProject();
 	    if (this.model.get('active')) {
-		ide.tabs.setAll({
+		project.get('tabs').setAll({
 		    active: false
 		},
 		this.model.getId());
 		this.$el.addClass('active');
 		// Show code
-		ide.view.$el.find('#' + this.uniqueId).show();
+		project.ideView.$el.find('#' + this.uniqueId).show();
 	    }
 	    else
 	    {
 		this.$el.removeClass('active');
 		// Hide code
-		ide.view.$el.find('#' + this.uniqueId).hide();
+		project.ideView.$el.find('#' + this.uniqueId).hide();
 	    }
 	    this.toggleJsEditor();
 	},
@@ -211,7 +213,7 @@ define([
 	    var a = this.$el.find('a'),
 		    tabEditor = this.$el.find('.tab_editor');
 	    if (this.model.get('editMode')) {
-		this.model.getIde().tabs.setAll({
+		this.model.getProject().get('tabs').setAll({
 		    editMode: false
 		},
 		this.model.getId());
@@ -231,13 +233,13 @@ define([
 	 */
 	nameState: function() {
 	    var name = this.model.get('name'),
-		    ide = this.model.getIde();
+		    project = this.model.getProject();
 	    this.$el.find('.tab-name').text(name);
 	    if (this.model.isMain()) {
-		ide.set('name', name);
+		project.set('name', name);
 	    }
-	    // Rename tab selector item
-	    ide.tabsSelector.rename(this.model);
+	    // Rename the tab selector item
+	    project.tabsSelectorView.rename(this.model);
 	},
 	/**
 	 * Save state.
@@ -245,7 +247,7 @@ define([
 	 */
 	savedState: function() {
 	    //console.log(this.model.get('id') + ": " + this.model.get('saved'));
-	    if (!this.model.get('saved') || (this.model.isMain() && !this.model.getIde().get('saved')))
+	    if (!this.model.get('saved') || (this.model.isMain() && !this.model.getProject().get('saved')))
 		this.$el.find('.unsaved').show();
 	    else
 		this.$el.find('.unsaved').hide();
@@ -254,7 +256,7 @@ define([
 	 * Update code state: show code was saved.
 	 */
 	codeChange: function() {
-	    this.model.getIde().set('saved', false);
+	    this.model.getProject().set('saved', false);
 	},
 	/**
 	 * Validate the new name, apply the change and exit the editing mode.
@@ -286,7 +288,7 @@ define([
 	 * Switch the javascript view of this tab (a read only Ace editor).
 	 */
 	toggleJsEditor: function() {
-	    if (this.model.getIde().get('jsMode')) {
+	    if (this.model.getProject().get('jsMode')) {
 		this.startJavascriptMode();
 	    }
 	    else

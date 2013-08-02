@@ -2,7 +2,7 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Templates
-    "text!tpl/TabSelector.html"
+    "text!tpl/Project/TabSelector.html"
 
 ], function(Pi, Backbone, $, TabSelectorHtml) {
 
@@ -15,7 +15,7 @@ define([
 	 * Init.
 	 */
 	initialize: function() {
-	    this.$el = this.model.view.$el.find('.tab_selector');
+	    this.$el = this.model.ideView.$el.find('.tab_selector');
 	    this.render(); // render immediatly to activate data binding
 	},
 	/**
@@ -24,7 +24,7 @@ define([
 	render: function() {
 	    this.$el.append(_.template(TabSelectorHtml, {
 		id: this.model.getId(),
-		tabs: this.model.tabs.toArrayWithId(),
+		tabs: this.model.get('tabs').toArrayWithId(),
 		openProjectAction: Pi.action.openProject
 	    }));
 	    this.$menu = this.$el.find(".dropdown-menu");

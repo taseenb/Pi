@@ -9,6 +9,17 @@ function(Pi, Backbone) {
     "use strict";
 
     Backbone.Model = Backbone.Model.extend({
+	
+	/**
+	 * Array containing the names of the model attributes that can be 
+	 * safely saved on the server.
+	 */
+	safeAttributes: [],
+	
+	/**
+	 * Array to store promises for confirmation dialogs.
+	 */
+	promise: [],
 	/**
 	 * Start tracking changes by storing changed attributes (key:value pairs) 
 	 * into an unsavedAttributes object.
@@ -98,7 +109,9 @@ function(Pi, Backbone) {
 	 * A safeAttributes array must exist and be filled with a list of attribute names.
 	 */
 	getUnsaved: function() {
-	    return this.isNew() ? this.attributes : this.unsavedAttributes;
+	    var attrs = this.isNew() ? this.attributes : this.unsavedAttributes;
+	    attrs = _.pick(attrs, this.safeAttributes);
+	    return attrs;
 	},
 	/**
 	 * Get the unique id of this model. If it is new, it will return the cid.
@@ -114,6 +127,7 @@ function(Pi, Backbone) {
 		    attrs = this.getUnsaved(),
 		    saved = $.Deferred();
 
+		    console.log(attrs);
 	    // Check if there is something to save
 	    if (!_.isEmpty(attrs)) {
 
@@ -147,8 +161,8 @@ function(Pi, Backbone) {
 				saved.reject();
 				return false;
 			    },
-			    // IE 9 and 10 fail with patch
-			    patch: that.isNew() ? false : true
+			    patch: that.isNew() ? false : true,
+			    wait: true // wait for the server response before updating the attributes
 			}
 		);
 
@@ -172,7 +186,46 @@ function(Pi, Backbone) {
 		}
 	    });
 	    return attributes;
-	}
+	},
+	/**
+	 * Ask a confirmation to delete the sketch.
+	 * @return {promise} confirmation Returns a deferred object with user's response.
+	 */
+	askForDelete: function() {
+	    // Store in the promise array to overwrite later
+	    this.promise['askForDelete' + this.getId()] = $.Deferred();
+	    // Setup confirmation dialog
+	    Pi.confirmation({
+		promise: this.promise['askForDelete' + this.getId()],
+		cancelResolve: false,
+		title: "Delete " + this.modelName,
+		message: "This " + this.modelName.toLowerCase() + " will be permanently deleted and cannot be recovered. Are you sure?",
+		buttons: [
+		    {
+			label: "Delete",
+			resolve: true
+		    }
+		]
+	    });
+	    return this.promise['askForDelete' + this.getId()];
+	},
+	/**
+	 * Delete the model.
+	 */
+	deleteModel: function() {
+	    var that = this;
+	    $.when(this.askForDelete())
+		    .done(function() {
+		that.destroy({
+		    success: function(model, response, options) {
+			console.log("Destroyed.");
+		    },
+		    error: function(model, xhr, options) {
+			console.log(xhr);
+		    }
+		});
+	    });
+	},
     });
 
 

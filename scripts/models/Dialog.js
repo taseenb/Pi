@@ -1,6 +1,6 @@
 define([
-    // Main scripts
-    'Pi',
+    // Main
+    'Pi', 'backbone', 'jquery',
     // Collections
     // Models
     // Views
@@ -8,7 +8,7 @@ define([
     // Backbone Extensions
     'Pi/Model'
 
-], function(Pi, Backbone) {
+], function(Pi, Backbone, $) {
 
     "use strict";
 
@@ -30,15 +30,17 @@ define([
 	],
 	/**
 	 * Loop through dialog data and apply it to each dialog model attribute.
-	 * If 'url' property is set, make a POST request 
-	 * and apply the response to the content.
+	 * If 'url' property is set, make a POST request to that url
+	 * and apply the response to the 'content' attribute.
 	 * Otherwise just set the attribute in the model.
 	 */
 	reload: function() {
 	    var data = this.data[this.get('dataId')],
 		    that = this;
+	    
+	    console.log(this);
 	    _.each(data, function(value, key) {
-		if (key === 'url')
+		if (key === 'contentUrl')
 		{
 		    that.aset({
 			'attr': 'content',
@@ -77,27 +79,27 @@ define([
 		height: 380,
 		title: "Log In",
 		require: ["login-form"],
-		url: Pi.basePath + '/user/login/'
+		contentUrl: Pi.basePath + '/user/login/'
 	    },
 	    'sign-up': {
 		width: 480,
 		height: 380,
 		title: "Sign Up",
 		require: ["signup-form", "validation-plugin"],
-		url: Pi.basePath + '/user/signup/'
+		contentUrl: Pi.basePath + '/user/signup/'
 	    },
 	    'password-recovery': {
 		width: 480,
 		height: 320,
 		title: "Password Recovery",
 		require: ["recovery-form"],
-		url: Pi.basePath + '/user/recovery/'
+		contentUrl: Pi.basePath + '/user/recovery/'
 	    },
 	    'activation-resend-email': {
 		width: 480,
 		height: 380,
 		title: "Resend Activation Email",
-		url: Pi.basePath + '/user/activation/resendemail'
+		contentUrl: Pi.basePath + '/user/activation/resendemail'
 	    }
 	}
     });

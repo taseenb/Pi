@@ -2,17 +2,20 @@ define([
     // Main
     'Pi', 'backbone', 'jquery',
     // Collections
+//    'collections/Projects',
     // Models
+    'models/Project',
     // Views
     
     // Backbone Extensions
     'Pi/Model',
+    'relational'
     
-], function(Pi, Backbone, $) {
+], function(Pi, Backbone, $, Project) {
 
     "use strict";
 
-    var Tab = Backbone.Model.extend({
+    var Tab = Backbone.RelationalModel.extend({
 	modelName: "Tab",
 	urlRoot: Pi.basePath + '/tab',
 	defaults: {
@@ -42,7 +45,6 @@ define([
 	    // Set saved state
 	    this.set('saved', !this.isNew());
 	    // Start tracking changes and unsaved attributes.
-//	    if (!Pi.isGuest)
 	    this.trackUnsaved(this.safeAttributes);
 	},
 	/**
@@ -61,7 +63,7 @@ define([
 	    this.set('name', newName);
 	    //console.log(this.changed);
 	    
-	    this.getIde().set('saved', false);
+	    this.getProject().set('saved', false);
 
 	    return true;
 	},
@@ -78,20 +80,20 @@ define([
 	/**
 	 * Get the containing Ide model of this tab.
 	 */
-	getIde: function() {
-	    return Pi.projects.get(this.get('project_id'));
+	getProject: function() {
+	    return this.get('project_id');
 	},
 	/**
 	 * Get the jQuery representation of Ide view of this tab.
 	 */
-	getIde$: function() {
-	    return this.getIde().view.$el;
+	getIdeView$: function() {
+	    return this.getProject().ideView.$el;
 	},
 	/**
 	 * Get a unique id for this tab composed by the paretn Ide id and the tab id.
 	 */
 	getTabUniqueId: function() {
-	    return this.get('project_id') + "_" + this.getId();
+	    return this.getProject().getId() + "_" + this.getId();
 	}
 
     });

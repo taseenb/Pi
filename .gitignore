@@ -23,3 +23,13 @@ TODO.html
 /scripts/tpl/OLDCollection.html
 /forum/
 /docs/
+/scripts/models/OLDCollection.js
+/scripts/collections/OLDIdes.js
+/scripts/collections/OLDCollections.js
+/scripts/tpl/OLDPopup.html
+/scripts/tpl/OLDFinder.html
+/scripts/tpl/OLDCollectionItem.html
+/scripts/views/OLDCollection/
+/protected/controllers/actions/OLDCollectionReadAction.php
+/protected/controllers/OLDCollectionController.php
+/protected/models/OLDCollection.php

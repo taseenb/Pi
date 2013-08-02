@@ -16,7 +16,7 @@ define([
 	    .on('click', '.new', function(e) {
 	e.preventDefault();
 	e.stopPropagation();
-	Pi.user.newSketch();
+	Pi.user.newProject();
     })
 	    .ajaxStart(function(e) {
 	spinner.show();
@@ -41,7 +41,7 @@ define([
 	    if (Pi.isGuest)
 		window.location.hash = "#log-in";
 	    else
-		Pi.projects.getFirst().saveSketch();
+		Pi.user.get('project').getFirst().saveSketch();
 	}
     });
 

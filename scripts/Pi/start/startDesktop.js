@@ -5,7 +5,7 @@ define([
     // Models
     "models/Desktop",
     // Views
-    "views/DesktopView"
+    "views/Desktop/DesktopView"
     
     // Plugins
 

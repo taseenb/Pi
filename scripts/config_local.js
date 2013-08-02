@@ -8,7 +8,7 @@ var require = {
 	// Backbone + Underscore
 	"backbone": "lib/backbone/backbone",
 	"underscore": "lib/underscore/underscore",
-	"relational": 'lib/backbone/backbone-relational',
+	"relational": 'lib/backbone-relational/backbone-relational',
 	"epoxy": 'lib/backbone-epoxy/backbone.epoxy', // data binding
 	//"rivets": 'lib/rivets/rivets.min',
 	
@@ -37,11 +37,15 @@ var require = {
     // Traditional browser globals scripts
     shim: {
 	'underscore': {
-		exports: '_'
+	    exports: '_'
 	},
 	'backbone': {
-		deps: ['underscore', 'jquery'],
-		exports: 'Backbone'
+	    deps: ['underscore', 'jquery'],
+	    exports: 'Backbone'
+	},
+	'relational': {
+	    deps: ['backbone'],
+	    exports: 'relational'
 	},
 	'processing': {
 	    exports: 'Processing'

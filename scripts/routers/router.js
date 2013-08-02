@@ -5,7 +5,10 @@ define([
     'Pi/start/startDataBinding',
     'Pi/start/startDesktop',
     'Pi/start/startDialogs',
-    'Pi/start/startUser'
+    'Pi/start/startUser',
+    
+    // Js and Json helpers
+    'Pi/Js'
 
 ], function(Pi, $, Backbone) {
 
@@ -37,63 +40,13 @@ define([
 	/**
 	 * Open or bring to front a particular ide (and a tab, if defined).
 	 */
-	openProject: function(ideId, action, tabId)
+	openProject: function(id, action)
 	{
-	    var router = this;
 	    require([
-		'Pi/start/startUser',
-		'models/Project',
-		'views/IdeView',
-		'Pi/Model'
-	    ], function(Pi, Project) {
-		var ide = Pi.projects.get(ideId.replace("/", ""));
-
-		if (ide && action === "fs")
-		{
-		    ide.playSketch({
-			'fullScreen': true
-		    });
-		    ide.set('fullScreen', true);
-		}
-		else if (ide && action === "play") {
-		    ide.playSketch({
-			'fullScreen': false
-		    });
-		}
-		else if (ide)
-		{
-		    // Open the Ide and save its open state
-		    if (!ide.get('active'))
-			ide.set('active', true);
-		    if (!ide.get('open')) {
-			ide.set('open', true);
-			if (!ide.isNew() && !ide.get('saved'))
-			    ide.saveSketch();
-		    }
-		    if (tabId)
-			var tab = ide.tabs.get(tabId.replace("/", ""));
-		    if (tab && !tab.get('active'))
-			tab.set('active', true);
-		}
-		else
-		{
-		    // Try to load ide from the server
-		    var project = new Project({id: ideId});
-		    $.when(project.fetch())
-		    .done(function(e) {
-			var ide = Pi.user.createIde(
-			    project.get('name'),
-			    project.get('tabs'),
-			    project.id, 
-			    project.get('collection_id'), 
-			    project.get('preview_id'),
-			    true // open
-			);
-			// Recurse to open the ide with the requested action and tab
-			if (ide)
-			    router.openProject(ideId, action, tabId);
-		    });
-		}
+		'Pi/start/startUser'
+	    ], function(Pi) {
+		var projectId = id.replace("/", "");
+		Pi.user.openProject(projectId, action);
 	    });
 	},
 	/**
@@ -248,7 +201,7 @@ define([
 //    Pi.router.route("art", "art");
 //    Pi.router.route("page/:page(/)", "page");
     Pi.router.route("find(/:collectionId)(/)", "find");
-    Pi.router.route(Pi.action.openProject + "/:ideId(/:action)(/:tabId)(/)", "openProject");
+    Pi.router.route(Pi.action.openProject + "/:id(/:action)(/:tabId)(/)", "openProject");
     Pi.router.route("me", "me");
     if (Pi.isGuest) {
 	Pi.router.addRoutesForGuests();

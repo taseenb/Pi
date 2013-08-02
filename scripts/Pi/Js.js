@@ -1,17 +1,44 @@
 define([
     'Pi', 'backbone', 'jquery',
-    
     // Backbone Extensions
     'Pi/Model'
 
 ], function(Pi, Backbone, $) {
-    
+
     "use strict";
 
     /**
      * Static helper methods.
      */
     Pi.js = {
+	/**
+	 * Determine whether a given string is a valid integer (negative numbers return false by default). 
+	 * Strings starting with '0' will always return false.
+	 * @param {string} str The string to be treated.
+	 * @param {boolean} acceptNegatives Whether to return true for negative integers (strings starting with '-').
+	 * @returns {boolean} True if the string is a valid integer.
+	 */
+	stringIsInteger: function(str, acceptNegatives) {
+	    if (acceptNegatives)
+		return /^\-?(0|[1-9]\d*)$/.test(str);
+	    else
+		return /^(0|[1-9]\d*)$/.test(str);
+	},
+		
+	/**
+	 * Given a Json object, convert all the string values (that only contain positive numbers or '0') into integers.
+	 * It will not convert strings starting with '0'.
+	 * @param {json object} json The json object to process.
+	 * @returns {json object}
+	 */
+	stringsToInts: function(data) {
+	    _.each(data, function(value, key) {
+		if (_.isString(value) && this.stringIsInteger(value)) {
+		    data[key] = parseInt(value);
+		}
+	    }, this);
+	    return data;
+	},
 	/**
 	 * Format date and time from a unix timestamp or javascript date object.
 	 * @param {undefined || number || string || Date} time	Optional argument for the time to format. 

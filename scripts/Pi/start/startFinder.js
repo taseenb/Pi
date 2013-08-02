@@ -3,7 +3,7 @@ define([
     'Pi',
     
     // Views
-    "views/FinderView",
+    "views/User/FinderView",
 
 ], function(Pi, FinderView) {
 
