@@ -43,7 +43,7 @@ define([
 		Pi.dialogView.$el.empty();
 		Pi.dialog.clear();
 		Pi.dialog.set(data);
-		Pi.dialogView.refresh();
+		//Pi.dialogView.refresh();
 	    }
 	}
 	else if (_.isString(data)) {

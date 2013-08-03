@@ -228,7 +228,7 @@ $form = $this->beginWidget('CActiveForm', array(
 		function ajaxSuccess(data) {
 		    $message.fadeOut(200, function() {
 			// USER SUCCESSFULLY LOGGED IN
-			// console.log(data);
+			//console.log(data);
 			Pi.user.update(data, true); // load user and update sketches
 			Pi.router.removeRoutesForGuests();
 			Pi.dialogView.close();

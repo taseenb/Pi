@@ -3,7 +3,6 @@
 
 class Pi extends CComponent
 {
-
     /**
      * Store whether the user exists and is active.
      * @var boolean True if the user is valid. 
@@ -38,32 +37,6 @@ class Pi extends CComponent
 	}
 	return self::$_user;
     }
-
-    /**
-     * Get a json string from a User active record, with related projects.
-     * @param object $collection Collection active record object.
-     * @param {int} $parents Levels of parent models (ie: collection is 2 levels from a tab).
-     * @param {int} $children Levels of children models (ie: projects are 1 level from collection).
-     * @param {boolean} $json Whether to encode the resulting array in json. Defaults to true.
-     * @param {boolean} $onlyOpenProjects Whether to exclude closed projects from results. Defaults to true.
-     * @return {json or array} Json or array representation of the records.
-     */
-//    public static function getDataFromUser($user, $children = 0, $json = true, $onlyOpenProjects = true)
-//    {
-//	$u = $user->attributes;
-//	if ($children > 0)
-//	{
-//	    $u['projects'] = array();
-//	    foreach ($user->projects as $project)
-//	    {
-//		if (!$onlyOpenProjects || $project->open)
-//		{
-//		    array_push($u['projects'], self::getDataFromProject($project, 0, $children-1, false));
-//		}
-//	    }
-//	}
-//	return $json ? CJSON::encode($c) : $c;
-//    }
 
     /**
      * Get a json string from a Project active record, with related parents and children models.
@@ -122,23 +95,6 @@ class Pi extends CComponent
     }
 
     /**
-     * Get all the collections of the user, with or without the projects.
-     * @param {boolean} $json Whether to encode the resulting array in json. Default true;
-     * @return {json or array} Json or array representation of the records.
-     */
-//    public static function getCollectionsFromUser($withProjects = true, $json = true, $onlyOpenProjects = false)
-//    {
-//	$user = self::getUser();
-//	$c = array();
-//	foreach ($user->collections as $collection)
-//	{
-//	    $collectionArray = self::getDataFromCollection($collection, $withProjects ? 1 : 0, false, $onlyOpenProjects);
-//	    array_push($c, $collectionArray);
-//	}
-//	return $json ? CJSON::encode($c) : $c;
-//    }
-
-    /**
      * Get User data + his/her collections and open projects.
      */
     public static function getUserBootstrap($json = true)
@@ -176,11 +132,8 @@ class Pi extends CComponent
 		    $array['profile'][$key] = $value;
 		}
 	    }
-
 	    // Projects (only open)
-	    $array['projects'] = self::getProjectsFromUser(self::getUser(), true, false, true);
-	    //$array['collections'][$collection->id] = self::getDataFromCollection($collection, 0, 2, false);
-	    
+	    $array['projects'] = self::getProjectsFromUser($user, false, false, true);
 	}
 	else
 	{

@@ -62,7 +62,8 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 		"<?php echo request()->csrfTokenName; ?>": "<?php echo request()->csrfToken; ?>"
 	    },
 	    action: {
-		openProject: "project"
+		openProject: "project",
+		//openFinder: "find"
 	    }
 	};
 	Pi.longName = Pi.name + " (" + Pi.version + ")";

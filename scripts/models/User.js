@@ -13,6 +13,8 @@ define([
     // Backbone Extensions
     'relational',
     'Pi/Model',
+    // Helpers
+    'Pi/Js'
 ], function(Pi, Backbone, $, Projects, Tabs, Project, Tab, IdeView, IconView) {
 
     "use strict";
@@ -46,22 +48,29 @@ define([
 	{
 	    // Set current desktop
 	    this.currentDesktop = Pi.desktopView;
+
+	    // Create an array with ids of bootstrapped projects
+	    this.bootstrapProjectIds = [];
+	    _.each(Pi.bootstrap.projects, function(project) {
+		this.bootstrapProjectIds.push(parseInt(project.id));
+	    }, this);
+	    //console.log(this.bootstrapProjectIds);
 	},
 	/**
 	 * Start the desktop playground with user's Processing sketches or, if guest, a demo sketch.
 	 * @param {json} data User model data with its profile and collections (containing only open projects).
 	 */
 	bootstrap: function(data) {
-	    if (Pi.isGuest && !Pi.guestBootstrapped)
+	    if (Pi.isGuest && !this.guestBootstrapped)
 	    {
 		// Start a demo sketch for the guest
 		this.newProject();
-		Pi.guestBootstrapped = true;
+		this.guestBootstrapped = true;
 	    }
-	    else if (!Pi.isGuest && !Pi.userBootstrapped)
+	    else if (!Pi.isGuest && !this.bootstrapped)
 	    {
 		this.update(data, true);
-		Pi.userBootstrapped = true;
+		this.bootstrapped = true;
 	    }
 	},
 	/**
@@ -69,7 +78,9 @@ define([
 	 * @param data {json object} User model data with its profile and projects.
 	 * @param updateProjects {boolean} Whether to update the projects as well with that data.
 	 */
-	update: function(data, updateProjects) {
+	update: function(data, loadProjects) {
+	    Pi.js.stringsToInts(data.user);
+
 	    // Reset user model before loading bootstrap data
 	    this.reset();
 
@@ -88,30 +99,56 @@ define([
 		this.profile.attributes[key] = value; // avoid backbone change event
 	    }, this);
 
-	    if (updateProjects)
-		this.updateProjects(data.projects);
-
 	    if (this.nav)
 		this.nav.render();
+
+	    if (loadProjects) {
+		this.persistNewProjects();
+		this.loadProjects(data.projects);
+	    }
 	},
 	/**
 	 * Update projects.
 	 * @param {json} projectsJson Json data with projects.
 	 */
-	updateProjects: function(projectsJson)
+	loadProjects: function(json)
 	{
-	    // Get user json data or load the bootstrap data (Pi.bootstrap)
-	    var projects = projectsJson ? projectsJson : Pi.bootstrap.projects;
+	    // Get user json data and load projects
+	    var projects = json;
 	    _.each(projects, function(project) {
-		var projectModel = new Project(project);
-		this.createIdeView(projectModel);
+		Pi.js.stringsToInts(project);
+		if (project.open) {
+		    this.openProject(project.id);
+		}
 	    }, this);
+
+	},
+	/**
+	 * Save new projects (not already saved) in the db or destroy projects 
+	 * that were not modified by the user.
+	 * This method is needed after user's log in, when new projects may be open
+	 * and not yet created on the db.
+	 */
+	persistNewProjects: function() {
+	    if (!Pi.isGuest) {
+		this.get('projects').each(function(project) {
+		    if (project.isNew() && !project.get('saved'))
+			project.saveSketch(true);
+		    else if (project.isNew() && project.get('saved'))
+			project.destroy();
+		});
+	    }
 	},
 	/**
 	 * Reset this user model and removes the profile model (clears attributes and listeners).
 	 */
 	reset: function() {
-	    this.clear();
+	    // Clear all attributes, but keep relations ('projects' attribute)
+	    _.each(this.attributes, function(value, key) {
+		if (key != 'projects')
+		    value = undefined;
+	    });
+	    //console.log(this.attributes);
 	    if (this.profile) {
 		this.profile.off();
 		delete this.profile;
@@ -165,6 +202,7 @@ define([
 		'code': Pi.demoCode,
 		'main': 1
 	    }));
+	    this.get('projects').add(project);
 	    this.createIdeView(project);
 	},
 	/**
@@ -172,12 +210,12 @@ define([
 	 * @param {integer} id Project id.
 	 * @param {string} action Action to perform.
 	 * @param {integer} tabId Optional: tab id to open.
+	 * @return {boolean} True if project was open, false if it does not exist or there was an error.
 	 */
 	openProject: function(id, action, tabId)
 	{
 	    var that = this,
 		    project = this.get('projects').get(id);
-	    //console.log(project);
 
 	    if (project && project.get('tabs').length) { // project model already exists
 		switch (action) {
@@ -194,7 +232,7 @@ define([
 			break;
 		    case "code":
 			// @TODO open the ide and activate the requested tab
-			
+
 			break;
 		    default:
 			// Create the Ide if it does not exist. Save the new 'open' state, if changed
@@ -208,22 +246,26 @@ define([
 			}
 			project.set('active', 1);
 		}
+		return true;
 	    }
 	    else // try to load the project from server and create the model
 	    {
-		if (!project) {
-		    var project = new Project({
-			'id': id
-		    });
-		}
+		var project = Project.findOrCreate({
+		    'id': id
+		});
 		project.fetch({
 		    success: function(model, response, options) {
 			// project successfully loaded - recurse to open the ide
+			//console.log(model);
 			that.openProject(id, action);
+			return true;
 		    },
 		    error: function(model, response, options) {
 			// project does not exist
-			project.clear({silent:true});
+			project.clear({
+			    silent: true
+			});
+			return false;
 		    }
 		});
 	    }
@@ -254,7 +296,6 @@ define([
 		    model: project
 		});
 		// Set the container (desktop) for this ide
-		project.ideView.container = this.currentDesktop.$el;
 		project.ideView.render().openState(); // render and show if open
 
 		// IMPORTANT: always set first the main tab active when loading

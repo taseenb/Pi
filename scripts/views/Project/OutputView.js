@@ -29,7 +29,7 @@ define([
 	    this.$el.html(OutputHtml).attr({
 		'data-e-bind': "active:active,front:front"
 	    });
-	    
+
 	    // Render view
 	    this.render();
 	},
@@ -37,7 +37,8 @@ define([
 	 * Data binding.
 	 */
 	bindings: "data-e-bind",
-	bindingHandlers: _.extend(Pi.bindingHandlers, {}),
+	bindingHandlers: _.extend(Pi.bindingHandlers, {
+	}),
 	className: 'output',
 	events: {
 	    "dragstop ": function(event, ui) {
@@ -84,7 +85,7 @@ define([
 		top: this.model.get('top'),
 		zIndex: this.model.get('zIndex') + 1
 	    })
-		    .appendTo(this.model.ideView.container)
+		    .appendTo(Pi.user.currentDesktop.$el)
 		    .draggable({
 		handle: '.title'
 	    })
@@ -106,6 +107,20 @@ define([
 	    this.$el.css({
 		top: that.model.get('ouputPosition').top,
 		left: that.model.get('ouputPosition').left
+	    });
+	},
+	/**
+	 * Position the output window in the center of the screen.
+	 */
+	position: function() {
+	    var w = this.$el.width(),
+		    h = this.$el.height(),
+		    titlebarHeight = this.$el.find('.title').outerHeight(true);
+	    this.model.set({
+		'ouputPosition': {
+		    left: window.innerWidth/2 - w/2,
+		    top: window.innerHeight/2 - (h/2) - titlebarHeight/2
+		}
 	    });
 	},
 	/**

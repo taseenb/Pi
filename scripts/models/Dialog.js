@@ -37,8 +37,6 @@ define([
 	reload: function() {
 	    var data = this.data[this.get('dataId')],
 		    that = this;
-	    
-	    console.log(this);
 	    _.each(data, function(value, key) {
 		if (key === 'contentUrl')
 		{

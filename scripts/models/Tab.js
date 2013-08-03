@@ -23,7 +23,7 @@ define([
 	    'code': "",
 	    'main': 0, // READ ONLY
 	    // app
-	    'saved': undefined,
+	    'saved': true,
 	    'active': true,
 	    'editMode': false
 	},
@@ -42,8 +42,9 @@ define([
 	    this.set('main', this.isMain());
 	    // Set the main tab as active
 	    this.set('active', this.isMain());
-	    // Set saved state
-	    this.set('saved', !this.isNew());
+	    // Set saved state - Make sure new tabs for guests start saved
+	    if (Pi.isGuest)
+		this.set('saved', true);
 	    // Start tracking changes and unsaved attributes.
 	    this.trackUnsaved(this.safeAttributes);
 	},

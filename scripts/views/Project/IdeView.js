@@ -228,7 +228,7 @@ define([
 		left: project.get('left'),
 		zIndex: project.get('zIndex')
 	    })
-		    .appendTo(this.container)
+		    .appendTo(Pi.user.currentDesktop.$el)
 		    .resizable({
 		minWidth: 400,
 		minHeight: 450,

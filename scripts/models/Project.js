@@ -55,7 +55,7 @@ define([
 		left: 0,
 		top: 0
 	    },
-	    saved: false,
+	    saved: true,
 	    front: true,
 	    active: true, // must be true, otherwise ide will not be active when initialized
 	    // db "projects"
@@ -124,7 +124,8 @@ define([
 	    }
 
 	    // Set saved state
-	    this.set('saved', !this.isNew());
+	    if (Pi.isGuest)
+		this.set('saved', true);
 
 	    // Start tracking changes and unsaved attributes.
 	    this.trackUnsaved(this.safeAttributes);
@@ -185,8 +186,6 @@ define([
 	playSketch: function(options)
 	{
 	    this.stopSketch();
-	    var $console = this.ideView.$console;
-	    $console.html('');
 	    try
 	    {
 		if (!this.outputView)
@@ -194,15 +193,10 @@ define([
 			model: this
 		    });
 		this.set({
-		    ouputPosition: {
-			left: this.getOutputLeft(),
-			top: this.ideView.$el.css('top')
-		    },
 		    'running': true,
 		    'isPaused': false
 		});
-		this.outputView.$el.show();
-
+		
 		// Start Processing Js
 		// Get code and pass the unique id to build the extra Pi methods
 		var sketch = Processing.compile(this.getCode(this.getUid()));
@@ -210,8 +204,10 @@ define([
 		this.startPjsLogger(this.outputView.processingInstance);
 		this.outputView.originalWidth = this.outputView.canvas().width;
 		this.outputView.originalHeight = this.outputView.canvas().height;
+		this.outputView.position();
 		this.set('fullScreen', (options && options.fullScreen) ? true : false);
 		this.outputView.fullScreenState();
+		this.outputView.$el.show();
 	    }
 	    catch (e)
 	    {
@@ -219,6 +215,12 @@ define([
 		    hide: true,
 		    liveCode: false
 		});
+		var $console;
+		if (!this.ideView) {
+		    Pi.user.createIdeView(this);
+		}
+		$console = this.ideView.$console;
+		$console.html('');
 		//console.log(e);
 		$console.append("<p>" + e.toString() + "</p>");
 		$console[0].scrollLeft = $console[0].scrollWidth;
@@ -483,7 +485,7 @@ define([
 	 */
 	getOutputLeft: function()
 	{
-	    var desktopWidth = this.ideView.container.width();
+	    var desktopWidth = Pi.user.currentDesktop.$el.width();
 	    var bestPosition = this.ideView.$el.width()
 		    + parseInt(this.ideView.$el.css('left')) + 50;
 	    var left = bestPosition < desktopWidth ? bestPosition : 100;

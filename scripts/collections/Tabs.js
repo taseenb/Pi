@@ -70,9 +70,6 @@ define([
 		// Remove tab view and its listeners
 		tab.view.remove();
 		tab.clear();
-		
-		//console.log(tab);
-		// @TODO destroy the tab to delete it on the server side
 	    });
 	},
 	/**

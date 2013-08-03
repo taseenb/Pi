@@ -6,7 +6,6 @@ define([
     'Pi/start/startDesktop',
     'Pi/start/startDialogs',
     'Pi/start/startUser',
-    
     // Js and Json helpers
     'Pi/Js'
 
@@ -45,8 +44,18 @@ define([
 	    require([
 		'Pi/start/startUser'
 	    ], function(Pi) {
-		var projectId = id.replace("/", "");
-		Pi.user.openProject(projectId, action);
+		if (Pi.js.stringIsInteger(id.replace("/", ""))) {
+		    var projectId = parseInt(id);
+		    // Avoid double ajax calls by checking the bootstrapped projects
+		    // (only the first time this method is called)
+		    if (Pi.user.bootstrapProjectIds) {
+			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1)
+			    Pi.user.openProject(projectId, action);
+			delete Pi.user.bootstrapProjectIds;
+		    } else {
+			Pi.user.openProject(projectId, action);
+		    }
+		}
 	    });
 	},
 	/**

@@ -39,7 +39,7 @@ define([
 
 		// Remove Icon View
 		if (project.iconView) {
-		    project.iconView.$el.draggable('destroy');
+		    //project.iconView.$el.draggable('destroy');
 		    project.iconView.remove();
 		    delete project.iconView.model;
 		    delete project.iconView;
@@ -48,7 +48,7 @@ define([
 		// Remove Output View
 		project.stopSketch({ liveCode: false, hide: true });
 		if (project.outputView) {
-		    project.outputView.$el.draggable('destroy');
+		    //project.outputView.$el.draggable('destroy');
 		    project.outputView.remove();
 		    delete project.outputView.model;
 		    delete project.outputView.processingInstance;
@@ -58,7 +58,7 @@ define([
 		// Destroy Ide View
 		if (project.ideView) {
 		    project.ideView.$el.resizable('destroy');
-		    project.ideView.$el.draggable('destroy');
+		    //project.ideView.$el.draggable('destroy');
 		    // Remove ide view
 		    project.ideView.remove();
 		    delete project.ideView;

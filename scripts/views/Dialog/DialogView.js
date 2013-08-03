@@ -67,14 +67,12 @@ define([
 	 * Hide the dialog.
 	 */
 	close: function() {
-	    console.log('destroy call');
 	    this.$el.dialog("close");
 	},
 	/**
 	 * Destroy the dialog (jquery ui instance).
 	 */
 	destroy: function() {
-	    console.log('destroy call');
 	    this.$el.dialog("destroy"); // @ TODO bug after successful login
 	},
 	/**
