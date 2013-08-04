@@ -124,7 +124,7 @@ define([
 	    }
 
 	    // Set saved state
-	    if (Pi.isGuest)
+	    if (Pi.user.isGuest())
 		this.set('saved', true);
 
 	    // Start tracking changes and unsaved attributes.
@@ -332,7 +332,7 @@ define([
 	    if (!this.get('saved')) {
 		$.when(this.askForSave())
 			.done(function() {
-		    if (!Pi.isGuest) {
+		    if (!Pi.user.isGuest()) {
 			that.set('open', false);
 			that.saveSketch();
 		    }
@@ -352,7 +352,7 @@ define([
 	 * Save the 'open' attribute of the Project in the db. Open must be 0 or 1;
 	 */
 	saveOpenState: function() {
-	    if (!Pi.isGuest && !this.isNew()) {
+	    if (!Pi.user.isGuest() && !this.isNew()) {
 		var openState = {
 		};
 		openState['open'] = this.get('open');
@@ -368,7 +368,7 @@ define([
 	 */
 	saveSketch: function(saveTabs)
 	{
-	    if (!Pi.isGuest) {
+	    if (!Pi.user.isGuest()) {
 		var that = this;
 		$.when(this.smartSave())
 			.done(function() {
@@ -422,7 +422,7 @@ define([
 	    // Store in the promise array to overwrite later
 	    this.promise['askForSave' + this.getId()] = $.Deferred();
 	    // Setup confirmation dialog
-	    if (!Pi.isGuest) {
+	    if (!Pi.user.isGuest()) {
 		Pi.confirmation({
 		    promise: this.promise['askForSave' + this.getId()],
 		    title: "Save sketch",

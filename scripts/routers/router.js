@@ -30,7 +30,7 @@ define([
 	 * Open user's personal space.
 	 */
 	me: function() {
-	    if (!Pi.isGuest) {
+	    if (!Pi.user.isGuest()) {
 		console.log("I am " + Pi.user.get('email'));
 	    } else {
 		console.log("I am " + undefined);
@@ -67,14 +67,17 @@ define([
 	/**
 	 * Finder.
 	 */
-	find: function(collectionId) {
+	find: function(id) {
 	    require([
 		'Pi/start/startFinder'
 	    ], function() {
-		Pi.finderView.show();
-		//console.log(collectionId);
+		Pi.user.finderView.show();
+		console.log("Finder id: " + id);
 	    });
 	},
+	/**
+	 * Sign out.
+	 */
 	signout: function() {
 	    window.location.href = Pi.basePath + "/user/logout/";
 	},
@@ -126,7 +129,7 @@ define([
 	 * Activated.
 	 */
 	activated: function() {
-	    if (Pi.isGuest) {
+	    if (Pi.user.isGuest()) {
 		require([
 		    'Pi/start/startDialogs'
 		], function(Pi) {
@@ -147,7 +150,7 @@ define([
 	 * Activated.
 	 */
 	alreadyActive: function() {
-	    if (Pi.isGuest) {
+	    if (Pi.user.isGuest()) {
 		require([
 		    'Pi/start/startDialogs'
 		], function(Pi) {
@@ -209,10 +212,10 @@ define([
     Pi.router.route("about", "about");
 //    Pi.router.route("art", "art");
 //    Pi.router.route("page/:page(/)", "page");
-    Pi.router.route("find(/:collectionId)(/)", "find");
+    Pi.router.route("find(/:id)(/)", "find");
     Pi.router.route(Pi.action.openProject + "/:id(/:action)(/:tabId)(/)", "openProject");
     Pi.router.route("me", "me");
-    if (Pi.isGuest) {
+    if (Pi.user.isGuest()) {
 	Pi.router.addRoutesForGuests();
     }
 

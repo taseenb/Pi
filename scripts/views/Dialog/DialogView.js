@@ -9,9 +9,6 @@ define([
     "use strict";
 
     var DialogView = Backbone.View.extend({
-	/**
-	 * Init the view.
-	 */
 	initialize: function() {
 	    this.listenTo(this.model, "change:content", this.render);
 	    this.listenTo(this.model, "change:height change:width", this.sizeState);
@@ -73,7 +70,7 @@ define([
 	 * Destroy the dialog (jquery ui instance).
 	 */
 	destroy: function() {
-	    this.$el.dialog("destroy"); // @ TODO bug after successful login
+	    this.$el.dialog("destroy");
 	},
 	/**
 	 * Destroy the dialog (jquery ui instance).

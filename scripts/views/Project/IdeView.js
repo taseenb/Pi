@@ -11,6 +11,7 @@ define([
     // Backbone Extensions
     'epoxy',
     'Pi/Model',
+    // Starters
     'Pi/start/startDataBinding',
     // Plugins
     'jquery-ui'
@@ -105,7 +106,7 @@ define([
 		    {
 			e.stopPropagation();
 			if (!this.model.get('saved')) {
-			    if (Pi.isGuest)
+			    if (Pi.user.isGuest())
 				window.location.hash = "#log-in";
 			    else
 				this.model.saveSketch(true);
@@ -115,7 +116,7 @@ define([
 		    "click .autosave": function(e)
 		    {
 			e.stopPropagation();
-			if (Pi.isGuest)
+			if (Pi.user.isGuest())
 			    window.location.hash = "#log-in";
 			else
 			    this.model.set('autoSave', !this.model.get('autoSave')); // toggle autosave

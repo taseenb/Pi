@@ -43,7 +43,7 @@ define([
 	    // Set the main tab as active
 	    this.set('active', this.isMain());
 	    // Set saved state - Make sure new tabs for guests start saved
-	    if (Pi.isGuest)
+	    if (Pi.user.isGuest())
 		this.set('saved', true);
 	    // Start tracking changes and unsaved attributes.
 	    this.trackUnsaved(this.safeAttributes);

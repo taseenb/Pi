@@ -38,10 +38,10 @@ define([
 	// Ascii codes: 115 => s // 83 => S // 19 => control
 	if ((e.which === 115 || e.which === 83) && ((e.ctrlKey||e.metaKey) || e.which === 19)) {
 	    e.preventDefault();
-	    if (Pi.isGuest)
+	    if (Pi.user.isGuest())
 		window.location.hash = "#log-in";
 	    else
-		Pi.user.get('project').getFirst().saveSketch();
+		Pi.user.get('projects').getFirst().saveSketch();
 	}
     });
 

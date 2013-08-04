@@ -32,12 +32,7 @@ define([
 	activeState: function()
 	{
 	    if (this.model.get('active')) {
-		// console.log('desktop active');
-		Pi.user.get('projects').each(function(model) {
-		    model.set({
-			active: false
-		    });
-		});
+		Pi.user.get('projects').deactivateAllOpen();
 	    }
 	},
 	show: function() {

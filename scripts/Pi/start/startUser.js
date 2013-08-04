@@ -5,20 +5,17 @@ define([
     // Models
     "models/User",
     // Views
-    "views/User/NavView",
+    "views/User/NavView"
 ], function(Pi, $, User, NavView) {
 
     /**
-     * Determine if user is authenticated.
-     */
-    Pi.isGuest = Pi.bootstrap.isGuest;
-
-    /**
      * Create the user model.
-     * REMEMBER: if id is undefined, User.isNew() will return true.
+     * REMEMBER: if id is undefined, User.isNew() will return true, 
+     * meaning the user is not authenticated.
      */
     Pi.user = new User({
-	'id': Pi.isGuest ? undefined : parseInt(Pi.bootstrap.user.id)
+	'id': Pi.bootstrap.isGuest ? undefined : parseInt(Pi.bootstrap.user.id),
+	//'guest': Pi.bootstrap.isGuest ? true : false
     });
     Pi.user.bootstrap(Pi.bootstrap);
     

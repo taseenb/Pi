@@ -54,20 +54,21 @@ define([
 	    _.each(Pi.bootstrap.projects, function(project) {
 		this.bootstrapProjectIds.push(parseInt(project.id));
 	    }, this);
-	    //console.log(this.bootstrapProjectIds);
+	    
+	    this.set('guest', Pi.bootstrap.isGuest ? true : false);
 	},
 	/**
 	 * Start the desktop playground with user's Processing sketches or, if guest, a demo sketch.
 	 * @param {json} data User model data with its profile and collections (containing only open projects).
 	 */
 	bootstrap: function(data) {
-	    if (Pi.isGuest && !this.guestBootstrapped)
+	    if (this.isGuest() && !this.guestBootstrapped)
 	    {
 		// Start a demo sketch for the guest
 		this.newProject();
 		this.guestBootstrapped = true;
 	    }
-	    else if (!Pi.isGuest && !this.bootstrapped)
+	    else if (!this.isGuest() && !this.bootstrapped)
 	    {
 		this.update(data, true);
 		this.bootstrapped = true;
@@ -81,12 +82,9 @@ define([
 	update: function(data, loadProjects) {
 	    Pi.js.stringsToInts(data.user);
 
-	    // Reset user model before loading bootstrap data
-	    this.reset();
-
 	    // Update isGuest value
-	    Pi.isGuest = data.isGuest;
-
+	    this.set('guest', data.isGuest ? true : false);
+	    
 	    // Store bootstrap user data into Pi.user
 	    _.each(data.user, function(value, key) {
 		//console.log(key + "=" + value);
@@ -106,6 +104,12 @@ define([
 		this.persistNewProjects();
 		this.loadProjects(data.projects);
 	    }
+	},
+	/**
+	 * Get 'guest' attribute from the user.
+	 */
+	isGuest: function() {
+	    return this.get('guest');
 	},
 	/**
 	 * Update projects.
@@ -130,7 +134,7 @@ define([
 	 * and not yet created on the db.
 	 */
 	persistNewProjects: function() {
-	    if (!Pi.isGuest) {
+	    if (!this.isGuest()) {
 		this.get('projects').each(function(project) {
 		    if (project.isNew() && !project.get('saved'))
 			project.saveSketch(true);
@@ -138,22 +142,6 @@ define([
 			project.destroy();
 		});
 	    }
-	},
-	/**
-	 * Reset this user model and removes the profile model (clears attributes and listeners).
-	 */
-	reset: function() {
-	    // Clear all attributes, but keep relations ('projects' attribute)
-	    _.each(this.attributes, function(value, key) {
-		if (key != 'projects')
-		    value = undefined;
-	    });
-	    //console.log(this.attributes);
-	    if (this.profile) {
-		this.profile.off();
-		delete this.profile;
-	    }
-	    this.off();
 	},
 	/**
 	 * Return fullname (firstname and lastname) if available or the username.

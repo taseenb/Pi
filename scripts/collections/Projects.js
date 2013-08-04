@@ -3,10 +3,9 @@ define([
     'Pi', 'backbone', 'jquery',
     // Models
     "models/Project",
-    
     // Backbone Extensions
     'Pi/Collection'
-    
+
 ], function(Pi, Backbone, $, Project) {
 
     "use strict";
@@ -46,7 +45,10 @@ define([
 		}
 
 		// Remove Output View
-		project.stopSketch({ liveCode: false, hide: true });
+		project.stopSketch({
+		    liveCode: false,
+		    hide: true
+		});
 		if (project.outputView) {
 		    //project.outputView.$el.draggable('destroy');
 		    project.outputView.remove();
@@ -57,7 +59,7 @@ define([
 
 		// Destroy Ide View
 		if (project.ideView) {
-		    project.ideView.$el.resizable('destroy');
+		    //project.ideView.$el.resizable('destroy');
 		    //project.ideView.$el.draggable('destroy');
 		    // Remove ide view
 		    project.ideView.remove();
@@ -89,31 +91,48 @@ define([
 		    front: true
 		});
 	},
-		
 	/**
 	 * Get active ide (in front).
 	 */
-	 getFirst: function() {
-	     var first;
-	     this.each(function(ide) {
-//		 console.log(ide.get('front'));
-		 if (ide.get('front') || ide.get('active'))
-		     first = ide;
-	     });
-	     return first;
-	 },
-	 /**
-	  * Get only the open ides.
-	  */
-	 getOpen: function() {
+	getFirst: function() {
+	    this.each(function(project) {
+		if (project.get('front') || project.get('active'))
+		    return project;
+	    });
+	},
+	/**
+	 * Get only the open ides.
+	 */
+	getOpen: function() {
 	    var openIdes = [];
 	    _.each(this.models, function(model) {
-		if (model.get('open')) openIdes.push(model);
+		if (model.get('open'))
+		    openIdes.push(model);
 	    });
 	    return openIdes;
-	 }
+	},
+	/**
+	 * Set all projects as not active (active: false)
+	 */
+//	deactivateAll: function() {
+//	    this.each(function(model) {
+//		model.set({
+//		    active: false
+//		});
+//	    });
+//	},
+	/**
+	 * Set all open projects as not active (active: false)
+	 */
+	deactivateAllOpen: function() {
+	    _.each(this.getOpen(), function(model) {
+		model.set({
+		    active: false
+		});
+	    });
+	}
     });
-    
+
     return Projects;
 
 });

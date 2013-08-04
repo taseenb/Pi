@@ -15,7 +15,7 @@ define([
      * Log in, Sign up, Password recovery, Resend activation email, Alert, etc.
      */
     Pi.dialog = new Dialog();
-    
+
     Pi.dialogView = new DialogView({
 	model: Pi.dialog
     });
@@ -43,7 +43,7 @@ define([
 		Pi.dialogView.$el.empty();
 		Pi.dialog.clear();
 		Pi.dialog.set(data);
-		//Pi.dialogView.refresh();
+		Pi.dialogView.refresh();
 	    }
 	}
 	else if (_.isString(data)) {
@@ -59,24 +59,25 @@ define([
 
     /**
      * Alert dialog.
+     * @param {string} title Alert title.
+     * @param {string} content Alert message.
      */
     Pi.alert = function(title, content) {
-	var buttons = {
-	    'Ok': function() {
-		$(this).dialog("close");
-	    }
-	};
 	Pi.dialog.open({
 	    'dataId': "alert",
 	    'title': title,
 	    'content': content,
-	    'buttons': buttons
+	    'buttons': {
+		'Ok': function() {
+		    $(this).dialog("close");
+		}
+	    }
 	});
     };
 
     /**
      * Confirmation dialog.
-     * @param {object} options Key:value pairs with dialog data. dataId defaults to "confirmation".
+     * @param {object} options Key-value pairs with dialog data. dataId defaults to "confirmation".
      */
     Pi.confirmation = function(options) {
 	// Create the buttons object for jquery ui dialog: http://api.jqueryui.com/dialog/#option-buttons
@@ -85,7 +86,6 @@ define([
 
 	// Create buttons
 	_.each(options.buttons, function(btn) {
-
 	    buttons[btn.label] = function() {
 		if (btn.resolve !== undefined && options.promise)
 		    btn.resolve ? options.promise.resolve() : options.promise.reject();
@@ -95,7 +95,6 @@ define([
 //		    btn.action();
 		$(this).dialog("close");
 	    };
-
 	});
 
 	// Always add a cancel button

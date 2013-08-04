@@ -4,13 +4,16 @@ define([
     
     // Views
     "views/User/FinderView",
+    
+    // Starters
+    "Pi/start/startUser",
 
 ], function(Pi, FinderView) {
 
     /**
-     * Finder
+     * Create the user finder.
      */
-    Pi.finderView = new FinderView({
+    Pi.user.finderView = new FinderView({
 	model: Pi.user,
 	el: '#finder'
     });

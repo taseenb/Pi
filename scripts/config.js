@@ -14,7 +14,7 @@ var require = {
 	//"underscore": "lib/underscore-amd/underscore",
 	"underscore": "//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.1/underscore-min",
 	
-	"relational": 'lib/backbone/backbone-relational',
+	"relational": 'lib/backbone-relational/backbone-relational',
 	"epoxy": 'lib/backbone-epoxy/backbone.epoxy.min', // data binding
 	//"rivets": 'lib/rivets/rivets.min',
 	

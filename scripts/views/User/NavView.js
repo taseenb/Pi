@@ -14,7 +14,7 @@ define([
 
     var NavView = Backbone.View.extend({
 	initialize: function() {
-	    this.listenTo(this.model, "change:id", this.render);
+	    //this.listenTo(this.model, "change:id", this.render);
 	    this.listenTo(this.model, "change:username change:email", this.nameState);
 	},
 	events: {
@@ -34,9 +34,8 @@ define([
 	render: function() {
 	    // Nav left side
 	    this.$el.find('.pull-left').html(NavLeftHtml);
-
 	    // Nav right side
-	    if (!Pi.isGuest) {
+	    if (!Pi.user.isGuest()) {
 		this.$el.find('.pull-right')
 			.html(_.template(NavRightHtml, {
 		    //basePath: Pi.basePath,
@@ -50,17 +49,18 @@ define([
 		this.$el.find('.pull-right')
 		    .html(NavRightGuestHtml);
 	    }
-	    
-
 	    return this;
 	},
+	/**
+	 * Update user name.
+	 */
 	nameState: function() {
 	    var name = this.model.getFullName();
 	    this.$el.find("#username").text(name);
 	},
-	lastvisit_atState: function() {
-	    this.$el.find("#lastvisit_at").text(this.model.get('lastvisit_at'));
-	},
+//	lastvisit_atState: function() {
+//	    this.$el.find("#lastvisit_at").text(this.model.get('lastvisit_at'));
+//	},
 	/**
 	 * Add 'active' class to the active item in the nav bar.
 	 * @param {string} href Name of the href attribute of the link to be activated.
