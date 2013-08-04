@@ -38,10 +38,10 @@ define([
     }
     // If captcha is visible from the beginning, change the size of the window
     if ($captcha.is(":visible")) {
+	$alternative.hide();
 	Pi.dialog.set({
 	    height: 430
 	});
-	$alternative.hide();
     }
 
     /**
@@ -49,7 +49,7 @@ define([
      * @param string response The server response.
      */
     var message = function (response) {
-	if (Pi.leftLogins < 5) {
+	if (leftLogins < 5) {
 	    return "You have " + leftLogins + " login attempt(s) left. <a href='#password-recovery'>Forgot your password?</a>";
 	}
 	var defaultMessage = "Please check your email address and password.";
@@ -167,8 +167,6 @@ define([
 
     function ajaxError(data) {
 	$btn.prop('disabled', true);
-	if (data.captcha)
-	    showCaptcha();
 	leftLogins = data.leftLogins;
 	if (leftLogins) {
 	    if (data.captcha) {
