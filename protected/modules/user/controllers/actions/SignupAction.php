@@ -79,8 +79,8 @@ class SignupAction extends CAction
 	if ($user->save(false))
 	{
 	    // Create default User Collection
-	    $user->default_collection = $user->createDefaultCollection();
-	    $user->save(false, array("default_collection"));
+	    //$user->default_collection = $user->createDefaultCollection();
+	    //$user->save(false, array("default_collection"));
 
 	    // Save Profile
 	    $profile->user_id = $user->id;

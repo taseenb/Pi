@@ -59,8 +59,8 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 </div>
 
-<input id="signup-button1" type="submit" class="btn btn-large step1" value="<?php echo UserModule::t("Get Started") ?>" disabled>
-<input id="signup-button2" type="submit" class="btn btn-large step2" value="<?php echo UserModule::t("Finish") ?>" style="display:none" disabled>
+<button type="button" id="signup-button1" class="btn btn-large step1" disabled><?php echo UserModule::t("Get Started") ?></button>
+<button type="button" id="signup-button2" class="btn btn-large step2" style="display:none" disabled><?php echo UserModule::t("Finish") ?></button>
 <?php $this->endWidget(); ?>
 
 <div id="signup-alternative" class="alternative-area">
@@ -182,7 +182,7 @@ $form = $this->beginWidget('CActiveForm', array(
 		     * @returns {} 
 		     */
 		    activateButton: function(button) {
-			return $(button).removeAttr('disabled').addClass('btn-primary');
+			return $(button).prop('disabled', false).addClass('btn-primary');
 		    },
 		    /**
 		     * Deactivate the submit button. 
@@ -190,7 +190,7 @@ $form = $this->beginWidget('CActiveForm', array(
 		     * @returns {} 
 		     */
 		    deactivateButton: function(button) {
-			return $(button).attr('disabled', 'disabled').removeClass('btn-primary');
+			return $(button).prop('disabled', true).removeClass('btn-primary');
 		    },
 		    /**
 		     * Step 1. Click event for step 1.

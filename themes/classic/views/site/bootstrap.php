@@ -2,7 +2,7 @@
 /* @var $this SiteController */
 $t = theme();
 $baseUrl = Yii::app()->baseUrl;
-$isGuest = Yii::app()->user->isGuest;
+//$isGuest = Yii::app()->user->isGuest;
 /**
  * Get Processing demo and spinner codes (demo_code.txt and spinner.txt)
  */

@@ -18,7 +18,7 @@ if ($form) :
         </div>
     </div>
     <?php
-    echo CHtml::submitButton(UserModule::t("Create a new password"), array('class' => 'btn'));
+    echo CHtml::button(UserModule::t("Create a new password"), array('id'=>'recovery-form-btn', 'class' => 'btn', 'disabled'=>'disabled'));
     echo CHtml::endForm();
 endif;
 ?>
@@ -41,7 +41,7 @@ endif;
 			$inputText = $form.find('input[type="text"]'),
 			$inputTextWrapper = $inputText.closest(".control-group"),
 			$emailMessage = $form.find('.email-message'),
-			$btn = $form.find('input[type="submit"]').attr('disabled', 'disabled'),
+			$btn = $form.find('#recovery-form-btn'),
 			message = "",
 			$message = $('#recovery-form-message');
 
@@ -50,7 +50,7 @@ endif;
 		    var email = $.trim($(this).val());
 		    if (email) {
 			if (Pi.js.isEmail(email)) {
-			    $btn.removeAttr('disabled').addClass('btn-inverse');
+			    $btn.prop('disabled', false).addClass('btn-inverse');
 			    $inputTextWrapper.addClass("info");
 			    $emailMessage.html('');
 			    return;
@@ -59,7 +59,7 @@ endif;
 			{
 			    $inputTextWrapper.removeClass("info");
 			    $emailMessage.html("Enter a valid email.");
-			    $btn.attr('disabled', 'disabled').removeClass('btn-inverse');
+			    $btn.prop('disabled', true).removeClass('btn-inverse');
 			    return;
 			}
 		    }

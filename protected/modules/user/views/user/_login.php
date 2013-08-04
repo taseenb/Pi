@@ -58,7 +58,7 @@ $form = $this->beginWidget('CActiveForm', array(
 </div>
 
 <!--Submit button-->
-<input type="submit" class="btn btn-large" value="<?php echo UserModule::t("Log In") ?>">
+<button type="button" id="login-form-btn" class="btn btn-large" disabled><?php echo UserModule::t("Log In") ?></button>
 <?php $this->endWidget(); ?>
 
 <!--Form messages-->
@@ -91,7 +91,7 @@ $form = $this->beginWidget('CActiveForm', array(
 			$inputs = $inputText.add($inputPass),
 			$emailMessage = $form.find('.email-message'),
 			$message = $('#login-form-message'),
-			$btn = $form.find('input[type="submit"]').attr('disabled', 'disabled'),
+			$btn = $form.find('#login-form-btn'),
 			$alternative = $('#login-form-alternative');
 
 		/**
@@ -190,18 +190,18 @@ $form = $this->beginWidget('CActiveForm', array(
 		    }
 		    if (emailValid && passValid)
 		    {
-			$btn.removeAttr('disabled').addClass('btn-primary');
+			$btn.prop('disabled', false).addClass('btn-primary');
 		    }
 		    else
 		    {
-			$btn.attr('disabled', 'disabled').removeClass('btn-primary');
+			$btn.prop('disabled', true).removeClass('btn-primary');
 		    }
 		});
 
 		$btn.click(function(e) {
 		    e.preventDefault(); // important! do not submit the form
 		    e.stopPropagation();
-		    $btn.attr('disabled', 'disabled').removeClass('btn-primary');
+		    $btn.prop('disabled', true).removeClass('btn-primary');
 		    $.ajax({
 			url: url,
 			method: 'post',

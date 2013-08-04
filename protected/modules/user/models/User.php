@@ -240,23 +240,23 @@ class User extends ActiveRecord
      * All users must have a default collection, 
      * that cannot be deleted until the user is deleted.
      */
-    public function createDefaultCollection()
-    {
-	// Create the default collection for the current user
-	$collection = new Collection;
-	$collection->user_id = $this->id;
-	$collection->name = "Your Collection";
-	$collection->description = "This is your default collection.";
-
-	if ($collection->save())
-	{
-	    return $collection->id;
-	}
-	else
-	{
-	    throw new CHttpException(500, 'Server error. Could not create the default user collection.');
-	}
-    }
+//    public function createDefaultCollection()
+//    {
+//	// Create the default collection for the current user
+//	$collection = new Collection;
+//	$collection->user_id = $this->id;
+//	$collection->name = "Your Collection";
+//	$collection->description = "This is your default collection.";
+//
+//	if ($collection->save())
+//	{
+//	    return $collection->id;
+//	}
+//	else
+//	{
+//	    throw new CHttpException(500, 'Server error. Could not create the default user collection.');
+//	}
+//    }
 
     /**
      * Send a new activation code via mail.
@@ -317,7 +317,7 @@ class User extends ActiveRecord
 	$domain = str_replace($local . "@", "", $email);
 
 	return Yii::app()->createAbsoluteUrl(
-			'/user/signup/activation', array(
+			'/user/activation', array(
 		    "key" => $activKey,
 		    "l" => $local,
 		    "d" => $domain
