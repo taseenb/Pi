@@ -40,6 +40,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    logo: "piLogo.svg",
 	    logoMono: "piMonoLogo.svg",
 	    defaultSketchIcon: "piSketchIcon.svg",
+	    minPwdLength: <?php echo app()->params['minPwdLength'] ?>,
 	    sessions: 0, // total number of ide windows opened
 	    maxIdeSessions: 5, // max number of ide windows open at the same time
 	    maxConsoleLogs: 250, // max number of items kept in the console of every ide 

@@ -28,9 +28,9 @@ define([
     /**
      * Open the dialog.
      * If the dialog was already loaded, just open it. Otherwise it will set 
-     * the new Id and reload data.
-     * @param {object or string} data	A list of key:value pairs with the dialog data. Or a string with the dataId value.
-     * @param {boolean} forceReload	Whether the data should be reloaded even if already loaded.
+     * the new Id, size, title, buttons and load content.
+     * @param {object} data A list of key:value pairs with the dialog data.
+     * @param {boolean} forceReload Whether data should be reloaded even if already loaded.
      */
     Pi.dialog.open = function(data, forceReload) {
 	if (_.isObject(data)) {
@@ -40,19 +40,24 @@ define([
 	    }
 	    else
 	    {
-		Pi.dialogView.$el.empty();
-		Pi.dialog.clear();
-		Pi.dialog.set(data);
+		// Unload the modules for the current dialog - IMPORTANT
+		if (Pi.dialog.get('require')) {
+		    _.each(Pi.dialog.get('require'), function(module) {
+			requirejs.undef(module);
+		    });
+		}
+		// Clear the model
+		Pi.dialog.clear({
+		    silent: true
+		});
+		// Set new data into the model
+		Pi.dialog.set(data, {
+		    silent: true
+		});
+		// Reload the dialog
+		Pi.dialog.reload();
+		// Refresh view
 		Pi.dialogView.refresh();
-	    }
-	}
-	else if (_.isString(data)) {
-	    if (Pi.dialog.get('dataId') === data) {
-		Pi.dialogView.open();
-	    }
-	    else
-	    {
-		Pi.dialog.set(dataId, data);
 	    }
 	}
     };

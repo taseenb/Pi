@@ -52,6 +52,7 @@ class LoginAction extends CAction
 
 			header('Content-type: application/json');
 			echo CJSON::encode(array(
+			    'captcha' => $form->captcha,
 			    'errors' => true,
 			    'errorMessage' => $this->_getErrorsString($form->getErrors()),
 			    'captcha' => $form->captcha,

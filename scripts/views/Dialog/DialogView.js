@@ -11,11 +11,11 @@ define([
     var DialogView = Backbone.View.extend({
 	initialize: function() {
 	    this.listenTo(this.model, "change:content", this.render);
-	    this.listenTo(this.model, "change:height change:width", this.sizeState);
 	},
 	// Set dialog as not initialized yet (necessary for Jquery UI dialog).
 	init: false,
 	render: function() {
+	    //console.log('render');
 	    var that = this,
 		    model = this.model.attributes;
 	    this.$el
@@ -70,12 +70,16 @@ define([
 	 * Destroy the dialog (jquery ui instance).
 	 */
 	destroy: function() {
-	    this.$el.dialog("destroy");
+	    if (this.init) {
+		this.$el.dialog("destroy");
+		this.init = false;
+	    }
 	},
 	/**
 	 * Destroy the dialog (jquery ui instance).
 	 */
 	refresh: function() {
+	    this.$el.empty();
 	    this.destroy();
 	    this.render();
 	},
@@ -83,6 +87,7 @@ define([
 	 * On size change.
 	 */
 	sizeState: function() {
+	    //console.log('size state');
 	    if (this.init) {
 		var that = this,
 			height = this.model.get("height"),

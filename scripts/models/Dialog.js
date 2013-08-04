@@ -76,21 +76,21 @@ define([
 		width: 480,
 		height: 380,
 		title: "Log In",
-		require: ["login-form"],
+		require: ['Pi/forms/loginForm'],
 		contentUrl: Pi.basePath + '/user/login/'
 	    },
 	    'sign-up': {
 		width: 480,
 		height: 380,
 		title: "Sign Up",
-		require: ["signup-form", "validation-plugin"],
+		require: ["Pi/forms/signupForm"],
 		contentUrl: Pi.basePath + '/user/signup/'
 	    },
 	    'password-recovery': {
 		width: 480,
 		height: 320,
 		title: "Password Recovery",
-		require: ["recovery-form"],
+		require: ['Pi/forms/recoveryForm'],
 		contentUrl: Pi.basePath + '/user/recovery/'
 	    },
 	    'activation-resend-email': {
