@@ -2,8 +2,7 @@
 $form = $this->beginWidget('CActiveForm', array(
     'id' => 'login-form',
     'enableAjaxValidation' => false, // Yii Ajax and client validation must be disabled
-    'enableClientValidation' => false,
-    'focus' => array($model, 'email')
+    'enableClientValidation' => false
 	));
 ?>
 
@@ -57,7 +56,7 @@ $form = $this->beginWidget('CActiveForm', array(
     </div>
 </div>
 
-<!--Submit button-->
+<!--Button-->
 <button type="button" id="login-form-btn" class="btn btn-large" disabled><?php echo UserModule::t("Log In") ?></button>
 <?php $this->endWidget(); ?>
 
@@ -75,9 +74,9 @@ $form = $this->beginWidget('CActiveForm', array(
 	    'login-form',
 	    ['domReady!', 'Pi', 'jquery', 'Pi/start/startDialogs'],
 	    function(doc, Pi, $) {
-		
+
 //		console.log(doc);
-		
+
 		var action = "login",
 			leftLogins = 1000,
 			url = Pi.basePath + '/user/' + action + '/',
@@ -93,14 +92,15 @@ $form = $this->beginWidget('CActiveForm', array(
 			$message = $('#login-form-message'),
 			$btn = $form.find('#login-form-btn'),
 			$alternative = $('#login-form-alternative');
-
+		
+		$inputText.focus();
+		
 		/**
 		 * Check if Captcha is required.
 		 * @returns {undefined}
 		 */
 		if (<?php echo $model->captcha ? "true" : "false" ?>)
 		    showCaptcha();
-
 		/**
 		 * Show the captcha field and changes the size of the window.
 		 * @returns {undefined}
@@ -149,20 +149,26 @@ $form = $this->beginWidget('CActiveForm', array(
 		    }
 		}
 		;
-
 //    "Your credentials are good but your account is not yet activated." = Not active
 //    "Please check your email address and password." = Invalid credentials.
 //	    "You account or ip address was locked or banned." = > Locked
 
 		// Enable the submit button only when text fields are filled
 		// and email is valid
-		$inputs.on('keyup input paste', function(e) {
+		$inputs
+			.on('keyup input paste', function(e) {
+
+		    if (e.keyCode == 13) {
+			if (!$btn.prop('disabled')) {
+			    $btn.trigger('click');
+			}
+		    }
+
 		    $message.empty();
 		    var email = $inputText.val(),
 			    emailValid = false,
 			    pass = $inputPass.val(),
 			    passValid = false;
-
 		    if (email)
 		    {
 			if (Pi.js.isEmail($.trim(email))) { // check if it is a valid mail address
@@ -198,6 +204,7 @@ $form = $this->beginWidget('CActiveForm', array(
 		    }
 		});
 
+
 		$btn.click(function(e) {
 		    e.preventDefault(); // important! do not submit the form
 		    e.stopPropagation();
@@ -224,7 +231,6 @@ $form = $this->beginWidget('CActiveForm', array(
 //		}
 		    });
 		});
-
 		function ajaxSuccess(data) {
 		    $message.fadeOut(200, function() {
 			// USER SUCCESSFULLY LOGGED IN

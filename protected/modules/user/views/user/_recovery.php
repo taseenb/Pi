@@ -3,25 +3,18 @@
     We will send you an email with a link to reset your password.
 </p>
 
-<?php
-if ($form) :
-    echo CHtml::beginForm('', 'post', array('id' => 'recovery-form'));
-    echo CHtml::errorSummary($form);
-    ?>
+<div id="recovery-form">
     <div class="control-group">
         <div class="controls">
-    	<div class="input-prepend">
-    	    <span class="add-on"><i class="icon-envelope"></i></span>
+	    <div class="input-prepend">
+		<span class="add-on"><i class="icon-envelope"></i></span>
 		<?php echo CHtml::activeTextField($form, 'email', array('class' => '', 'placeholder' => 'Your Email')); ?>
-    	</div>
-    	<small class="text-warning email-message"></small>
+	    </div>
+	    <small class="text-warning email-message"></small>
         </div>
     </div>
-    <?php
-    echo CHtml::button(UserModule::t("Create a new password"), array('id'=>'recovery-form-btn', 'class' => 'btn', 'disabled'=>'disabled'));
-    echo CHtml::endForm();
-endif;
-?>
+    <button type="button" id="recovery-form-btn" class="btn" disabled><?php echo UserModule::t("Create a new password") ?></button>
+</div>
 
 <p id="recovery-form-message"></p>
 
@@ -30,7 +23,6 @@ endif;
 </div>
 
 <script>
-    // Disable submit button if input is empty.
     define(
 	    'recovery-form',
 	    ['Pi', 'jquery'],
@@ -45,8 +37,15 @@ endif;
 			message = "",
 			$message = $('#recovery-form-message');
 
-		// Enable button when text field is filled with more than 4 chars
+		$inputText.focus();
+
 		$inputText.on('keyup input paste', function(e) {
+		    // Get the Enter key
+		    if (e.keyCode == 13) {
+			if (!$btn.prop('disabled')) {
+			    $btn.trigger('click');
+			}
+		    }
 		    var email = $.trim($(this).val());
 		    if (email) {
 			if (Pi.js.isEmail(email)) {
@@ -55,7 +54,7 @@ endif;
 			    $emailMessage.html('');
 			    return;
 			}
-			else if (email.length > 4)
+			else if (email.length > 4) // Enable button when text field is filled with more than 4 chars
 			{
 			    $inputTextWrapper.removeClass("info");
 			    $emailMessage.html("Enter a valid email.");
@@ -63,7 +62,7 @@ endif;
 			    return;
 			}
 		    }
-		    $btn.attr('disabled', 'disabled');
+		    $btn.prop('disabled', true);
 		    $emailMessage.html('');
 		});
 
@@ -72,13 +71,13 @@ endif;
 		    $.ajax({
 			url: url,
 			method: 'post',
-			data: $form.serialize(),
+			data: $inputText.serialize() + "&" + Pi.csrfTokenName + "=" + Pi.csrfToken,
 			success: success,
 			error: function(jqXHR, textStatus, errorThrown) {
 			    console.log(jqXHR);
 			    console.log(errorThrown);
 			    var error = jqXHR.responseText || Pi.js.error(jqXHR, textStatus, errorThrown);
-			    $btn.attr('disabled', 'disabled'); // disable button until the user changes the email
+			    $btn.prop('disabled', true); // disable button until the user changes the email
 			    $message.fadeOut(200, function() {
 				$(this)
 					.html('<strong>Sorry!</strong> ' + error)
@@ -97,8 +96,8 @@ endif;
 				    .html('<?php echo UserModule::t("We\'ve sent you an email with a link.<br>If you do not receive this email within a few minutes, please check your spam folder.") ?><br><br>')
 				    .fadeIn();
 			    // Restore attributes and remove event handlers on the recovery form.
-			    $inputText.off().attr('readonly', 'readonly');
-			    $btn.attr('disabled', 'disabled').val('<?php echo UserModule::t("You have new mail") ?>');
+			    $inputText.off().prop('readonly', true);
+			    $btn.prop('disabled', true).val('<?php echo UserModule::t("You have new mail") ?>');
 			});
 		    }
 		}

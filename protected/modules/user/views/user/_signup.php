@@ -6,8 +6,7 @@
 $form = $this->beginWidget('CActiveForm', array(
     'id' => 'signup-form',
     'enableAjaxValidation' => false, // Yii Ajax and client validation must be disabled
-    'enableClientValidation' => false,
-    'focus' => array($model, 'email')
+    'enableClientValidation' => false
 	));
 ?>
 
@@ -98,6 +97,9 @@ $form = $this->beginWidget('CActiveForm', array(
 			$btn1 = $form.find('#signup-button1'),
 			$btn2 = $form.find('#signup-button2');
 
+
+			$inputEmail.focus();
+			
 		/**
 		 * Client side rules.
 		 * Add data into form emlements for validatino on client and server side.
@@ -206,6 +208,11 @@ $form = $this->beginWidget('CActiveForm', array(
 			$inputs.on('keyup input past blur', function(e) {
 			    e.stopPropagation();
 			    that.validateAllStep1();
+			    if (e.keyCode == 13) {
+				if (!$btn1.prop('disabled')) {
+				    $btn1.trigger('click');
+				}
+			    }
 			});
 		    },
 		    /**
@@ -277,6 +284,11 @@ $form = $this->beginWidget('CActiveForm', array(
 					that.activateButton($btn2);
 				    } else {
 					that.deactivateButton($btn2);
+				    }
+				    if (e.keyCode == 13) {
+					if (!$btn2.prop('disabled')) {
+					    $btn2.trigger('click');
+					}
 				    }
 				});
 			    });
