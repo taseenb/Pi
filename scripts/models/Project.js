@@ -127,8 +127,9 @@ define([
 	    if (Pi.user.isGuest())
 		this.set('saved', true);
 
-	    // Start tracking changes and unsaved attributes.
-	    this.trackUnsaved(this.safeAttributes);
+	    // Start tracking changes and unsaved attributes. Never track 'user_id'.
+	    var attrsToTrack = _.without(this.safeAttributes, 'user_id');
+	    this.trackUnsaved(attrsToTrack);
 	},
 	/**
 	 * Set the size and position of a new window
@@ -372,10 +373,8 @@ define([
 		var that = this;
 		$.when(this.smartSave())
 			.done(function() {
-			    console.log('project saved');
-		    // only save tabs when ide is saved (needed for new projects)
+		    // only save tabs when project is saved (needed for new projects)
 		    if (saveTabs !== false) {
-			console.log('saving tabs');
 			$.when(that.saveTabs())
 				.done(function() {
 			    that.set('saved', true);

@@ -47,6 +47,8 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    fileNameMaxLength: 36, // tab name characters
 	    autoSaveInterval: 30000, // in milliseconds // 30 seconds
 	    liveCodeInterval: 1000, // interval between sketch updates during live code mode (only when code is new)
+	    defaultDesktopImage: "", //"<?php //echo $t; ?>/img/bg/gradient_autumn.jpg",
+	    defaultDesktopColor: "",
 	    demoCode: "<?php echo $demoSketch ?>",
 	    spinnerCode: "<?php echo $spinnerSketch ?>",
 	    defaultAvatarFileName: "<?php echo app()->params['defaultAvatarFileName'] ?>",
@@ -78,7 +80,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 <!-- Container for static pages (hidden by default) -->
 <div id="container" class="container"></div>
 
-<div class="desktop-background image fill">
+<div id="desktop_bg" class="desktop_bg image fill">
 
     <!-- Nav bar -->
     <div id="nav" class="navbar navbar-fixed-top">

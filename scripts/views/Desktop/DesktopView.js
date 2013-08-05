@@ -1,9 +1,8 @@
 define([
     'Pi', 'backbone', 'jquery',
-
     // Plugins
     "jquery-ui"
-    
+
 ], function(Pi, Backbone, $) {
 
     "use strict";
@@ -14,6 +13,8 @@ define([
 	initialize: function()
 	{
 	    this.listenTo(this.model, "change:active", this.activeState);
+	    this.listenTo(this.model, "change:backgroundImage change:backgroundColor", this.bgState);
+	    this.bgState();
 	},
 	events:
 		{
@@ -56,6 +57,16 @@ define([
 		containment: "parent",
 		zIndex: 100
 	    });
+	},
+	bgState: function() {
+	    var img = this.model.get("backgroundImage");
+	    var color = this.model.get("backgroundColor");
+	    if (img) {
+		$('#desktop_bg').css('background-image', img);
+	    }
+	    if (color) {
+		$('#desktop_bg').css('background-color', color);
+	    }
 	}
 
     });

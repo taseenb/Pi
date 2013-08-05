@@ -14,7 +14,7 @@
     background-color: transparent;
 }
 
-.desktop-background {
+.desktop_bg {
     position:absolute;
     top:0;
     left:0;
@@ -22,16 +22,16 @@
     bottom:0;
     z-index: -501;
 }
-.desktop-background.image {
-    background-image: url("../img/background/gradient_spring.jpg");
+.desktop_bg.image {
+    background-image: url(../img/bg/gradient_earth.jpg);
     background-color: transparent;
 }
 
-.desktop-background.color {
+.desktop_bg.color {
     background-image: none;
 }
 
-.desktop-background.fill {
+.desktop_bg.fill {
     background-position: top left;
     background-repeat: no-repeat;
     background-size:100% 100%;

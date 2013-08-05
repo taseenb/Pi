@@ -32,16 +32,19 @@ define([
 	    .ajaxComplete(function(e) {
 	Pi.ajax = false;
     })
-    
-    // Ctrl+S or Cmd+S save the active sketch.
-    .keypress(function(e) {
+
+	    // Ctrl+S or Cmd+S save the active sketch.
+	    .keypress(function(e) {
 	// Ascii codes: 115 => s // 83 => S // 19 => control
-	if ((e.which === 115 || e.which === 83) && ((e.ctrlKey||e.metaKey) || e.which === 19)) {
+	if ((e.which === 115 || e.which === 83) && ((e.ctrlKey || e.metaKey) || e.which === 19)) {
 	    e.preventDefault();
 	    if (Pi.user.isGuest())
 		window.location.hash = "#log-in";
-	    else
-		Pi.user.get('projects').getFirst().saveSketch();
+	    else {
+		var activeProject = Pi.user.get('projects').getFirst();
+		if (activeProject)
+		    activeProject.saveSketch();
+	    }
 	}
     });
 

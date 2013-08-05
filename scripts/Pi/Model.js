@@ -126,8 +126,7 @@ function(Pi, Backbone) {
 	    var that = this,
 		    attrs = this.getUnsaved(),
 		    saved = $.Deferred();
-
-		    console.log(attrs);
+	    // console.log(attrs);
 	    // Check if there is something to save
 	    if (!_.isEmpty(attrs)) {
 

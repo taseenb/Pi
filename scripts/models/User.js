@@ -167,6 +167,9 @@ define([
 		return this.get('username');
 	    }
 	},
+	/**
+	 * Get user's avatar image url.
+	 */
 	getAvatar: function() {
 	    if (this.get('avatar'))
 		Pi.user.getPublicDir() + "/avatar.jpg";
@@ -259,18 +262,6 @@ define([
 	    }
 	},
 	/**
-	 * Create a Project model (new or from db data).
-	 * @param {object} data Json data of the project.
-	 * @returns {object} The project model.
-	 */
-//	createProject: function(data) {
-//	    // Convert strings containing numbers to integers
-////	    var data = Pi.js.stringsToInts(data);
-////	    data.tabs = Pi.js.stringsToInts(data.tabs);
-//	    return new Project(data);
-//	},
-//	
-	/**
 	 * Create an ide with all its views from a Project model.
 	 * If data is not a Backbone model, a Project model will be created from the data.
 	 * @param {object} project A Project model or json data to create the Project Model.
@@ -328,23 +319,6 @@ define([
 	    });
 	    return count;
 	}
-	/**
-	 * Updates user data on the server. Only sends changed and safe attributes.
-	 */
-//	update: function() {
-//	    if (!this.isNew())
-//	    {
-//		console.log(this.changed);
-//		var clean = _.pick(this.changed, this.safeAttributes);
-//		console.log(clean);
-//
-//		if (!_.isEmpty(clean)) {
-//		    this.save(clean, {
-//			'patch': true
-//		    }); // update user
-//		}
-//	    }
-//	}
 
     });
 

@@ -95,10 +95,14 @@ define([
 	 * Get active ide (in front).
 	 */
 	getFirst: function() {
-	    this.each(function(project) {
-		if (project.get('front') || project.get('active'))
-		    return project;
-	    });
+	    var openProjects = this.getOpen();
+	    var openCount = openProjects.length;
+	    if (openCount) {
+		for (var i = 0; i < openCount; i++) {
+		    if (openProjects[i].get('front') || openProjects[i].get('active'))
+			return openProjects[i];
+		}
+	    }
 	},
 	/**
 	 * Get only the open ides.

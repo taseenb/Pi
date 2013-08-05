@@ -1,6 +1,6 @@
 define([
     // Main scripts
-    'Pi', 'backbone', 'jquery', 
+    'Pi', 'backbone', 'jquery',
     // Templates
     "text!tpl/Project/Ide.html",
     // Models
@@ -35,6 +35,7 @@ define([
 	{
 	    this.listenTo(this.model, "change:open", this.openState);
 	    this.listenTo(this.model, "change:minimized", this.minimizedState);
+	    this.listenTo(this.model, "change:maximized", this.maximizedState);
 	    this.listenTo(this.model, "change:active", this.activeState);
 	    this.listenTo(this.model, "change:zIndex", function() {
 		this.$el.css('z-index', this.model.get('zIndex'));
@@ -51,7 +52,14 @@ define([
 	 * View main attributes.
 	 */
 	tagName: 'div',
-	className: 'win',
+	className: 'win window-background',
+	attributes: function() {
+	    var id = this.model.getId();
+	    return {
+		'id': "ide" + id,
+		'data-href': '#' + Pi.action.openProject + '/' + id
+	    }
+	},
 	/**
 	 * Helpers.
 	 */
@@ -89,6 +97,8 @@ define([
 			    hide: true
 			});
 		    },
+		    "click .max": "toggleMax",
+		    "dblclick .tools": "toggleMax",
 		    "click .min": function(e)
 		    {
 			e.stopPropagation();
@@ -215,14 +225,7 @@ define([
 	render: function()
 	{
 	    var project = this.model;
-	    var id = project.getId();
-
-	    this.$el.addClass('window-background')
-		    .attr({
-		'id': "ide" + id,
-		'data-href': '#' + Pi.action.openProject + '/' + id
-	    })
-		    .css({
+	    this.$el.css({
 		width: project.get('width'),
 		height: project.get('height'),
 		top: project.get('top'),
@@ -322,6 +325,24 @@ define([
 		});
 		this.$el.show();
 	    }
+	},
+	maximizedState: function() {
+	    if (this.model.get('maximized'))
+	    {
+		this.$el.addClass('maximized');
+		this.refreshAceEditorSize();
+	    }
+	    else
+	    {
+		this.$el.removeClass('maximized');
+		this.refreshAceEditorSize();
+	    }
+	},
+	toggleMax: function(e) {
+	    e.stopPropagation();
+	    this.model.set({
+		'maximized': !this.model.get('maximized')
+	    });
 	},
 	/**
 	 * Bring to front.
