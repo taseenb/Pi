@@ -35,7 +35,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	var Pi = {
 	    name: "Processing Ideas",
 	    shortName: "Pi",
-	    version: "alpha1",
+	    version: "alpha 0.0.4",
 	    pjsVersion: "Processing.js 1.4.1", // http://processingjs.org
 	    logo: "piLogo.svg",
 	    logoMono: "piMonoLogo.svg",
