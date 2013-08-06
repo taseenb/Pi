@@ -44,6 +44,7 @@ define([
 	    require([
 		'Pi/start/startUser'
 	    ], function(Pi) {
+		// If project is not new (id is an integer)
 		if (Pi.js.stringIsInteger(id.replace("/", ""))) {
 		    var projectId = parseInt(id);
 		    // Avoid double ajax calls by checking the bootstrapped projects
@@ -55,6 +56,11 @@ define([
 		    } else {
 			Pi.user.openProject(projectId, action);
 		    }
+		}
+		// Project is new: try to set it active
+		else
+		{
+		    Pi.user.openProject(id, "active");
 		}
 	    });
 	},

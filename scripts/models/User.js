@@ -214,9 +214,10 @@ define([
 	 */
 	openProject: function(id, action, tabId)
 	{
-	    var that = this,
-		    project = this.get('projects').get(id);
-
+	    var that = this, 
+		project = this.get('projects').get(id);
+	    
+	    //console.log(project);
 	    if (project && project.get('tabs').length) { // project model already exists
 		switch (action) {
 		    case "fs":
@@ -232,7 +233,7 @@ define([
 			break;
 		    case "code":
 			// @TODO open the ide and activate the requested tab
-
+			
 			break;
 		    default:
 			// Create the Ide if it does not exist. Save the new 'open' state, if changed
@@ -248,6 +249,11 @@ define([
 		}
 		return true;
 	    }
+//	    else if (action==="active") 
+//	    {
+//		if (project)
+//		    project.set('active', 1);
+//	    }
 	    else // try to load the project from server and create the model
 	    {
 		var project = Project.findOrCreate({
