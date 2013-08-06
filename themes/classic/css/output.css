@@ -71,11 +71,11 @@
     float: right;
 }
 
-.output .canvas_wrapper .tools {
+.output .iframe_wrapper .tools {
     display: none !important;
 }
 
-.canvas_wrapper {
+.iframe_wrapper {
     position:relative;
     min-width: 100px;
     min-height: 100px;
@@ -83,8 +83,8 @@
     text-align: center;
 }
 
-.canvas_wrapper .pictures_container,
-.canvas_wrapper .secondary_tools {
+.iframe_wrapper .pictures_container,
+.iframe_wrapper .secondary_tools {
     display:none;
 }
 
@@ -107,28 +107,15 @@
     display:none !important;
 }
 
-.fullscreen .canvas_wrapper {
+.fullscreen .iframe_wrapper {
     position:absolute;
-    height:100%;
-    width:100%;
+    height:100% !important;
+    width:100% !important;
     background-color: #CCC;
     overflow: auto;
 }
 
-.fullscreen .canvas_wrapper canvas {
-    top:0; 
-    bottom:0; 
-    left:0; 
-    right:0;
-    margin:auto;
-    position:absolute;
-    max-width: none;
-    max-height: none;
-    background-image: url("../img/gui/transparent_checker.gif") !important;
-    background-position: top left !important;
-    background-repeat: repeat !important;   
-}
-.output.fullscreen .canvas_wrapper .secondary_tools {
+.output.fullscreen .iframe_wrapper .secondary_tools {
     display: inline-block !important;
     padding: 0;
     position: fixed;
@@ -136,21 +123,30 @@
     right: 32px;
     z-index: 500;
 }
-.output.fullscreen .canvas_wrapper .secondary_tools a {
+.output.fullscreen .iframe_wrapper .secondary_tools a {
     font-size: 18px;
 }
-.output.fullscreen .canvas_wrapper .pictures_container {
+.output.fullscreen .iframe_wrapper .pictures_container {
     display:inline-block;
     position: fixed;
     top:48px;
     right: 32px;
     z-index: 499;
 }
-.output.fullscreen .canvas_wrapper .pictures_container img {
+.output.fullscreen .iframe_wrapper .pictures_container img {
     max-height: 48px;
     float: left;
     margin-left: 10px;
     border: 5px solid #FFF;
     -webkit-box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
     box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+}
+
+
+/* Iframe */
+.output iframe {
+    border: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
 }

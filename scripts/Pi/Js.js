@@ -90,9 +90,18 @@ define([
 	    return uid;
 	},
 	/**
+	 * Get a query string value by the given paramenter name.
+	 * @param {string} name The parameter name.
+	 * @returns {any} The value of the parameter.
+	 */
+	getParameterByName: function(name) {
+	    var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+	    return match && decodeURIComponent(match[1].replace(/\+/g, ' '));
+	},
+	/**
 	 * Email validation. Tells if this is a valid email address.
 	 * @param {type} email
-	 * @returns {@exp;regex@call;test}
+	 * @returns {boolean} True if the string is an email.
 	 */
 	isEmail: function(email) {
 	    var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

@@ -58,6 +58,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    basePath: "<?php echo app()->baseUrl; ?>",
 	    themePath: "<?php echo $t; ?>",
 	    imgPath: "<?php echo $t; ?>/img/",
+	    sandbox: "http://run.processingideas.com",
 	    bootstrap: <?php echo $bootstrapUserData ?>,
 	    minPwdLength: <?php echo app()->params['minPwdLength'] ?>,
 	    csrfToken: "<?php echo request()->csrfToken; ?>",
@@ -108,11 +109,12 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    <div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content">
 		<div class="tabbable">
 		    <ul id="finder_tabs" class="nav nav-pills">
-			<li data-e-bind="hide:guest"><a data-target="my" data-toggle="tab" href="#find/my">My Projects</a></li>
+			<!--<li data-e-bind="hide:guest"><a data-target="my" data-toggle="tab" href="#find/my">My Projects</a></li>-->
+			<li class="active"><a data-target="my" data-toggle="tab" href="#find/my">My Projects</a></li>
 		    </ul>
 		    <div id="finder_tabs_content" class="main_content">
 			<div class="projects_wrapper tab-content">
-			    <div data-e-bind="hide:guest" id="my" class="tab-pane projects"></div>
+			    <div data-e-bind="collection:$myProjects" id="my" class="tab-pane projects"></div>
 			</div>
 		    </div>
 		</div>

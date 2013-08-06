@@ -9,7 +9,7 @@ define([
     // Bootstrap
     "bootstrap-tab"
 
-], function(Pi, Backbone, $, FinderProjectView) {
+], function(Pi, Backbone, $) {
 
     "use strict";
 
@@ -20,52 +20,24 @@ define([
 	bindings: "data-e-bind",
 	bindingHandlers: _.extend(Pi.bindingHandlers, {
 	}),
+	bindingSources: {
+	    myProjects: Pi.user.get('projects'),
+	},
 	initialize: function() {
 	    this.listenTo(this.model, "change:guest", this.guestState);
-	    this.fetchProjects();
+	    this.fetchMyProjects();
 	},
 	events: {
 	    "click .exit": function() {
 		this.hide();
 	    }
 	},
-	render: function() {
-	    var $tabs = this.$el.find("#finder_tabs");
-	    var $projectsWrapper = this.$el.find('.projects_wrapper');
-
-	    // Append my projects (user's projects)
-	    this.model.get('projects').each(function(project) {
-		var finderProjectView = new FinderProjectView({
-		    model: project
-		});
-		finderProjectView.container = $projectsWrapper.find('#my');
-		finderProjectView.render();
-	    }, this);
-	    $tabs.find("li:first").addClass('active');
-	    $projectsWrapper.find(".projects:first").addClass('active');
-	},
 	/**
-	 * Try to fetch user's projects from the server and render them in the finder.
+	 * Try to fetch user's projects from the server.
 	 */
-	fetchProjects: function(_page) {
-	    var page = _page ? _page : 1;
-	    console.log("fetching projects");
+	fetchMyProjects: function() {
 	    if (!this.model.isGuest()) {
-		var that = this;
-		console.log(Pi.user.get('projects').length);
-		this.model.get('projects').fetch({
-		    data: {
-			'page': page
-		    },
-		    success: function() {
-			console.log("rendering projects");
-			console.log(Pi.user.get('projects').length);
-			that.render();
-		    },
-		    error: function() {
-			console.log("error while fetching projects");
-		    }
-		});
+		this.model.get('projects').fetch();
 	    }
 	},
 	/**
@@ -88,8 +60,7 @@ define([
 	 * On guest state change, try to fetch user's projects.
 	 */
 	guestState: function() {
-	    console.log('guest change: ' + this.model.get('guest'));
-	    this.fetchProjects();
+	    this.fetchMyProjects();
 	}
     });
 

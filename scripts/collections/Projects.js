@@ -3,29 +3,30 @@ define([
     'Pi', 'backbone', 'jquery',
     // Models
     "models/Project",
+    // Views
+    "views/Project/FinderProjectView",
     // Backbone Extensions
     'Pi/Collection'
 
-], function(Pi, Backbone, $, Project) {
+], function(Pi, Backbone, $, Project, FinderProjectView) {
 
     "use strict";
 
     var Projects = Backbone.Collection.extend({
 	url: Pi.basePath + '/projects?tabs=0',
 	model: Project,
+	view: FinderProjectView,
 	/**
 	 * Init collection.
 	 */
 	initialize: function() {
-
 	    /**
 	     * Increase the total sessions counter (used by Ide.createNewTitle()).
 	     */
-	    this.on("add", function()
+	    this.on("add", function(model)
 	    {
 		Pi.sessions++;
 	    });
-
 	    /**
 	     *  Destruction of all references to removed objects 
 	     *  is important to avoid memory leaks!

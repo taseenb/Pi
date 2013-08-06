@@ -225,13 +225,16 @@ define([
 	render: function()
 	{
 	    var project = this.model;
-	    this.$el.css({
-		width: project.get('width'),
-		height: project.get('height'),
-		top: project.get('top'),
-		left: project.get('left'),
-		zIndex: project.get('zIndex')
-	    })
+	    this.$el.css(
+		    this.setupWindow()
+//		    {
+//		width: project.get('width'),
+//		height: project.get('height'),
+//		top: project.get('top'),
+//		left: project.get('left'),
+//		zIndex: project.get('zIndex')
+//	    }
+	)
 		    .appendTo(Pi.user.currentDesktop.$el)
 		    .resizable({
 		minWidth: 400,
@@ -257,6 +260,45 @@ define([
 	    this.$console = this.$el.find('.console');
 
 	    return this;
+	},
+	/**
+	 * Set the size and position of a new window
+	 * (based on the other contents on the desktop).
+	 */
+	setupWindow: function()
+	{
+	    // Size and position
+	    var width, height, top, left, zIndex, margin = 40,
+		    ideCount = Pi.user.openProjectsCount(),
+		    $desktop = Pi.desktopView.$el,
+		    zIndex = ideCount + 1;
+	    if ($desktop.width() < (500 + margin * 4))
+	    {
+		width = $desktop.width() / 1.5;
+		left = 0;
+	    }
+	    else
+	    {
+		width = 500;
+		left = margin * (ideCount + 1);
+	    }
+	    if ($desktop.height() < 600 + margin)
+	    {
+		height = $desktop.height();
+		top = 0;
+	    }
+	    else
+	    {
+		height = 600;
+		top = margin * (ideCount + 1);
+	    }
+	    return {
+		'width': width,
+		'height': height,
+		'top': top,
+		'left': left,
+		'zIndex': zIndex
+	    };
 	},
 	/**
 	 * Creates a new tab view from a tab model.

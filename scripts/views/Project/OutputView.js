@@ -7,7 +7,9 @@ define([
     'Pi/start/startDataBinding',
     // Plugins
     'jquery-ui',
-    "jquery-easing"
+    "jquery-easing",
+    // Start
+    "Pi/start/iframeMessenger"
 
 ], function(Pi, Backbone, $, OutputHtml) {
 
@@ -25,10 +27,14 @@ define([
 	    this.listenTo(this.model, "change:ouputPosition", this.positionState);
 	    this.listenTo(this.model, "change:fullScreen", this.fullScreenState);
 
-	    // Raw html
-	    this.$el.html(OutputHtml).attr({
-		'data-e-bind': "active:active,front:front"
+	    this.$el.html(OutputHtml)
+		    .attr({
+		'data-e-bind': "active:active,front:front",
 	    });
+
+	    //var sandbox = Pi.basePath + "/scripts/views/Project/OutputSandbox.html";
+	    var sandbox = Pi.sandbox;
+	    this.$iframe().prop('src', sandbox + "/?uid=" + this.model.getUid() + "&pid=" + this.model.getId());
 
 	    // Render view
 	    this.render();
@@ -79,6 +85,7 @@ define([
 	 */
 	render: function()
 	{
+	    this.hide();
 	    this.$el
 		    .addClass('win active front no_select')
 		    .css({
@@ -88,19 +95,65 @@ define([
 		    .appendTo(Pi.user.currentDesktop.$el)
 		    .draggable({
 		handle: '.title'
-	    })
-		    .find('canvas')
-		    .attr('id', 'canvas' + this.model.getId());
+	    });
 	    return this;
 	},
-	canvas: function() {
-	    return document.getElementById('canvas' + this.model.getId());
+	/**
+	 * Show/hide this output window.
+	 */
+	show: function() {
+	    this.$el.css('visibility', 'visible');
+	    //this.$el.show();
 	},
-	context: function() {
-	    return this.canvas().getContext('2d');
+	hide: function() {
+	    this.$el.css('visibility', 'hidden');
+	    //this.$el.hide();
 	},
 	/**
-	 * Position the output window.
+	 * Iframe helper selectors.
+	 */
+	$iframe: function() {
+	    return this.$el.find('iframe');
+	},
+	iframeWindow: function() {
+	    return this.$iframe()[0].contentWindow;
+	},
+	iframeDocument: function() {
+	    return this.$iframe()[0].contentDocument;
+	},
+	/**
+	 * Communications with the iframe: send processing code to the iframe.
+	 */
+	iframeSendCode: function() {
+	    var that = this,
+		    uid = this.model.getUid();
+	    this.iframeWindow().postMessage(
+		    window.JSON.stringify({
+		'code': that.model.getCode(uid),
+		'uid': uid, // unique Id (needed for play and pause)
+		'pid': that.model.getId() // project Id
+	    }),
+	    "*");
+	    this.model.set({
+		'running': true,
+		'isPaused': false
+	    });
+	},
+	/**
+	 * Communications with the iframe: get the iframe size.
+	 */
+	iframeSize: function(w, h) {
+	    if (this.originalWidth != w || this.originalHeight != h) {
+		this.originalWidth = w;
+		this.originalHeight = h;
+		this.setSize(w, h);
+		this.position();
+		this.adjustSize();
+	    }
+	    this.show();
+	},
+	/**
+	 * Update position of the window.
 	 */
 	positionState: function() {
 	    var that = this;
@@ -118,8 +171,8 @@ define([
 		    titlebarHeight = this.$el.find('.title').outerHeight(true);
 	    this.model.set({
 		'ouputPosition': {
-		    left: window.innerWidth/2 - w/2,
-		    top: window.innerHeight/2 - (h/2) - titlebarHeight/2
+		    left: window.innerWidth / 2 - w / 2,
+		    top: window.innerHeight / 2 - (h / 2) - titlebarHeight / 2
 		}
 	    });
 	},
@@ -178,16 +231,27 @@ define([
 	/**
 	 * Calculate the max canvas width, based on window width.
 	 */
-	maxCanvasWidth: function() {
+	maxIframeWidth: function() {
 	    var maxW = 62.5; // percent of the desktop width
 	    return Math.floor((Pi.desktopView.$el.width() * maxW) / 100);
 	},
 	/**
 	 * Calculate the max canvas height, based on window height.
 	 */
-	maxCanvasHeight: function() {
+	maxIframeHeight: function() {
 	    var maxH = 85; // percent of the desktop height
 	    return (Pi.desktopView.$el.height() * maxH) / 100;
+	},
+	/**
+	 * Set the size of the iframe part of the window.
+	 * @param {type} w Width of the iframe_wrapper.
+	 * @param {type} h Height of the iframe_wrapper.
+	 */
+	setSize: function(w, h) {
+	    this.$el.find('.iframe_wrapper').css({
+		'width': w,
+		'height': h
+	    });
 	},
 	/**
 	 * Adjust size of the output window, if it is too large for the screen.
@@ -197,17 +261,14 @@ define([
 		    h = this.originalHeight;
 	    if (!this.fullScreen) {
 		this.reduceToMaxSize(w, h);
-		if (w > this.maxCanvasWidth() || h > this.maxCanvasHeight()) {
+		if (w > this.maxIframeWidth() || h > this.maxIframeHeight()) {
 		    this.model.set('outputResized', true);
 		}
 	    }
 	    else
 	    {
 		if (this.model.get('outputResized')) {
-		    this.$el.find('canvas').css({
-			'width': w,
-			'height': h
-		    });
+		    this.setSize(w, h);
 		    this.model.set('outputResized', false);
 		}
 	    }
@@ -218,8 +279,8 @@ define([
 	 * @param {number} h Sketch height.
 	 */
 	reduceToMaxSize: function(w, h) {
-	    var maxW = this.maxCanvasWidth(),
-		    maxH = this.maxCanvasHeight(),
+	    var maxW = this.maxIframeWidth(),
+		    maxH = this.maxIframeHeight(),
 		    newW = w,
 		    newH = h,
 		    changed = false;
@@ -249,10 +310,7 @@ define([
 		//console.log("changed! let's check again");
 		this.reduceToMaxSize(newW, newH);
 	    } else if (newW !== this.originalWidth || newH !== this.originalHeight) {
-		this.$el.find('canvas').css({
-		    'width': Math.floor(newW),
-		    'height': Math.floor(newH)
-		});
+		this.setSize(~~newW, ~~newH);
 	    }
 	},
 	/**
@@ -261,12 +319,20 @@ define([
 	togglePause: function() {
 	    if (this.model.get('isPaused')) {
 		this.model.set('isPaused', false);
-		this.processingInstance['unpause' + this.model.uid]();
+		this.iframeWindow().postMessage(JSON.stringify({
+		    'unPause': true,
+		    'pid': this.model.getId()
+		}),
+		"*");
 	    }
 	    else
 	    {
 		this.model.set('isPaused', true);
-		this.processingInstance['pause' + this.model.uid]();
+		this.iframeWindow().postMessage(JSON.stringify({
+		    'pause': true,
+		    'pid': this.model.getId()
+		}),
+		"*");
 	    }
 	}
     });

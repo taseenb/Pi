@@ -23,7 +23,6 @@ define([
     })
 	    .ajaxStop(function() {
 	spinner.hide();
-
     })
 	    .ajaxSend(function(e) {
 	Pi.lastAjax = e.timeStamp;

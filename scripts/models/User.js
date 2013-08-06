@@ -54,7 +54,7 @@ define([
 	    _.each(Pi.bootstrap.projects, function(project) {
 		this.bootstrapProjectIds.push(parseInt(project.id));
 	    }, this);
-	    
+
 	    this.set('guest', Pi.bootstrap.isGuest ? true : false);
 	},
 	/**
@@ -84,7 +84,7 @@ define([
 
 	    // Update isGuest value
 	    this.set('guest', data.isGuest ? true : false);
-	    
+
 	    // Store bootstrap user data into Pi.user
 	    _.each(data.user, function(value, key) {
 		//console.log(key + "=" + value);
@@ -147,13 +147,16 @@ define([
 	 * Return fullname (firstname and lastname) if available or the username.
 	 */
 	getFullName: function() {
-	    if (this.profile && (this.profile.firstname || this.profile.lastname))
-		return this.profile.firstname + " " + this.profile.lastname;
+	    if (!this.isGuest()) {
+		if (this.profile && (this.profile.firstname || this.profile.lastname))
+		    return this.profile.firstname + " " + this.profile.lastname;
+		else
+		    return this.getUsername();
+	    }
 	    else
-		return this.getUsername();
-	},
-	getPublicDir: function() {
-	    return Pi.publicDir + "/" + this.id;
+	    {
+		return "Guest";
+	    }
 	},
 	/**
 	 * Return username or set the username as the first part of the mail and return it.
@@ -166,6 +169,12 @@ define([
 		this.set('username', email.substr(0, email.indexOf('@')));
 		return this.get('username');
 	    }
+	},
+	/**
+	 * Get user public url (containing user's files and images).
+	 */
+	getPublicDir: function() {
+	    return Pi.publicDir + "/" + this.id;
 	},
 	/**
 	 * Get user's avatar image url.

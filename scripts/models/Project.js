@@ -17,7 +17,9 @@ define([
     // Other extentions
     'Pi/Logger',
     // Helpers
-    'Pi/Js'
+    'Pi/Js',
+    // Start
+    "Pi/start/iframeMessenger"
 
 ], function(Pi, Backbone, $, Tabs, Tab, OutputView, Processing) {
 
@@ -104,16 +106,16 @@ define([
 	{
 	    // Convert all strings containing numbers to integer types.
 	    Pi.js.stringsToInts(this.attributes);
-	    
+
 	    // Setup ide window size and position
-	    var setup = this.setupWindow();
-	    this.set({
-		width: setup['width'],
-		height: setup['height'],
-		top: setup['top'],
-		left: setup['left'],
-		zIndex: setup['zIndex']
-	    });
+//	    var setup = this.setupWindow();
+//	    this.set({
+//		width: setup['width'],
+//		height: setup['height'],
+//		top: setup['top'],
+//		left: setup['left'],
+//		zIndex: setup['zIndex']
+//	    });
 
 	    // Create a new name for the ide/project, if new
 	    if (!this.get('name') && this.isNew())
@@ -130,45 +132,7 @@ define([
 	    // Start tracking changes and unsaved attributes. Never track 'user_id'.
 	    var attrsToTrack = _.without(this.safeAttributes, 'user_id');
 	    this.trackUnsaved(attrsToTrack);
-	},
-	/**
-	 * Set the size and position of a new window
-	 * (based on the other contents on the desktop).
-	 */
-	setupWindow: function()
-	{
-	    // Size and position
-	    var width, height, top, left, zIndex, margin = 40,
-		    ideCount = Pi.user.openProjectsCount(),
-		    $desktop = Pi.desktopView.$el,
-		    zIndex = ideCount + 1;
-	    if ($desktop.width() < (500 + margin * 4))
-	    {
-		width = $desktop.width() / 1.5;
-		left = 0;
-	    }
-	    else
-	    {
-		width = 500;
-		left = margin * (ideCount + 1);
-	    }
-	    if ($desktop.height() < 600 + margin)
-	    {
-		height = $desktop.height();
-		top = 0;
-	    }
-	    else
-	    {
-		height = 600;
-		top = margin * (ideCount + 1);
-	    }
-	    return {
-		'width': width,
-		'height': height,
-		'top': top,
-		'left': left,
-		'zIndex': zIndex
-	    };
+
 	},
 	/**
 	 * Create an unique Id to attach extra Pi methods (play, pause)
@@ -187,47 +151,41 @@ define([
 	playSketch: function(options)
 	{
 	    this.stopSketch();
-	    try
-	    {
-		if (!this.outputView)
-		    this.outputView = new OutputView({
-			model: this
-		    });
-		this.set({
-		    'running': true,
-		    'isPaused': false
+
+	    // Create the output view
+	    if (!this.outputView) {
+		this.outputView = new OutputView({
+		    model: this
 		});
-		
-		// Start Processing Js
-		// Get code and pass the unique id to build the extra Pi methods
-		var sketch = Processing.compile(this.getCode(this.getUid()));
-		this.outputView.processingInstance = new Processing(this.outputView.canvas(), sketch);
-		this.startPjsLogger(this.outputView.processingInstance);
-		this.outputView.originalWidth = this.outputView.canvas().width;
-		this.outputView.originalHeight = this.outputView.canvas().height;
-		this.outputView.position();
-		this.set('fullScreen', (options && options.fullScreen) ? true : false);
-		this.outputView.fullScreenState();
-		this.outputView.$el.show();
+		this.outputView.iframeReady = false;
 	    }
-	    catch (e)
-	    {
-		this.stopSketch({
-		    hide: true,
-		    liveCode: false
-		});
-		var $console;
-		if (!this.ideView) {
-		    Pi.user.createIdeView(this);
-		}
-		$console = this.ideView.$console;
-		$console.html('');
-		//console.log(e);
-		$console.append("<p>" + e.toString() + "</p>");
-		$console[0].scrollLeft = $console[0].scrollWidth;
-		$console[0].scrollTop = $console[0].scrollHeight;
-		this.set('consoleOpen', true);
-	    }
+
+	    // Init the output view and wait for the iframe to be ready
+	    if (this.outputView.iframeReady)
+		this.outputView.iframeSendCode();
+
+	    this.set('fullScreen', (options && options.fullScreen) ? true : false);
+	    this.outputView.fullScreenState();
+
+//	    }
+//	    catch (e)
+//	    {
+//		this.stopSketch({
+//		    hide: true,
+//		    liveCode: false
+//		});
+//		var $console;
+//		if (!this.ideView) {
+//		    Pi.user.createIdeView(this);
+//		}
+//		$console = this.ideView.$console;
+//		$console.html('');
+//		//console.log(e);
+//		$console.append("<p>" + e.toString() + "</p>");
+//		$console[0].scrollLeft = $console[0].scrollWidth;
+//		$console[0].scrollTop = $console[0].scrollHeight;
+//		this.set('consoleOpen', true);
+//	    }
 	},
 	/**
 	 * Override println and print methods in Processing.js. 
@@ -283,7 +241,8 @@ define([
 	 */
 	isRunning: function() {
 	    if (this.outputView) {
-		return (this.outputView.processingInstance instanceof Processing);
+		console.log(this.outputView.iframeWindow().pjs);
+		return (this.outputView.processingInstance() instanceof Processing);
 	    }
 	    else
 	    {
@@ -300,22 +259,19 @@ define([
 	    if (options && options.liveCode)
 		this.set('liveCode', options.liveCode);
 	    // Check if output window actually exists
-	    if (this.outputView
-		    && this.outputView.processingInstance instanceof Processing)
-	    {
-		this.outputView.processingInstance.exit();
-	    }
-	    // Clear the canvas for a later reuse
+	    if (this.outputView)
+		this.outputView
+			.iframeWindow()
+			.postMessage(window.JSON.stringify({
+		    'stop': true,
+		    'pid': this.getId()
+		}),
+		"*");
+
 	    if (!_.isEmpty(this.outputView))
 	    {
-		var o = this.outputView;
-		if (o)
-		{
-		    o.context()
-			    .clearRect(0, 0, o.canvas().width, o.canvas().height);
-		}
 		if (options && options.hide)
-		    this.outputView.$el.hide();
+		    this.outputView.hide();
 	    }
 	    this.set({
 		'running': false,
@@ -339,15 +295,27 @@ define([
 		    }
 		})
 			.fail(function() {
-		    that.set('open', false);
-		    that.saveOpenState();
+		    that.exitWithoutSaving();
 		});
 	    }
 	    else {
-		this.set('open', false);
-		that.saveOpenState();
+		that.exitWithoutSaving();
 	    }
 	    Pi.router.goHome();
+	},
+	/**
+	 * Exit without saving. 
+	 * Save open state for logged users and completely removes the project for guests.
+	 */
+	exitWithoutSaving: function() {
+	    if (!Pi.user.isGuest()) {
+		this.set('open', false);
+		this.saveOpenState();
+	    }
+	    else
+	    {
+		Pi.user.get('projects').remove(this);
+	    }
 	},
 	/**
 	 * Save the 'open' attribute of the Project in the db. Open must be 0 or 1;
@@ -455,7 +423,6 @@ define([
 	    }
 	    return this.promise['askForSave' + this.getId()];
 	},
-	
 	/**
 	 * Get code from ide tabs. Optionally adds some extra methods at the end of the code (play, pause).
 	 * @param {string} uid Unique id: if set, the extra methods will be added.

@@ -23,14 +23,19 @@ define([
 	bindings: "data-e-bind",
 	bindingHandlers: _.extend(Pi.bindingHandlers, {
 	}),
+	attributes: function() {
+	    return {
+		'id': "finder_project" + this.model.getId(),
+		'class': "project",
+		'data-e-bind': "open:open"
+	    }
+	},
 	initialize: function() {
 	    // Rendering must be done at initialization for Epox data-binding
 	    var that = this,
 		    project = this.model;
-	    
 	    this.$el.html(_.template(FinderProjectHtml, {
-		id: project.get('id'),
-		//open: project.get('open') ? true : false,
+		id: project.getId(),
 		name: project.get('name'),
 		preview: that.getPreview(project.get('preview_id'), project.get('id')),
 		description: project.get('description'),
@@ -40,11 +45,7 @@ define([
 		userId: Pi.user.id,
 		username: Pi.user.getFullName(),
 		avatar: Pi.user.getAvatar()
-	    })).attr({
-		'id': "finder_project" + project.getId(),
-		'class': "project",
-		'data-e-bind': "open:open"
-	    });
+	    }));
 	},
 	render: function() {
 	    this.container.append(this.$el);

@@ -37,7 +37,7 @@ define([
 	    }
 	},
 	/**
-	 * Open or bring to front a particular ide (and a tab, if defined).
+	 * Open or bring to front a particular project ide.
 	 */
 	openProject: function(id, action)
 	{
@@ -72,7 +72,7 @@ define([
 		'Pi/start/startFinder'
 	    ], function() {
 		Pi.user.finderView.show();
-		console.log("Finder id: " + id);
+		//console.log("Finder id: " + id);
 	    });
 	},
 	/**
