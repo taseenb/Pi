@@ -236,7 +236,8 @@ define([
 			
 			break;
 		    default:
-			// Create the Ide if it does not exist. Save the new 'open' state, if changed
+			// Create the Ide if it does not exist. 
+			// Save the new 'open' state, if changed
 			if (!project.ideView) {
 			    that.createIdeView(project);
 			    project.saveOpenState();
@@ -249,11 +250,6 @@ define([
 		}
 		return true;
 	    }
-//	    else if (action==="active") 
-//	    {
-//		if (project)
-//		    project.set('active', 1);
-//	    }
 	    else // try to load the project from server and create the model
 	    {
 		var project = Project.findOrCreate({
