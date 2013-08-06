@@ -112,7 +112,7 @@ define([
 	    return this.get('guest');
 	},
 	/**
-	 * Update projects.
+	 * Load projects from json.
 	 * @param {json} projectsJson Json data with projects.
 	 */
 	loadProjects: function(json)
@@ -120,7 +120,7 @@ define([
 	    // Get user json data and load projects
 	    var projects = json;
 	    _.each(projects, function(project) {
-		Pi.js.stringsToInts(project);
+		project = Pi.js.stringsToInts(project);
 		if (project.open) {
 		    this.openProject(project.id);
 		}

@@ -65,19 +65,17 @@ define([
 //	    preview_id: undefined,
 	    name: undefined,
 	    description: undefined,
-	    minimized: false,
-	    maximized: false,
-	    open: false,
-	    public: true,
+	    minimized: 0,
+	    maximized: 0,
+	    open: 0,
+	    public: 1,
 	    left: undefined,
 	    top: undefined,
 	    iconLeft: undefined,
 	    iconTop: undefined,
 	    width: undefined,
 	    height: undefined,
-	    zIndex: undefined,
-	    create_time: undefined, // automatically set on server side
-	    update_time: undefined  // automatically set on server side
+	    zIndex: undefined
 	},
 	/**
 	 * Attributes that can be updated on the server side.

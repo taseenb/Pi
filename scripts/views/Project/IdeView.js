@@ -103,7 +103,7 @@ define([
 		    {
 			e.stopPropagation();
 			this.model.set({
-			    'minimized': true
+			    'minimized': 1
 			});
 		    },
 		    "click .exit": function(e)

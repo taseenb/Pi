@@ -34,45 +34,39 @@ define([
 	    // see User.js -> openIde()
 	},
 	render: function() {
-	    var ide = this.model.attributes,
+	    var project = this.model.attributes,
 		    img = Pi.imgPath + Pi.defaultSketchIcon;
 
 	    this.id = "icon" + this.model.getId();
 
 	    this.$el
 		    .html(
-		    '<img src="' + img + '"><span>' + ide.name + '</span>'
+		    '<img src="' + img + '"><span>' + project.name + '</span>'
 		    )
-		    .addClass(ide.iconClasses)
+		    .addClass(project.iconClasses)
 		    .css({
-		"display": ide.minimized ? "block" : "none",
-		"top": ide.iconTop,
-		"left": ide.iconLeft
+		"top": project.iconTop,
+		"left": project.iconLeft
 	    })
 		    .appendTo(
-		    this.model.container
+		    Pi.user.currentDesktop.$el
 		    )
 		    .draggable({
-		containment: this.model.container,
+		containment: Pi.user.currentDesktop.$el,
 		zIndex: 100
 	    });
-
+	    
 	    this.visibleState();
-
 	    return this;
 	},
 	/**
 	 * Show or hide icon (fade in/out).
 	 */
 	visibleState: function() {
-	    if (this.model.get('minimized'))
-	    {
-		this.$el.fadeIn(200);
-	    }
+	    if (this.model.get('minimized') > 0)
+		this.$el.fadeIn(100);
 	    else
-	    {
-		this.$el.fadeOut(200);
-	    }
+		this.$el.fadeOut(100);
 	},
 	/**
 	 * Change the name if the icon.
