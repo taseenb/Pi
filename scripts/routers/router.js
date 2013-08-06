@@ -61,7 +61,7 @@ define([
 		// Project is new (ie: id is not an integer): try to activate it
 		else
 		{
-		    Pi.user.openProject(id, "active");
+		    Pi.user.openProject(id, action);
 		}
 	    });
 	},

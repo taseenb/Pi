@@ -161,7 +161,8 @@ define([
 	    // Init the output view and wait for the iframe to be ready
 	    if (this.outputView.iframeReady)
 		this.outputView.iframeSendCode();
-
+	    
+	    // Set fullscreen
 	    this.set('fullScreen', (options && options.fullScreen) ? true : false);
 	    this.outputView.fullScreenState();
 

@@ -219,6 +219,18 @@ define([
 	    
 	    //console.log(project);
 	    if (project && project.get('tabs').length) { // project model already exists
+		console.log(project);
+		console.log(action);
+		// Create the Ide if it does not exist. 
+		// Save the new 'open' state, if changed
+		if (!project.ideView) {
+		    that.createIdeView(project);
+		    project.saveOpenState();
+		}
+		if (!project.get('open')) {
+		    project.set('open', 1);
+		    project.saveOpenState();
+		}
 		switch (action) {
 		    case "fs":
 			project.playSketch({
@@ -236,17 +248,8 @@ define([
 			
 			break;
 		    default:
-			// Create the Ide if it does not exist. 
-			// Save the new 'open' state, if changed
-			if (!project.ideView) {
-			    that.createIdeView(project);
-			    project.saveOpenState();
-			}
-			if (!project.get('open')) {
-			    project.set('open', 1);
-			    project.saveOpenState();
-			}
 			project.set('active', 1);
+			
 		}
 		return true;
 	    }
