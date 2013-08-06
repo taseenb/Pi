@@ -141,6 +141,14 @@
     -webkit-box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
     box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
 }
+.output.fullscreen .iframe_wrapper .pictures_container img:hover {
+    max-height: 98px;
+    float: left;
+    margin-left: 10px;
+    border: 5px solid #FFF;
+    -webkit-box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+    box-shadow:  1px 1px 1px 0px rgba(0, 0, 0, 0.2);
+}
 
 
 /* Iframe */

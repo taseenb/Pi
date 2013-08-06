@@ -221,8 +221,21 @@ define([
 	 * Take a picture of the current frame.
 	 */
 	takePicture: function() {
-	    var picturesContainer = this.$el.find('.pictures_container');
-	    var image = Pi.js.convertCanvasToImage(this.canvas());
+	    this.iframeWindow().postMessage(JSON.stringify({
+		'takePicture': true,
+		'pid': this.model.getId()
+	    }),
+	    "*");
+
+	},
+	/**
+	 * Append a picture coming from the iframe to the pictures container.
+	 * @param {object} image Image taken from canvas (within the iframe).
+	 */
+	appendPicture: function(imageSrc) {
+	    var picturesContainer = this.$el.find('.pictures_container'),
+		image = new Image();
+	    image.src = imageSrc;
 	    if (picturesContainer.find('img').size() >= 5) {
 		picturesContainer.find('img:eq(-4)').prevAll().remove();
 	    }

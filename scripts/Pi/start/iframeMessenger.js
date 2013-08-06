@@ -20,6 +20,8 @@ define([
 		outputView.iframeSendCode();
 	    } else if (data.width && data.height) {
 		outputView.iframeSize(data.width, data.height);
+	    } else if (data.imageSrc) {
+		outputView.appendPicture(data.imageSrc);
 	    }
 	}
     }
