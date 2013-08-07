@@ -64,7 +64,7 @@ define([
 	},
 	/**
 	 * Convert a string to camelCase, by removing spaces.
-	 * @param {type} input
+	 * @param {string} input
 	 */
 	camelCase: function camelCase(input) {
 //	    return input.toLowerCase().replace(/ (.)/g, function(match, group1) {

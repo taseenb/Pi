@@ -219,8 +219,8 @@ define([
 	    
 	    //console.log(project);
 	    if (project && project.get('tabs').length) { // project model already exists
-		console.log(project);
-		console.log(action);
+		//console.log(project);
+		//console.log(action);
 		// Create the Ide if it does not exist. 
 		// Save the new 'open' state, if changed
 		if (!project.ideView) {

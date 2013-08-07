@@ -22,7 +22,7 @@ define([
 		    iconLeft: ui.position.left
 		});
 	    },
-	    "click": function(e) {
+	    "dblclick": function(e) {
 		e.stopPropagation();
 		this.model.set({
 		    minimized: false
