@@ -48,7 +48,7 @@ define([
 	    }));
 	},
 	render: function() {
-	    this.container.append(this.$el);
+//	    this.container.append(this.$el);
 	},
 	getPreview: function(previewId, projectId) {
 	    if (previewId) {

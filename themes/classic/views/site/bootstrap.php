@@ -95,13 +95,10 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    <!--</div>-->
 	</div>
     </div>
-
-
-    <!-- Desktop -->
-    <div id="desktop" class="desktop">
-
-	<!--Finder-->
-	<div id="finder" class="popup finder ui-dialog">
+    
+    <!--Finder-->
+	<!--<div id="finder" class="finder ui-dialog">-->
+	<div id="finder" class="finder">
 	    <a class="exit close" title="Close">
 		<i class="icon-remove-sign"></i>
 	    </a>
@@ -109,12 +106,15 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    <div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content">
 		<div class="tabbable">
 		    <ul id="finder_tabs" class="nav nav-pills">
-			<!--<li data-e-bind="hide:guest"><a data-target="my" data-toggle="tab" href="#find/my">My Projects</a></li>-->
-			<li class="active"><a data-target="my" data-toggle="tab" href="#find/my">My Projects</a></li>
+			<li class="active"><a data-target="#my" data-toggle="tab" href="#find/my">My Projects</a></li>
+			<li><a data-target="#most_liked" data-toggle="tab" href="#find/most_liked">Most liked</a></li>
 		    </ul>
 		    <div id="finder_tabs_content" class="main_content">
 			<div class="projects_wrapper tab-content">
-			    <div data-e-bind="collection:$myProjects" id="my" class="tab-pane projects"></div>
+			    <div id="my" class="tab-pane projects active">
+				<div data-e-bind="collection:$myProjects"></div>
+			    </div>
+			    <div id="most_liked" class="tab-pane projects">test</div>
 			</div>
 		    </div>
 		</div>
@@ -128,14 +128,16 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    </div>
 
 	</div>
+    
 
+
+    <!-- Desktop -->
+    <div id="desktop" class="desktop">
 
 	<!--Popup-->
-	<div id="popup" class="popup ui-dialog">
-	    
-	</div>
+	<div id="popup" class="popup ui-dialog"></div>
 
-
+	<!--Main icon-->
 	<div id="icon_main" class="icon no_select new">
 	    <img src="<?php echo $t; ?>/img/piLogo.svg" alt="Processing Ideas">
 	    <span>Processing Ideas (alpha)</span>

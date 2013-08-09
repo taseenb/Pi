@@ -9,7 +9,6 @@
 /* Elements */
 @import "ajax.css";
 @import "code.css";
-@import "collection.css";
 @import "console.css";
 @import "desktop.css";
 @import "dialog.css";
@@ -23,6 +22,7 @@
 @import "output.css";
 @import "page.css";
 @import "popup.css";
+@import "projects.css";
 @import "user.css";
 
 

@@ -1,6 +1,6 @@
 define([
     // Main scripts
-    'Pi', 'backbone', 'jquery', 'jquery-ui',
+    'Pi', 'backbone', 'jquery', 'jquery-ui'
     
     // Backbone Extensions
     
