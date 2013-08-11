@@ -1,6 +1,6 @@
 define([
     // Main scripts
-    'Pi', 'backbone', 'jquery', 
+    'Pi', 'backbone', 'jquery',
     // Templates
     "text!tpl/Project/FinderProject.html",
     // Models
@@ -22,11 +22,6 @@ define([
 	 */
 	bindings: "data-e-bind",
 	bindingHandlers: _.extend(Pi.bindingHandlers, {
-//	    
-//	    'user_id': function($element, value) {
-//		Pi.user.getId() === value.id ? $element.show() : $element.show();
-//	    },
-	    
 	}),
 	attributes: function() {
 	    return {
@@ -36,16 +31,15 @@ define([
 	    }
 	},
 	initialize: function() {
-	    // Rendering must be done at initialization for Epox data-binding
+	    // Rendering must be done during initialization for Epoxy data-binding
 	    var that = this;
 	    var project = this.model;
 	    var projectId = project.getId(),
 		    projectUserId = project.get('user_id').id,
 		    projectUsername = project.get('user_id').username;
-	    
+
 //	    console.log(project);
-	    console.log(Pi.user.getId() === projectUserId);
-	    
+
 	    this.$el.html(_.template(FinderProjectHtml, {
 		'myProject': Pi.user.getId() === projectUserId,
 		'avatar': project.get('user_id').avatar,
@@ -58,7 +52,7 @@ define([
 		'public': project.get('public'),
 		'create_time': project.get('create_time'),
 		'update_time': project.get('update_time'),
-		'userId': projectUserId, 
+		'userId': projectUserId,
 		'username': projectUsername
 	    }));
 	},
@@ -74,7 +68,6 @@ define([
 		return Pi.imgPath + Pi.defaultPreviewFileName;
 	    }
 	}
-
     });
 
     return FinderProjectView;

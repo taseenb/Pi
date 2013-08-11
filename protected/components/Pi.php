@@ -51,9 +51,6 @@ class Pi extends CComponent
      */
     public static function getDataFromProject($project, $tabs = true, $json = true)
     {
-	foreach($project->attributes as $key => $value) {
-	    if (is_numeric($value)) $project->$key = floatval($value);
-	}
 	$p = $project->attributes;
 	// Add tabs if children are requested
 	if ($tabs)
@@ -61,9 +58,6 @@ class Pi extends CComponent
 	    $p['tabs'] = array();
 	    foreach ($project->tabs as $tab)
 	    {
-		foreach($tab->attributes as $key => $value) {
-		    if (is_numeric($value)) $tab->$key = floatval($value);
-		}
 		array_push($p['tabs'], $tab->attributes);
 	    }
 	}
@@ -80,9 +74,6 @@ class Pi extends CComponent
      */
     public static function getDataFromTab($tab, $json = true)
     {
-	foreach($tab->attributes as $key => $value) {
-	    if (is_numeric($value)) $tab->$key = floatval($value);
-	}
 	$t = $tab->attributes;
 	return $json ? CJSON::encode($t) : $t;
     }
@@ -131,9 +122,6 @@ class Pi extends CComponent
 		'state' => $project->user->profile->state,
 		'country' => $project->user->profile->country
 	    );
-	    foreach($project->attributes as $key => $value) {
-		if (is_numeric($value)) $project->$key = floatval($value);
-	    }
 	}
 
 	return $json ? CJSON::encode($projects) : $projects;

@@ -54,8 +54,19 @@ class ActiveRecord extends CActiveRecord {
      * @param type $event
      */
     protected function afterSave() {
-	$this->removeCaptchaSession();
 	parent::afterSave();
+	$this->removeCaptchaSession();
+    }
+    
+    /**
+     * After find event.
+     */
+    protected function afterFind()
+    {
+	parent::afterFind();
+	foreach($this->attributes as $key => $value) {
+	    if (is_numeric($value)) $this->$key = floatval($value);
+	}
     }
     
     

@@ -88,23 +88,13 @@ define([
 	    "minimized",
 	    "maximized",
 	    "open",
-	    "public",
-		    //	"left",
-		    //	"top",
-		    //	"iconLeft",
-		    //	"iconTop",
-		    //	"width",
-		    //	"height",
-		    //	"zIndex"
+	    "public"
 	],
 	/**
 	 * Init.
 	 */
 	initialize: function()
 	{
-	    // Convert all strings containing numbers to integer types.
-	    Pi.js.stringsToInts(this.attributes);
-
 	    // Setup ide window size and position
 //	    var setup = this.setupWindow();
 //	    this.set({

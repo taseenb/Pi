@@ -16,7 +16,9 @@ define([
 	    .on('click', '.new', function(e) {
 	e.preventDefault();
 	e.stopPropagation();
-	Pi.user.newProject();
+	require(['controllers/ProjectController'], function(ProjectController) {
+	    ProjectController.new(Pi.user.getId());
+	});
     })
 	    .ajaxStart(function(e) {
 	spinner.show();

@@ -54,8 +54,10 @@ define([
 	openProject: function(id, action)
 	{
 	    require([
-		'Pi/start/startUser'
-	    ], function(Pi) {
+		'Pi',
+		'controllers/ProjectController'
+	    ], function(Pi, ProjectController) {
+		
 		// If project is not new (id is an integer)
 		if (Pi.js.stringIsInteger(id.replace("/", "")))
 		{
@@ -63,17 +65,21 @@ define([
 		    // Avoid double ajax calls by checking the bootstrapped projects
 		    // (only the first time this method is called)
 		    if (Pi.user.bootstrapProjectIds) {
-			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1)
-			    Pi.user.openProject(projectId, action);
+			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1) {
+			    //Pi.user.openProject(projectId, action);
+			    ProjectController.open(id, action);
+			}
 			delete Pi.user.bootstrapProjectIds;
 		    } else {
-			Pi.user.openProject(projectId, action);
+			//Pi.user.openProject(projectId, action);
+			ProjectController.open(id, action);
 		    }
 		}
 		// Project is new (ie: id is not an integer): try to activate it
 		else
 		{
-		    Pi.user.openProject(id, action);
+		    //Pi.user.openProject(id, action);
+		    ProjectController.open(id, action);
 		}
 	    });
 	},

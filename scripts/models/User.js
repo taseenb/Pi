@@ -64,7 +64,8 @@ define([
 	    if (this.isGuest() && !this.guestBootstrapped)
 	    {
 		// Start a demo sketch for the guest
-		this.newProject();
+		var ProjectController = require('controllers/ProjectController');
+		ProjectController.new(Pi.user.getId());
 		this.guestBootstrapped = true;
 	    }
 	    else if (!this.isGuest() && !this.bootstrapped)
@@ -79,8 +80,6 @@ define([
 	 * @param updateProjects {boolean} Whether to update the projects as well with that data.
 	 */
 	update: function(data, loadProjects) {
-	    Pi.js.stringsToInts(data.user);
-
 	    // Update isGuest value
 	    this.set('guest', data.isGuest ? true : false);
 
@@ -119,7 +118,6 @@ define([
 	    // Get user json data and load projects
 	    var projects = json;
 	    _.each(projects, function(project) {
-		project = Pi.js.stringsToInts(project);
 		if (project.open) {
 		    this.openProject(project.id);
 		}
@@ -185,178 +183,62 @@ define([
 		return Pi.imgPath + "/" + Pi.defaultAvatarFileName;
 	},
 	/**
-	 * Start a new project with a demo sketch.
-	 */
-	newProject: function()
-	{
-	    // Create a new project
-	    var project = new Project({
-		'user_id': this.getId(),
-		'open': 1
-	    });
-	    // Add a tab with the new Project ID (cid) and the demo code
-	    project.get('tabs').add(new Tab({
-		'name': project.get('name'),
-		'project_id': project,
-		'code': Pi.demoCode,
-		'main': 1
-	    }));
-	    this.get('projects').add(project);
-	    this.createIdeView(project);
-	},
-	/**
 	 * Show a project if already loaded or try to load it from the server.
 	 * @param {integer} id Project id.
 	 * @param {string} action Action to perform.
 	 * @param {integer} tabId Optional: tab id to open.
 	 * @return {boolean} True if project was open, false if it does not exist or there was an error.
 	 */
-	openProject: function(id, action, tabId)
-	{
-	    var that = this,
-		    project = this.get('projects').get(id);
-
-	    //console.log(project);
-	    if (project && project.get('tabs').length) { // project model already exists
-		//console.log(project);
-		//console.log(action);
-		// Create the Ide if it does not exist. 
-		// Save the new 'open' state, if changed
-		if (!project.ideView) {
-		    that.createIdeView(project);
-		    project.saveOpenState();
-		}
-		if (!project.get('open')) {
-		    project.set('open', 1);
-		    project.saveOpenState();
-		}
-		switch (action) {
-		    case "fs":
-			project.playSketch({
-			    'fullScreen': true
-			});
-			project.set('fullScreen', true);
-			break;
-		    case "play":
-			project.playSketch({
-			    'fullScreen': false
-			});
-			break;
-		    case "code":
-			// @TODO open the ide and activate the requested tab
-
-			break;
-		    default:
-			project.set('active', 1);
-
-		}
-		return true;
-	    }
-	    else // try to load the project from server and create the model
-	    {
-		var project = Project.findOrCreate({
-		    'id': id
-		});
-
-		// To open a project from another user in the desktop, we have 
-		// to CLONE that project, with a new cid and must be NEW.
-		// We have to copy only the content, not open the actual project.
-
-//		console.log(Pi.user.get('projects').length);
-//		console.log(Pi.user.get('projects').add(project));
-//		console.log(project);
-//		console.log(Pi.user.get('projects').length);
-
-		project.fetch({
-		    'data': {
-			'tabs': 1
-		    },
-		    'success': function(model, response, options) {
-			// project successfully loaded - recurse to open the ide
-
-			// Convert numeric strings to ints
-			var attr = Pi.js.stringsToInts(model.attributes);
-			model.attributes = attr;
-
-			// If the project does not belong to the user: 
-			// create a copy and open the copy
-			if (model.get('user_id') != that.get('user_id')) {
-			    var newTabs = [];
-			    model.get('tabs').each(function(tab) {
-				tab.attributes.id = undefined;
-				tab.attributes.project_id = undefined;
-				newTabs.push(tab.attributes);
-			    });
-			    var newProject = model.clone();
-			    newProject.set({
-				'id': undefined,
-				'user_id': that.getId(),
-				'open': 1,
-				'tabs': newTabs
-			    });
-			    //console.log(newProject);
-			    that.get('projects').add(newProject);
-			    that.openProject(newProject.getId(), action);
-			    return;
-			}
-			else
-			    that.openProject(id, action);
-		    },
-		    'error': function(model, response, options) {
-			// project does not exist
-			project.clear({
-			    silent: true
-			});
-		    }
-		});
-	    }
-	},
+//	openProject: function(id, action, tabId)
+//	{
+//	    
+//	},
 	/**
 	 * Create an ide with all its views from a Project model.
 	 * If data is not a Backbone model, a Project model will be created from the data.
 	 * @param {object} project A Project model or json data to create the Project Model.
 	 */
-	createIdeView: function(project)
-	{
-	    if (this.openProjectsCount() <= Pi.maxIdeSessions)
-	    {
-		// Create an IdeView
-		project.ideView = new IdeView({
-		    model: project
-		});
-		// Set the container (desktop) for this ide
-		project.ideView.render().openState(); // render and show if open
-
-		// IMPORTANT: always set first the main tab active when loading
-		// a project and set the location.hash with this project id, 
-		// unless there is another path already set
-		project.setMainTabActive();
-		if (!window.location.hash)
-		    window.location.hash = "project/" + project.getId();
-
-		// Create an icon view
-		project.iconTop = 100;
-		project.iconLeft = 100;
-		project.iconView = new IconView({
-		    model: project
-		});
-		project.iconView.render();
-
-		// Set project open
-		project.set('open', 1);
-		return project;
-	    }
-	    else
-	    {
-		if (project.isNew())
-		    Pi.user.get('projects').remove(project);
-		else
-		    project.set('open', 0);
-		Pi.alert("Too Many Windows!",
-			"<p>Please, save and close at least one window.<br>Otherwise your browser could explode!</p>"
-			);
-	    }
-	},
+//	createIdeView: function(project)
+//	{
+//	    if (this.openProjectsCount() <= Pi.maxIdeSessions)
+//	    {
+//		// Create an IdeView
+//		project.ideView = new IdeView({
+//		    model: project
+//		});
+//		// Set the container (desktop) for this ide
+//		project.ideView.render().openState(); // render and show if open
+//
+//		// IMPORTANT: always set first the main tab active when loading
+//		// a project and set the location.hash with this project id, 
+//		// unless there is another path already set
+//		project.setMainTabActive();
+//		if (!window.location.hash)
+//		    window.location.hash = "project/" + project.getId();
+//
+//		// Create an icon view
+//		project.iconTop = 100;
+//		project.iconLeft = 100;
+//		project.iconView = new IconView({
+//		    model: project
+//		});
+//		project.iconView.render();
+//
+//		// Set project open
+//		project.set('open', 1);
+//		return project;
+//	    }
+//	    else
+//	    {
+//		if (project.isNew())
+//		    Pi.user.get('projects').remove(project);
+//		else
+//		    project.set('open', 0);
+//		Pi.alert("Too Many Windows!",
+//			"<p>Please, save and close at least one window.<br>Otherwise your browser could explode!</p>"
+//			);
+//	    }
+//	},
 	/**
 	 * Count all open projects available in all the collections of the user.
 	 * @returns {integer} The number of projects currently open.
