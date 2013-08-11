@@ -1,28 +1,31 @@
 /* Main */
-@import "bootstrap.css";
-@import "responsive.css";
-@import "jquery-ui-custom.css";
+@import "../css-dev/bootstrap.css";
+@import "../css-dev/responsive.css";
+@import "../css-dev/jquery-ui-custom.css";
 
 /* General */
-@import "pi_style.css";
+@import "../css-dev/pi_style.css";
 
 /* Elements */
-@import "ajax.css";
-@import "code.css";
-@import "console.css";
-@import "desktop.css";
-@import "dialog.css";
-@import "finder.css";
-@import "fork_github.css";
-@import "form.css";
-@import "icon.css";
-@import "ide_tabs.css";
-@import "ide_tools.css";
-@import "ide_window.css";
-@import "output.css";
-@import "page.css";
-@import "popup.css";
-@import "projects.css";
-@import "user.css";
+@import "../css-dev/ajax.css";
+@import "../css-dev/code.css";
+@import "../css-dev/console.css";
+@import "../css-dev/desktop.css";
+@import "../css-dev/dialog.css";
+@import "../css-dev/finder.css";
+@import "../css-dev/fork_github.css";
+@import "../css-dev/form.css";
+@import "../css-dev/icon.css";
+@import "../css-dev/ide_tabs.css";
+@import "../css-dev/ide_tools.css";
+@import "../css-dev/ide_window.css";
+@import "../css-dev/output.css";
+@import "../css-dev/page.css";
+@import "../css-dev/popup.css";
+@import "../css-dev/projects.css";
+@import "../css-dev/user.css";
+
+/* Fonts */
+/*@import url(http://fonts.googleapis.com/css?family=Lato:400,300,700,900);*/
 
 

@@ -80,7 +80,7 @@ define([
 	 */
 	hide: function(outputWindow, callback) {
 	    this.$el.animate({
-		top: "-31"
+		top: "-34"
 	    },
 	    200, "easeOutQuad", function() {
 		Pi.user.currentDesktop.$el.css({
@@ -95,7 +95,7 @@ define([
 	    },
 	    200, function() {
 		Pi.user.currentDesktop.$el.css({
-		    'top': 31
+		    'top': 34
 		});
 		callback(outputWindow);
 	    });

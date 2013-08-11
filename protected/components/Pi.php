@@ -3,6 +3,7 @@
 
 class Pi extends CComponent
 {
+
     /**
      * Store whether the user exists and is active.
      * @var boolean True if the user is valid. 
@@ -10,6 +11,8 @@ class Pi extends CComponent
     private static $_user;
 
     private static $_isValidUser;
+    
+    public static $validTopValues = array("featured","mostAppreciated","mostViewed","mostCommented");
 
     /**
      * Check whether the user exists and is active.
@@ -48,6 +51,9 @@ class Pi extends CComponent
      */
     public static function getDataFromProject($project, $tabs = true, $json = true)
     {
+	foreach($project->attributes as $key => $value) {
+	    if (is_numeric($value)) $project->$key = floatval($value);
+	}
 	$p = $project->attributes;
 	// Add tabs if children are requested
 	if ($tabs)
@@ -55,6 +61,9 @@ class Pi extends CComponent
 	    $p['tabs'] = array();
 	    foreach ($project->tabs as $tab)
 	    {
+		foreach($tab->attributes as $key => $value) {
+		    if (is_numeric($value)) $tab->$key = floatval($value);
+		}
 		array_push($p['tabs'], $tab->attributes);
 	    }
 	}
@@ -71,8 +80,63 @@ class Pi extends CComponent
      */
     public static function getDataFromTab($tab, $json = true)
     {
+	foreach($tab->attributes as $key => $value) {
+	    if (is_numeric($value)) $tab->$key = floatval($value);
+	}
 	$t = $tab->attributes;
 	return $json ? CJSON::encode($t) : $t;
+    }
+
+    /**
+     * Get all top projects.
+     * @param {boolean} $json Whether to encode the resulting array in json. Default true;
+     * @return {json or array} Json or array representation of the records.
+     */
+    public static function getTopProjects($top = 'featured', $withTabs = false, $json = true)
+    {
+	$criteria=new CDbCriteria;
+	
+	// Pagination
+	$count = Project::model()->count($criteria);
+	$pages = new CPagination($count);
+	$pages->pageSize = 10;
+	$pages->applyLimit($criteria);
+	
+	// Sorting
+//	$sort = new CSort('Project');
+//        $sort->attributes = array(
+//	    'id',
+//	    'title',
+//	);
+//	$sort->applyOrder($criteria);
+	
+	// Fetch projects
+	if ($top == "featured") {
+	    $projects = Project::model()->public()->featured()->findAll($criteria);
+	} elseif ($top == "mostAppreciated") {
+	    $projects = Project::model()->public()->mostAppreciated()->findAll($criteria);
+	} elseif ($top == "mostViewed") {
+	    $projects = Project::model()->public()->mostViewed()->findAll($criteria);
+	}
+	
+	// Add user data
+	foreach($projects as $project) {
+	    $project->user_id = array(
+		'id' => (int)$project->user->id,
+		'avatar' => Avatar::get_gravatar($project->user->email, 80),
+		'username' => $project->user->username,
+		'firstname' => $project->user->profile->firstname,
+		'lastname' => $project->user->profile->lastname,
+		'city' => $project->user->profile->city,
+		'state' => $project->user->profile->state,
+		'country' => $project->user->profile->country
+	    );
+	    foreach($project->attributes as $key => $value) {
+		if (is_numeric($value)) $project->$key = floatval($value);
+	    }
+	}
+
+	return $json ? CJSON::encode($projects) : $projects;
     }
 
     /**
@@ -113,6 +177,7 @@ class Pi extends CComponent
 	    // User array
 	    $array['user'] = array(
 		'id' => $user->id,
+		'avatar' => Avatar::get_gravatar($user->email, 80),
 		'username' => $user->username,
 		'email' => $user->email,
 		'old_lastvisit_at' => $user->lastvisit_at,

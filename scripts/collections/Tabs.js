@@ -16,43 +16,14 @@ define([
     var Tabs = Backbone.Collection.extend({
 	url: Pi.basePath + '/tabs/',
 	model: Tab,
-	/**
-	 * Init
-	 * "Add" event handler set parent model (Project) and container (IdeView.$el).
-	 * 
-	 */
 	initialize: function() {
-
-	    /**
-	     * ADD event.
-	     */
-//	    this.on('add', function(tab) {
-//		var ide = tab.getIde();
-//		this.setAll({
-//		    active: false
-//		},
-//		tab.getId());
-////		tab.set({
-////		    'name': tab.isMain() ? ide.get('name') : tab.get('name')
-////		});
-//		
-//		// Create and render the tab view
-//		tab.view = new TabView({
-//		    model: tab
-//		});
-//		tab.view.render();
-//		
-//		// Update the tab selector
-//		ide.tabsSelector.add(tab);
-//	    }, this);
-
 	    /**
 	     * REMOVE event.
 	     */
 	    this.on('remove', function(tab) {
 		// Get ide
 		var project = tab.getProject();
-		
+
 		// Set another tab active, unless the whole ide is being removed
 		if (project && project.get('tabs').length) {
 		    project.getMainTab().set('active', true);

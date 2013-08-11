@@ -108,7 +108,7 @@ class Profile extends UActiveRecord {
 	// NOTE: you may need to adjust the relation name and the related
 	// class name for the relations automatically generated below.
 	$relations = array(
-	    'user' => array(self::HAS_ONE, 'User', 'id'),
+	    'user' => array(self::BELONGS_TO, 'User', 'user_id'),
 	);
 	if (isset(Yii::app()->getModule('user')->profileRelations))
 	    $relations = array_merge($relations, Yii::app()->getModule('user')->profileRelations);

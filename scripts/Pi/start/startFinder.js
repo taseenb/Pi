@@ -1,14 +1,12 @@
 define([
     // Main scripts
     'Pi',
-    
+    // Collections
+    "collections/Projects",
     // Views
-    "views/User/FinderView",
-    
-    // Starters
-    "Pi/start/startUser",
+    "views/User/FinderView"
+], function(Pi, Projects, FinderView) {
 
-], function(Pi, FinderView) {
 
     /**
      * Create the user finder.
@@ -17,7 +15,7 @@ define([
 	model: Pi.user,
 	el: '#finder'
     });
-    
+
     return Pi;
-    
+
 });

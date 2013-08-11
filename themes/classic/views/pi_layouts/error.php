@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" type="text/css" 
-      href="<?php echo $t; ?>/css/bootstrap.css" />
+      href="<?php echo $t; ?>/css/main.css" />
 
 <title>Processing Ideas - Error<?php //echo CHtml::encode($this->pageTitle); ?></title>
 

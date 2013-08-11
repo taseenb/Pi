@@ -13,12 +13,9 @@ define([
     "use strict";
 
     var Projects = Backbone.Collection.extend({
-	url: Pi.basePath + '/projects?tabs=0',
+	url: Pi.basePath + '/projects',
 	model: Project,
 	view: FinderProjectView,
-	/**
-	 * Init collection.
-	 */
 	initialize: function() {
 	    /**
 	     * Increase the total sessions counter (used by Ide.createNewTitle()).
@@ -117,16 +114,6 @@ define([
 	    return openIdes;
 	},
 	/**
-	 * Set all projects as not active (active: false)
-	 */
-//	deactivateAll: function() {
-//	    this.each(function(model) {
-//		model.set({
-//		    active: false
-//		});
-//	    });
-//	},
-	/**
 	 * Set all open projects as not active (active: false)
 	 */
 	deactivateAllOpen: function() {
@@ -135,7 +122,31 @@ define([
 		    active: false
 		});
 	    });
-	}
+	},
+	/**
+	 * Urls to fetch projects for different collections.
+	 * @returns {String} Url.
+	 */	
+//	getProjectsUrls: function() {
+//	    
+//	    switch (this.selection) {
+//		case 'featured':
+//		    return Pi.basePath + '/projects?featured=1&tabs=0';
+//		    break;
+//		case 'mostAppreciated':
+//		    return Pi.basePath + '/projects?mostAppreciated=1&tabs=0';
+//		    break;
+//		case 'mostViewed':
+//		    return Pi.basePath + '/projects?mostViewed=1&tabs=0';
+//		    break;
+//		case 'mostCommented':
+//		    return Pi.basePath + '/projects?mostCommented=1&tabs=0';
+//		    break;
+//		default:
+//		    return Pi.basePath + '/projects?tabs=0'; // user's projects
+//	    }
+//	    
+//	}
     });
 
     return Projects;

@@ -6,6 +6,7 @@ define([
     "models/User",
     // Views
     "views/User/NavView"
+
 ], function(Pi, $, User, NavView) {
 
     /**
@@ -14,11 +15,9 @@ define([
      * meaning the user is not authenticated.
      */
     Pi.user = new User({
-	'id': Pi.bootstrap.isGuest ? undefined : parseInt(Pi.bootstrap.user.id),
-	//'guest': Pi.bootstrap.isGuest ? true : false
+	'id': Pi.bootstrap.isGuest ? undefined : parseInt(Pi.bootstrap.user.id)
     });
-    Pi.user.bootstrap(Pi.bootstrap);
-    
+
     /**
      * Create the user navigation bar view (that belongs to the User model).
      */

@@ -14,7 +14,8 @@
     position:relative;
     float:left;
     top: 0;
-    height: 236px;
+    /*height: 236px;*/
+    height: 270px;
     width: 200px;
     overflow: hidden;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -54,10 +55,10 @@
 .authors {
     /*margin: 5px 0;*/
     margin-top: 3px;
-    display:none;
+    /*display:none;*/
 }
 .author_info {
-    background-color: #F6F6F6;
+    /*background-color: #F6F6F6;*/
 }
 
 .author_info a.author_link {
@@ -119,7 +120,7 @@
 .projects .project:hover .project_tools {
     /*display:block;*/
     cursor: pointer;
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0.3);
 }
 
 .projects .project .project_tools {
@@ -130,7 +131,7 @@
     left:0;
     right: 0;
     z-index: 100;
-    background-color: rgba(0,0,0,0.4);
+    background-color: none;
     /*background-color: #000;*/
     width:100%;
     height:100%;

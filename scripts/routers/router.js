@@ -11,21 +11,33 @@ define([
 
 ], function(Pi, $, Backbone) {
 
-    // Start events and site title
-    require([
-	'Pi/start/startTitle',
-	'Pi/start/startEvents'
-    ]);
-
     var Router = Backbone.Router.extend({
-	// initialize: function() {},
+	/**
+	 * Start events and site title
+	 */
+	 initialize: function() {
+	    require([
+		'Pi/start/startTitle',
+		'Pi/start/startEvents',
+		'Pi/start/startFinder'
+	    ], function() {
+		
+	    });
+	 },
 	// routes: {
 	//     //"": "start"
 	// },
-	// start: function()
-	// {
-	//
-	// },
+	/**
+	 * Home.
+	 */
+	home: function() {
+	    require([
+		'Pi/start/startFinder'
+	    ], function(Pi) {
+		Pi.user.nav.deactivateAll();
+		Pi.user.finderView.show();
+	    });
+	},
 	/**
 	 * Open user's personal space.
 	 */
@@ -45,7 +57,7 @@ define([
 		'Pi/start/startUser'
 	    ], function(Pi) {
 		// If project is not new (id is an integer)
-		if (Pi.js.stringIsInteger(id.replace("/", ""))) 
+		if (Pi.js.stringIsInteger(id.replace("/", "")))
 		{
 		    var projectId = parseInt(id);
 		    // Avoid double ajax calls by checking the bootstrapped projects
@@ -68,20 +80,28 @@ define([
 	/**
 	 * Show desktop coding environment.
 	 */
-//	art: function() {
-//	    // Nothing special.
-//	},
-	/**
-	 * Finder.
-	 */
-	find: function(id) {
+	desktop: function() {
 	    require([
 		'Pi/start/startFinder'
-	    ], function() {
-		Pi.user.finderView.show();
-		//console.log("Finder id: " + id);
+	    ], function(Pi) {
+		Pi.user.finderView.hide();
+		Pi.user.nav.activate("desktop");
+		Pi.user.desktopBootstrap(Pi.bootstrap);
 	    });
 	},
+	/**
+	 * Finder.
+	 * @param {string} id The category to activate.
+	 */
+//	find: function(id) {
+//	    require([
+//		'Pi/start/startFinder'
+//	    ], function() {
+//		Pi.user.finderView.show();
+//		Pi.user.nav.activate("find");
+//		//console.log("Finder id: " + id);
+//	    });
+//	},
 	/**
 	 * Sign out.
 	 */
@@ -102,6 +122,7 @@ define([
 //		Pi.pageView.show();
 //	    });
 //	},
+
 	/**
 	 * Temporary about.
 	 */
@@ -212,14 +233,14 @@ define([
      * Routes.
      */
     Pi.router = new Router();
+    Pi.router.route("", "home");
     Pi.router.route("signout", "signout");
     Pi.router.route("alreadyActive", "alreadyActive");
     Pi.router.route("activated", "activated");
     Pi.router.route("contribute", "contribute");
     Pi.router.route("about", "about");
-//    Pi.router.route("art", "art");
-//    Pi.router.route("page/:page(/)", "page");
-    Pi.router.route("find(/:id)(/)", "find");
+    Pi.router.route("desktop", "desktop");
+//    Pi.router.route("find(/:id)(/)", "find");
     Pi.router.route(Pi.action.openProject + "/:id(/:action)(/:tabId)(/)", "openProject");
     Pi.router.route("me", "me");
     if (Pi.user.isGuest()) {

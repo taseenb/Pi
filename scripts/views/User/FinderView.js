@@ -2,14 +2,17 @@ define([
     // Main scripts
     'Pi', 'backbone', 'jquery',
     // Collections
+    "collections/Projects",
     // Models
     // Views
-    'views/Project/FinderProjectView',
+//    'views/Project/FinderProjectView',
     // Templates
     // Bootstrap
-    "bootstrap-tab"
+    "bootstrap-tab",
+    // Start
+    'Pi/start/startFinder'
 
-], function(Pi, Backbone, $) {
+], function(Pi, Backbone, $, Projects) {
 
     "use strict";
 
@@ -21,11 +24,32 @@ define([
 	bindingHandlers: _.extend(Pi.bindingHandlers, {
 	}),
 	bindingSources: {
-	    myProjects: Pi.user.get('projects'),
+	    // User's projects
+	    'myProjects': Pi.user.get('projects'),
+	    // Other project collections
+	    'featured': new Projects(),
+	    'mostAppreciated': new Projects(),
+	    'mostViewed': new Projects()
 	},
 	initialize: function() {
 	    this.listenTo(this.model, "change:guest", this.guestState);
 	    this.fetchMyProjects();
+	    
+	    
+	    this.bindingSources.featured.fetch({data: {
+		    'tabs': 0,
+		    'top': 'featured'
+	    }});
+	
+	    this.bindingSources.mostAppreciated.fetch({data: {
+		    'tabs': 0,
+		    'top': 'mostAppreciated'
+	    }});
+	
+	    this.bindingSources.mostViewed.fetch({data: {
+		    'tabs': 0,
+		    'top': 'mostViewed'
+	    }});
 	},
 	events: {
 	    "click .exit": function() {
@@ -37,38 +61,47 @@ define([
 	 */
 	fetchMyProjects: function() {
 	    if (!this.model.isGuest())
-		this.model.get('projects').fetch();
+		this.model.get('projects').fetch({data: {
+		    'ownedByUser': 1,
+		    'tabs': 0
+	    }});
 	},
 	/**
 	 * Show the finder window.
 	 */
 	show: function() {
 	    // Trigger a click on the desktop to set all windows inactive
-	    Pi.user.nav.activate("find");
+//	    Pi.user.nav.activate("find");
 //	    this.$el.addClass('active');
 	    Pi.user.get('projects').deactivateAllOpen();
-	    
-	    this.$el.animate({
-		'left': 0
-	    }, 200);
-	    Pi.desktopView.$el.animate({
-		'left': '50%'
-	    }, 200);
+
+	    this.$el.show();
+
+//	    this.$el.animate({
+//		'top': '34px',
+//		'bottom': 0
+//	    }, 400);
+//	    Pi.desktopView.$el.animate({
+//		'top': '100%'
+//	    }, 400);
 	},
 	/**
 	 * Hide the finder window.
 	 */
 	hide: function() {
-	    Pi.user.nav.deactivateAll();
+//	    Pi.user.nav.deactivateAll();
 //	    this.$el.removeClass('active');
-	    Pi.router.goHome();
-	    
-	    this.$el.animate({
-		'left': '-50%'
-	    }, 200);
-	    Pi.desktopView.$el.animate({
-		'left': 0
-	    }, 200);
+//	    Pi.router.goHome();
+
+	    this.$el.hide();
+
+//	    this.$el.animate({
+//		'top': '-100%',
+//		'bottom': '100%'
+//	    }, 400);
+//	    Pi.desktopView.$el.animate({
+//		'top': '34px'
+//	    }, 400);
 	},
 	/**
 	 * On guest state change, try to fetch user's projects.

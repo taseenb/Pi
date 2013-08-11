@@ -32,7 +32,7 @@
 
     <div class="description text_overflow project_block clearfix">{{description}}</div>
 
-    <div class="authors text_shadow clearfix">
+    <div class="authors clearfix">
 	<div class="author_info">
 	    <a class="author_link" href="#user/{{userId}}">
 		<span class="user_info">
@@ -47,15 +47,16 @@
     <div class="project_appreciation project_block clearfix">
 	<span class="project_likes pull-left">
 	    <span class="vote_up">
-		<i class="icon-thumbs-up"></i></span> <span class="project_likes_count">0</span>
+		<i class="icon-thumbs-up"></i></span> <span class="project_likes_count">{{likes}}</span>
 	</span>
 	<span class="project_views pull-left">
 	    <span class="views">
-		<i class="icon-eye-open"></i></span> <span class="project_views_count">0</span>
+		<i class="icon-eye-open"></i></span> <span class="project_views_count">{{views}}</span>
 	</span>
 	
+	<% if (myProject) { %>
 	<span class="pull-right"><a data-e-bind="show:open" class="exit" href="#project/{{id}}" title="Already open"><i class="icon-ok-sign "></i></a></span>
-	
+	<% } %>
     </div>
 
 </div>

@@ -26,11 +26,7 @@ define([
 		type: Backbone.HasMany,
 		key: 'projects',
 		relatedModel: Project,
-		collectionType: Projects,
-		reverseRelation: {
-		    key: 'user_id',
-		    includeInJSON: 'id'
-		}
+		collectionType: Projects
 	    }],
 	defaults: {
 	},
@@ -56,12 +52,15 @@ define([
 	    }, this);
 
 	    this.set('guest', Pi.bootstrap.isGuest ? true : false);
+
+	    if (!this.isGuest())
+		this.update(Pi.bootstrap, false);
 	},
 	/**
 	 * Start the desktop playground with user's Processing sketches or, if guest, a demo sketch.
 	 * @param {json} data User model data with its profile and collections (containing only open projects).
 	 */
-	bootstrap: function(data) {
+	desktopBootstrap: function(data) {
 	    if (this.isGuest() && !this.guestBootstrapped)
 	    {
 		// Start a demo sketch for the guest
@@ -181,7 +180,7 @@ define([
 	 */
 	getAvatar: function() {
 	    if (this.get('avatar'))
-		Pi.user.getPublicDir() + "/avatar.jpg";
+		return this.get('avatar'); //Pi.user.getPublicDir() + "/avatar.jpg";
 	    else
 		return Pi.imgPath + "/" + Pi.defaultAvatarFileName;
 	},
@@ -214,9 +213,9 @@ define([
 	 */
 	openProject: function(id, action, tabId)
 	{
-	    var that = this, 
-		project = this.get('projects').get(id);
-	    
+	    var that = this,
+		    project = this.get('projects').get(id);
+
 	    //console.log(project);
 	    if (project && project.get('tabs').length) { // project model already exists
 		//console.log(project);
@@ -245,11 +244,11 @@ define([
 			break;
 		    case "code":
 			// @TODO open the ide and activate the requested tab
-			
+
 			break;
 		    default:
 			project.set('active', 1);
-			
+
 		}
 		return true;
 	    }
@@ -258,19 +257,56 @@ define([
 		var project = Project.findOrCreate({
 		    'id': id
 		});
+
+		// To open a project from another user in the desktop, we have 
+		// to CLONE that project, with a new cid and must be NEW.
+		// We have to copy only the content, not open the actual project.
+
+//		console.log(Pi.user.get('projects').length);
+//		console.log(Pi.user.get('projects').add(project));
+//		console.log(project);
+//		console.log(Pi.user.get('projects').length);
+
 		project.fetch({
-		    success: function(model, response, options) {
-			// project successfully loaded - recurse to open the ide
-			//console.log(model);
-			that.openProject(id, action);
-			return true;
+		    'data': {
+			'tabs': 1
 		    },
-		    error: function(model, response, options) {
+		    'success': function(model, response, options) {
+			// project successfully loaded - recurse to open the ide
+
+			// Convert numeric strings to ints
+			var attr = Pi.js.stringsToInts(model.attributes);
+			model.attributes = attr;
+
+			// If the project does not belong to the user: 
+			// create a copy and open the copy
+			if (model.get('user_id') != that.get('user_id')) {
+			    var newTabs = [];
+			    model.get('tabs').each(function(tab) {
+				tab.attributes.id = undefined;
+				tab.attributes.project_id = undefined;
+				newTabs.push(tab.attributes);
+			    });
+			    var newProject = model.clone();
+			    newProject.set({
+				'id': undefined,
+				'user_id': that.getId(),
+				'open': 1,
+				'tabs': newTabs
+			    });
+			    //console.log(newProject);
+			    that.get('projects').add(newProject);
+			    that.openProject(newProject.getId(), action);
+			    return;
+			}
+			else
+			    that.openProject(id, action);
+		    },
+		    'error': function(model, response, options) {
 			// project does not exist
 			project.clear({
 			    silent: true
 			});
-			return false;
 		    }
 		});
 	    }

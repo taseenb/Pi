@@ -3,9 +3,11 @@
 
 .desktop {
     position: absolute;
+    /*top:34px;*/
     top:34px;
     left: 0;
     bottom: 0;
+    right:0;
     width: 100%;
     z-index: -500;
     margin: 0;
@@ -21,6 +23,7 @@
     right:0;
     bottom:0;
     z-index: -501;
+    overflow-y: visible;
 }
 .desktop_bg.image {
     background-image: url(../img/bg/gradient_earth.jpg);

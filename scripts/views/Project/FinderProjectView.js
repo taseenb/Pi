@@ -22,6 +22,11 @@ define([
 	 */
 	bindings: "data-e-bind",
 	bindingHandlers: _.extend(Pi.bindingHandlers, {
+//	    
+//	    'user_id': function($element, value) {
+//		Pi.user.getId() === value.id ? $element.show() : $element.show();
+//	    },
+	    
 	}),
 	attributes: function() {
 	    return {
@@ -32,33 +37,41 @@ define([
 	},
 	initialize: function() {
 	    // Rendering must be done at initialization for Epox data-binding
-	    var that = this,
-		    project = this.model;
+	    var that = this;
+	    var project = this.model;
+	    var projectId = project.getId(),
+		    projectUserId = project.get('user_id').id,
+		    projectUsername = project.get('user_id').username;
+	    
+//	    console.log(project);
+	    console.log(Pi.user.getId() === projectUserId);
+	    
 	    this.$el.html(_.template(FinderProjectHtml, {
-		id: project.getId(),
-		name: project.get('name'),
-		preview: that.getPreview(project.get('preview_id'), project.get('id')),
-		description: project.get('description'),
-		public: project.get('public'),
-		create_time: project.get('create_time'),
-		update_time: project.get('update_time'),
-		userId: Pi.user.id,
-		username: Pi.user.getFullName(),
-		avatar: Pi.user.getAvatar()
+		'myProject': Pi.user.getId() === projectUserId,
+		'avatar': project.get('user_id').avatar,
+		'id': projectId,
+		'name': project.get('name'),
+		'likes': project.get('likes'),
+		'views': project.get('views'),
+		'preview': that.getPreview(projectUserId, projectId, project.get('has_preview')),
+		'description': project.get('description'),
+		'public': project.get('public'),
+		'create_time': project.get('create_time'),
+		'update_time': project.get('update_time'),
+		'userId': projectUserId, 
+		'username': projectUsername
 	    }));
 	},
-	render: function() {
+//	render: function() {
 //	    this.container.append(this.$el);
-	},
-	getPreview: function(previewId, projectId) {
-	    if (previewId) {
-		var userId = Pi.user.id,
-			imgUrl = Pi.publicDir + '/' + userId + '/' + Pi.previewFileName + projectId + ".jpg";
-		return imgUrl;
+//	},
+	getPreview: function(userId, projectId, hasPreview) {
+	    if (hasPreview) {
+		return Pi.publicDir + '/' + userId + '/' + Pi.previewFileName + projectId + ".jpg";
 	    }
 	    else
 	    {
-		return Pi.imgPath + '/' + Pi.defaultPreviewFileName;
+		return Pi.imgPath + Pi.defaultPreviewFileName;
 	    }
 	}
 

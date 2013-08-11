@@ -47,7 +47,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    fileNameMaxLength: 36, // tab name characters
 	    autoSaveInterval: 30000, // in milliseconds // 30 seconds
 	    liveCodeInterval: 1000, // interval between sketch updates during live code mode (only when code is new)
-	    defaultDesktopImage: "", //"<?php //echo $t; ?>/img/bg/gradient_autumn.jpg",
+	    defaultDesktopImage: "", //"<?php //echo $t;  ?>/img/bg/gradient_autumn.jpg",
 	    defaultDesktopColor: "",
 	    demoCode: "<?php echo $demoSketch ?>",
 	    spinnerCode: "<?php echo $spinnerSketch ?>",
@@ -55,26 +55,26 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    defaultPreviewFileName: "<?php echo app()->params['defaultPreviewFileName'] ?>",
 	    previewFileName: "<?php echo app()->params['previewFileName'] ?>",
 	    publicDir: "<?php echo app()->baseUrl; ?>/<?php echo app()->params['publicDirName'] ?>",
-	    basePath: "<?php echo app()->baseUrl; ?>",
-	    themePath: "<?php echo $t; ?>",
-	    imgPath: "<?php echo $t; ?>/img/",
-	    sandbox: "http://run.processingideas.com",
-	    bootstrap: <?php echo $bootstrapUserData ?>,
-	    minPwdLength: <?php echo app()->params['minPwdLength'] ?>,
-	    csrfToken: "<?php echo request()->csrfToken; ?>",
-	    csrfTokenName: "<?php echo request()->csrfTokenName; ?>",
-	    csrf: {
-		"<?php echo request()->csrfTokenName; ?>": "<?php echo request()->csrfToken; ?>"
-	    },
-	    action: {
-		openProject: "project",
-		//openFinder: "find"
-	    }
-	};
-	Pi.longName = Pi.name + " (" + Pi.version + ")";
+			basePath: "<?php echo app()->baseUrl; ?>",
+			themePath: "<?php echo $t; ?>",
+			imgPath: "<?php echo $t; ?>/img/",
+			sandbox: "http://run.processingideas.com",
+			bootstrap: <?php echo $bootstrapUserData ?>,
+			minPwdLength: <?php echo app()->params['minPwdLength'] ?>,
+				csrfToken: "<?php echo request()->csrfToken; ?>",
+			csrfTokenName: "<?php echo request()->csrfTokenName; ?>",
+			csrf: {
+			    "<?php echo request()->csrfTokenName; ?>": "<?php echo request()->csrfToken; ?>"
+			},
+			action: {
+			    openProject: "project",
+			    //openFinder: "find"
+			}
+		    };
+		    Pi.longName = Pi.name + " (" + Pi.version + ")";
 
-	return Pi;
-    });
+		    return Pi;
+		});
 
 </script>
 
@@ -87,7 +87,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
     <div id="nav" class="navbar navbar-fixed-top">
 	<canvas id="ajax-spinner"></canvas>
 	<div class="navbar-inner">
-	    <a class="brand no_select" href="#art"><img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" class="pi_logo"></a>
+	    <a class="brand no_select" href="#"><img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" class="pi_logo"></a> 
 
 	    <!--<div class="nav-collapse">-->
 	    <ul class="nav pull-left no_select"></ul>
@@ -95,40 +95,57 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    <!--</div>-->
 	</div>
     </div>
-    
-    <!--Finder-->
-	<!--<div id="finder" class="finder ui-dialog">-->
-	<div id="finder" class="finder">
-	    <a class="exit close" title="Close">
-		<i class="icon-remove-sign"></i>
-	    </a>
 
-	    <div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content">
-		<div class="tabbable">
-		    <ul id="finder_tabs" class="nav nav-pills">
-			<li class="active"><a data-target="#my" data-toggle="tab" href="#find/my">My Projects</a></li>
-			<li><a data-target="#most_liked" data-toggle="tab" href="#find/most_liked">Most liked</a></li>
-		    </ul>
-		    <div id="finder_tabs_content" class="main_content">
-			<div class="projects_wrapper tab-content">
-			    <div id="my" class="tab-pane projects active">
-				<div data-e-bind="collection:$myProjects"></div>
-			    </div>
-			    <div id="most_liked" class="tab-pane projects">test</div>
+    <!--Finder-->
+    <!--<div id="finder" class="finder ui-dialog">-->
+    <div id="finder" class="finder">
+	<a class="exit close" title="Close">
+	    <i class="icon-remove-sign"></i>
+	</a>
+
+	<div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content">
+	    
+<!--	    <h1 style="font-weight:100;margin: 0 10px 20px 10px;" class="clearfix">PROCESSING <strong>ideas</strong></h1>-->
+	    
+	    <div class="tabbable">
+		<ul id="finder_tabs" class="nav nav-pills">
+		    <li data-e-bind="hide:guest" class="active hide"><a data-target="#myProjects" data-toggle="tab" href="#find/my_projects">My Projects</a></li>
+		    <li data-e-bind="active:guest"><a data-target="#featured" data-toggle="tab" href="#find/featured">Featured</a></li>
+		    <li><a data-target="#most_appreciated" data-toggle="tab" href="#find/most_appreciated">Most Appreciated</a></li>
+		    <li><a data-target="#most_viewed" data-toggle="tab" href="#find/most_viewed">Most Viewed</a></li>
+		    <!--<li><a data-target="#most_commented" data-toggle="tab" href="#find/most_commented">Most Commented</a></li>-->
+		</ul>
+		<div id="finder_tabs_content" class="main_content">
+		    <div class="projects_wrapper tab-content">
+			<div data-e-bind="hide:guest" id="myProjects" class="tab-pane projects active hide">
+			    <div data-e-bind="collection:$myProjects"></div>
 			</div>
+			<div data-e-bind="active:guest" id="featured" class="tab-pane projects">
+			    <div data-e-bind="collection:$featured"></div>
+			</div>
+			<div id="most_appreciated" id="mostAppreciated" class="tab-pane projects">
+			    <div data-e-bind="collection:$mostAppreciated"></div>
+			</div>
+			<div id="most_viewed" id="mostViewed" class="tab-pane projects">
+			    <div data-e-bind="collection:$mostViewed"></div>
+			</div>
+<!--			<div id="most_commented" class="tab-pane projects">
+			    <div data-e-bind="collection:$mostCommented"></div>
+			</div>-->
 		    </div>
 		</div>
 	    </div>
-
-	    <div class="alternative-area">
-		<span>
-		    Don't have an account yet?
-		    <a class="btn btn-small btn-success" href="#sign-up">Sign Up for Pi</a>
-		</span>
-	    </div>
-
 	</div>
-    
+
+	<div class="alternative-area">
+	    <span>
+		Don't have an account yet?
+		<a class="btn btn-small btn-success" href="#sign-up">Sign Up for Pi</a>
+	    </span>
+	</div>
+
+    </div>
+
 
 
     <!-- Desktop -->
