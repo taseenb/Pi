@@ -57,18 +57,22 @@ define([
 		'Pi',
 		'controllers/ProjectController'
 	    ], function(Pi, ProjectController) {
-		// If project is not new (id is an integer)
+		// If project is not new, id should be an integer
 		if (Pi.js.stringIsInteger(id.replace("/", "")))
 		{
 		    var projectId = parseInt(id);
 		    // Avoid double ajax calls by checking the bootstrapped projects
 		    // (only the first time this method is called)
-		    if (Pi.user.bootstrapProjectIds) {
-			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1) {
+		    if (Pi.user.bootstrapProjectIds) 
+		    {
+			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1) 
+			{
 			    ProjectController.open(id, action);
 			}
 			delete Pi.user.bootstrapProjectIds;
-		    } else {
+		    } 
+		    else 
+		    {
 			ProjectController.open(id, action);
 		    }
 		}
@@ -90,7 +94,7 @@ define([
 //		Pi.user.finderView.hide();
 //		Pi.user.nav.activate("desktop");
 //		Pi.user.desktopBootstrap(Pi.bootstrap);
-		Pi.desktop.set('active');
+		Pi.desktop.set('active', true);
 	    });
 	},
 	/**

@@ -114,8 +114,8 @@ define([
 	    }
 
 	    // Set saved state
-	    if (Pi.user.isGuest())
-		this.set('saved', true);
+//	    if (Pi.user.isGuest())
+//		this.set('saved', true);
 
 	    // Start tracking changes and unsaved attributes. Never track 'user_id'.
 	    var attrsToTrack = _.without(this.safeAttributes, 'user_id');
@@ -138,23 +138,29 @@ define([
 	 */
 	playSketch: function(options)
 	{
-	    this.stopSketch();
-
-	    // Create the output view
-	    if (!this.outputView) {
-		this.outputView = new OutputView({
-		    model: this
-		});
-		this.outputView.iframeReady = false;
+	    try {
+		this.stopSketch();
+		// Create the output view
+		if (!this.outputView) {
+		    this.outputView = new OutputView({
+			model: this
+		    });
+		    this.outputView.iframeReady = false;
+		}
+		// Init the output view and wait for the iframe to be ready
+		if (this.outputView.iframeReady) {
+		    this.outputView.iframeSendCode();
+		}
+		// Set fullscreen
+		this.set('fullScreen', (options && options.fullScreen) ? true : false);
+		this.outputView.fullScreenState();
+	    }
+	    catch (e)
+	    {
+		console.log(e);
 	    }
 
-	    // Init the output view and wait for the iframe to be ready
-	    if (this.outputView.iframeReady)
-		this.outputView.iframeSendCode();
-	    
-	    // Set fullscreen
-	    this.set('fullScreen', (options && options.fullScreen) ? true : false);
-	    this.outputView.fullScreenState();
+
 
 //	    }
 //	    catch (e)

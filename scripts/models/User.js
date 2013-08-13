@@ -28,7 +28,8 @@ define([
 		type: Backbone.HasMany,
 		key: 'projects',
 		relatedModel: Project,
-		collectionType: Projects
+		collectionType: Projects,
+		parse: true
 	    }],
 	defaults: {
 	},
@@ -49,9 +50,11 @@ define([
 
 	    // Create an array with ids of bootstrapped projects
 	    this.bootstrapProjectIds = [];
-	    _.each(Pi.bootstrap.projects, function(project) {
-		this.bootstrapProjectIds.push(parseInt(project.id));
-	    }, this);
+	    if (Pi.bootstrap.user) {
+		_.each(Pi.bootstrap.user.projects, function(project) {
+		    this.bootstrapProjectIds.push(parseInt(project.id));
+		}, this);
+	    }
 
 	    this.set('guest', Pi.bootstrap.isGuest ? true : false);
 
@@ -81,16 +84,16 @@ define([
 	/**
 	 * Update the user with data loaded from server.
 	 * @param data {json object} User model data with its profile and projects.
-	 * @param updateProjects {boolean} Whether to update the projects as well with that data.
+	 * @param fetchProjects {boolean} Whether to update the projects as well with that data.
 	 */
-	update: function(data, loadProjects) {
+	update: function(data, fetchProjects) {
 	    // Update isGuest value
 	    this.set('guest', data.isGuest ? true : false);
-
+	    
 	    // Store bootstrap user data into Pi.user
 	    _.each(data.user, function(value, key) {
 		//console.log(key + "=" + value);
-		this.set(key, value); // avoid backbone change event
+		this.set(key, value);
 	    }, this);
 
 	    // Store bootstrap profile data into Pi.user.profile
@@ -98,13 +101,14 @@ define([
 	    _.each(data.profile, function(value, key) {
 		this.profile.attributes[key] = value; // avoid backbone change event
 	    }, this);
-
+	    
 	    if (this.nav)
 		this.nav.render();
-
-	    if (loadProjects) {
+	    
+	    if (fetchProjects) {
 		this.persistNewProjects();
-		this.loadProjects(data.projects);
+		//this.fetchUserProjects();
+		//this.openProjects(data.projects);
 	    }
 	},
 	/**
@@ -115,9 +119,9 @@ define([
 	},
 	/**
 	 * Load projects from json.
-	 * @param {json} projectsJson Json data with projects.
+	 * @param {json} json Json data with projects.
 	 */
-	loadProjects: function(json)
+	openProjects: function(json)
 	{
 	    // Get user json data and load projects
 	    var projects = json;
@@ -126,7 +130,6 @@ define([
 		    ProjectController.open(project.id);
 		}
 	    }, this);
-
 	},
 	/**
 	 * Save new projects (not already saved) in the db or destroy projects 

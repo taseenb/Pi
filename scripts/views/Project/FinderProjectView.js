@@ -27,7 +27,7 @@ define([
 	    return {
 		'id': "finder_project" + this.model.getId(),
 		'class': "project",
-		'data-e-bind': "open:open"
+//		'data-e-bind': "open:open"
 	    }
 	},
 	initialize: function() {
@@ -35,14 +35,16 @@ define([
 	    var that = this;
 	    var project = this.model;
 	    var projectId = project.getId(),
-		    projectUserId = project.get('user_id').id,
-		    projectUsername = project.get('user_id').username;
-
-//	    console.log(project);
+		    myProject = Pi.user.getId() === project.get('user_id');
+	    
+	    // Does the project belong to the current user?
+	    var projectUserId = myProject ? Pi.user.getId() : project.get('user_id').id;
+	    var projectUsername = myProject ? Pi.user.getFullName() : project.get('user_id').username
+	    var avatar = myProject ? Pi.user.getAvatar() : project.get('user_id').avatar
 
 	    this.$el.html(_.template(FinderProjectHtml, {
-		'myProject': Pi.user.getId() === projectUserId,
-		'avatar': project.get('user_id').avatar,
+		'myProject': myProject,
+		'avatar': avatar,
 		'id': projectId,
 		'name': project.get('name'),
 		'likes': project.get('likes'),
@@ -61,7 +63,7 @@ define([
 //	},
 	getPreview: function(userId, projectId, hasPreview) {
 	    if (hasPreview) {
-		return Pi.publicDir + '/' + userId + '/' + Pi.previewFileName + projectId + ".jpg";
+		return Pi.publicDir + '/' + userId + '/' + Pi.previewFileName + projectId + ".png";
 	    }
 	    else
 	    {

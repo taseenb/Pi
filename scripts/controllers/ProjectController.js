@@ -49,8 +49,11 @@ define([
 	open: function(id, action, tabId) {
 	    var that = this,
 		    project = Pi.user.get('projects').get(id);
-
-	    //console.log(project);
+	    
+	    console.log(id);
+	    console.log(project);
+	    
+	    //console.log(project.get('tabs').length);
 	    if (project && project.get('tabs').length) { // project model already exists
 		Pi.desktop.set('active', true);
 		//console.log(project);

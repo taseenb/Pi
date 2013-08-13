@@ -2,6 +2,7 @@
 /* @var $this SiteController */
 $t = theme();
 $baseUrl = Yii::app()->baseUrl;
+$isGuest = Yii::app()->user->isGuest;
 //$isGuest = Yii::app()->user->isGuest;
 /**
  * Get Processing demo and spinner codes (demo_code.txt and spinner.txt)
@@ -120,10 +121,10 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 				<!--<div class="tabbable">-->
 				<!-- finder tabs -->
 				<ul id="finder_tabs" class="nav nav-pills">
-				    <li data-e-bind="hide:guest" class="active hide"><a data-target="#myProjects" data-toggle="tab" href="#find/my_projects">My Projects</a></li>
-				    <li data-e-bind="active:guest"><a data-target="#featured" data-toggle="tab" href="#find/featured"><i class="icon-star"></i> Featured</a></li>
-				    <li><a data-target="#most_appreciated" data-toggle="tab" href="#find/most_appreciated"><i class="icon-thumbs-up "></i> Most Appreciated</a></li>
-				    <li><a data-target="#most_viewed" data-toggle="tab" href="#find/most_viewed"><i class="icon-eye-open"></i> Most Viewed</a></li>
+				    <li id="myProjectsTab" class="<?php echo $isGuest ? "hide" : "active"; ?>"><a data-target="#myProjects" data-toggle="tab" href="#find/myProjects">My Projects</a></li>
+				    <li class="<?php if ($isGuest) echo "active" ?>"><a data-target="#featured" data-toggle="tab" href="#find/featured"><i class="icon-star"></i> Featured</a></li>
+				    <li><a data-target="#mostAppreciated" data-toggle="tab" href="#find/mostAppreciated"><i class="icon-thumbs-up "></i> Most Appreciated</a></li>
+				    <li><a data-target="#mostViewed" data-toggle="tab" href="#find/mostViewed"><i class="icon-eye-open"></i> Most Viewed</a></li>
 				</ul>
 				<!-- finder tabs -->
 
@@ -131,17 +132,17 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 				<!--<div class="tabs_content_wrapper">-->
 				<div id="finder_tabs_content" class="main_content">
 				    <div class="projects_wrapper tab-content">
-					<div data-e-bind="hide:guest" id="myProjects" class="tab-pane projects active hide">
-					    <div data-e-bind="collection:$myProjects"></div>
+					<div id="myProjects" class="tab-pane projects <?php echo $isGuest ? "hide" : "active"; ?>">
+					    <!--<div data-e-bind="collection:$myProjects"></div>-->
 					</div>
-					<div data-e-bind="active:guest" id="featured" class="tab-pane projects">
-					    <div data-e-bind="collection:$featured"></div>
+					<div id="featured" class="tab-pane projects <?php if ($isGuest) echo "active" ?>">
+<!--					    <div data-e-bind="collection:$featured"></div>-->
 					</div>
-					<div id="most_appreciated" id="mostAppreciated" class="tab-pane projects">
-					    <div data-e-bind="collection:$mostAppreciated"></div>
+					<div id="mostAppreciated" class="tab-pane projects">
+					    <!--<div data-e-bind="collection:$mostAppreciated"></div>-->
 					</div>
-					<div id="most_viewed" id="mostViewed" class="tab-pane projects">
-					    <div data-e-bind="collection:$mostViewed"></div>
+					<div id="mostViewed" class="tab-pane projects">
+					    <!--<div data-e-bind="collection:$mostViewed"></div>-->
 					</div>
 				    </div>
 				</div>

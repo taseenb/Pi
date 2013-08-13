@@ -31,7 +31,6 @@ define([
 		    .attr({
 		'data-e-bind': "active:active,front:front",
 	    });
-
 	    //var sandbox = Pi.basePath + "/scripts/views/Project/OutputSandbox.html";
 	    var sandbox = Pi.sandbox;
 	    this.$iframe().prop('src', sandbox + "/?uid=" + this.model.getUid() + "&pid=" + this.model.getId());
@@ -234,7 +233,7 @@ define([
 	 */
 	appendPicture: function(imageSrc) {
 	    var picturesContainer = this.$el.find('.pictures_container'),
-		image = new Image();
+		    image = new Image();
 	    image.src = imageSrc;
 	    if (picturesContainer.find('img').size() >= 5) {
 		picturesContainer.find('img:eq(-4)').prevAll().remove();

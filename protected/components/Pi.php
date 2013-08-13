@@ -11,8 +11,8 @@ class Pi extends CComponent
     private static $_user;
 
     private static $_isValidUser;
-    
-    public static $validTopValues = array("featured","mostAppreciated","mostViewed","mostCommented");
+
+    public static $validTopValues = array("featured", "mostAppreciated", "mostViewed", "mostCommented");
 
     /**
      * Check whether the user exists and is active.
@@ -85,14 +85,14 @@ class Pi extends CComponent
      */
     public static function getTopProjects($top = 'featured', $withTabs = false, $json = true)
     {
-	$criteria=new CDbCriteria;
-	
+	$criteria = new CDbCriteria;
+
 	// Pagination
 	$count = Project::model()->count($criteria);
 	$pages = new CPagination($count);
 	$pages->pageSize = 15;
 	$pages->applyLimit($criteria);
-	
+
 	// Sorting
 //	$sort = new CSort('Project');
 //        $sort->attributes = array(
@@ -100,27 +100,27 @@ class Pi extends CComponent
 //	    'title',
 //	);
 //	$sort->applyOrder($criteria);
-	
 	// Fetch projects
-	if ($top == "featured") {
+	if ($top == "featured")
+	{
 	    $projects = Project::model()->public()->featured()->findAll($criteria);
-	} elseif ($top == "mostAppreciated") {
+	}
+	elseif ($top == "mostAppreciated")
+	{
 	    $projects = Project::model()->public()->mostAppreciated()->findAll($criteria);
-	} elseif ($top == "mostViewed") {
+	}
+	elseif ($top == "mostViewed")
+	{
 	    $projects = Project::model()->public()->mostViewed()->findAll($criteria);
 	}
-	
+
 	// Add user data
-	foreach($projects as $project) {
+	foreach ($projects as $project)
+	{
 	    $project->user_id = array(
-		'id' => (int)$project->user->id,
-		'avatar' => Avatar::get_gravatar($project->user->email, 80),
+		'id' => (int) $project->user->id,
 		'username' => $project->user->username,
-		'firstname' => $project->user->profile->firstname,
-		'lastname' => $project->user->profile->lastname,
-		'city' => $project->user->profile->city,
-		'state' => $project->user->profile->state,
-		'country' => $project->user->profile->country
+		'avatar' => Avatar::get_gravatar($project->user->email, 80)
 	    );
 	}
 
@@ -158,8 +158,7 @@ class Pi extends CComponent
 	    $array = array(
 		'isGuest' => false,
 		'user' => array(),
-		'profile' => array(),
-		'collections' => array(),
+		'profile' => array()
 	    );
 
 	    // User array
@@ -186,7 +185,7 @@ class Pi extends CComponent
 		}
 	    }
 	    // Projects (only open)
-	    $array['projects'] = self::getProjectsFromUser($user, false, false, true);
+	    $array['user']['projects'] = self::getProjectsFromUser($user, false, false);
 	}
 	else
 	{

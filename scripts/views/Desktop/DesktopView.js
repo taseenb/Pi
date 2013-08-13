@@ -13,7 +13,7 @@ define([
 	initialize: function()
 	{
 	    this.listenTo(this.model, "change:active", this.activeState);
-	    this.listenTo(this.model, "change:backgroundImage change:backgroundColor", this.bgState);
+	    //this.listenTo(this.model, "change:backgroundImage change:backgroundColor", this.bgState);
 	    this.bgState();
 	},
 	events:
