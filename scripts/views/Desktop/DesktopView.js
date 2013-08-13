@@ -24,7 +24,7 @@ define([
 			this.model.set({
 			    active: true
 			});
-			window.location.hash = "";
+			window.location.hash = "desktop";
 		    }
 		},
 	/**
@@ -34,6 +34,13 @@ define([
 	{
 	    if (this.model.get('active')) {
 		Pi.user.get('projects').deactivateAllOpen();
+		Pi.user.finderView.hide();
+		Pi.user.nav.activate("desktop");
+		Pi.user.desktopBootstrap(Pi.bootstrap);
+	    }
+	    else
+	    {
+		Pi.user.nav.deactivate("desktop");
 	    }
 	},
 	show: function() {

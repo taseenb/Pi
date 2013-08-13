@@ -47,7 +47,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    fileNameMaxLength: 36, // tab name characters
 	    autoSaveInterval: 30000, // in milliseconds // 30 seconds
 	    liveCodeInterval: 1000, // interval between sketch updates during live code mode (only when code is new)
-	    defaultDesktopImage: "", //"<?php //echo $t;  ?>/img/bg/gradient_autumn.jpg",
+	    defaultDesktopImage: "", //"<?php //echo $t;                 ?>/img/bg/gradient_autumn.jpg",
 	    defaultDesktopColor: "",
 	    demoCode: "<?php echo $demoSketch ?>",
 	    spinnerCode: "<?php echo $spinnerSketch ?>",
@@ -75,93 +75,139 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 
 		    return Pi;
 		});
-
 </script>
 
 <!-- Container for static pages (hidden by default) -->
-<div id="container" class="container"></div>
+<!--<div id="container" class="container"></div>-->
 
-<div id="desktop_bg" class="desktop_bg image fill">
-
+<!--Finder-->
+<div class="container-fluid"> <!-- finder container -->
+    
     <!-- Nav bar -->
-    <div id="nav" class="navbar navbar-fixed-top">
-	<canvas id="ajax-spinner"></canvas>
-	<div class="navbar-inner">
-	    <a class="brand no_select" href="#"><img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" class="pi_logo"></a> 
+    <div class="row-fluid">
+	<div class="span12">
 
-	    <!--<div class="nav-collapse">-->
-	    <ul class="nav pull-left no_select"></ul>
-	    <ul class="nav pull-right no_select"></ul>
-	    <!--</div>-->
-	</div>
-    </div>
+	    <div id="nav" class="navbar">
+		<canvas id="ajax-spinner"></canvas>
+		<div class="navbar-inner">
+		    <a class="brand no_select" href="#"><img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" class="pi_logo"></a> 
 
-    <!--Finder-->
-    <!--<div id="finder" class="finder ui-dialog">-->
-    <div id="finder" class="finder">
-	<a class="exit close" title="Close">
-	    <i class="icon-remove-sign"></i>
-	</a>
-
-	<div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content">
-	    
-<!--	    <h1 style="font-weight:100;margin: 0 10px 20px 10px;" class="clearfix">PROCESSING <strong>ideas</strong></h1>-->
-	    
-	    <div class="tabbable">
-		<ul id="finder_tabs" class="nav nav-pills">
-		    <li data-e-bind="hide:guest" class="active hide"><a data-target="#myProjects" data-toggle="tab" href="#find/my_projects">My Projects</a></li>
-		    <li data-e-bind="active:guest"><a data-target="#featured" data-toggle="tab" href="#find/featured">Featured</a></li>
-		    <li><a data-target="#most_appreciated" data-toggle="tab" href="#find/most_appreciated">Most Appreciated</a></li>
-		    <li><a data-target="#most_viewed" data-toggle="tab" href="#find/most_viewed">Most Viewed</a></li>
-		    <!--<li><a data-target="#most_commented" data-toggle="tab" href="#find/most_commented">Most Commented</a></li>-->
-		</ul>
-		<div id="finder_tabs_content" class="main_content">
-		    <div class="projects_wrapper tab-content">
-			<div data-e-bind="hide:guest" id="myProjects" class="tab-pane projects active hide">
-			    <div data-e-bind="collection:$myProjects"></div>
-			</div>
-			<div data-e-bind="active:guest" id="featured" class="tab-pane projects">
-			    <div data-e-bind="collection:$featured"></div>
-			</div>
-			<div id="most_appreciated" id="mostAppreciated" class="tab-pane projects">
-			    <div data-e-bind="collection:$mostAppreciated"></div>
-			</div>
-			<div id="most_viewed" id="mostViewed" class="tab-pane projects">
-			    <div data-e-bind="collection:$mostViewed"></div>
-			</div>
-<!--			<div id="most_commented" class="tab-pane projects">
-			    <div data-e-bind="collection:$mostCommented"></div>
-			</div>-->
-		    </div>
+		    <!--<div class="nav-collapse">-->
+		    <ul class="nav pull-left no_select"></ul>
+		    <ul class="nav pull-right no_select"></ul>
+		    <!--</div>-->
 		</div>
 	    </div>
 	</div>
-
-	<div class="alternative-area">
-	    <span>
-		Don't have an account yet?
-		<a class="btn btn-small btn-success" href="#sign-up">Sign Up for Pi</a>
-	    </span>
-	</div>
-
     </div>
 
 
+    <div class="row-fluid pi_innerbody">
+	<div class="span12">
 
-    <!-- Desktop -->
-    <div id="desktop" class="desktop">
+	    <!--Finder-->
+	    <div id="finder" class="row-fluid finder">
+		<div class="span12">
 
-	<!--Popup-->
-	<div id="popup" class="popup ui-dialog"></div>
+		    <div class="row-fluid"> <!--Finder body-->
+			<div class="span8">
 
-	<!--Main icon-->
-	<div id="icon_main" class="icon no_select new">
-	    <img src="<?php echo $t; ?>/img/piLogo.svg" alt="Processing Ideas">
-	    <span>Processing Ideas (alpha)</span>
+			    <div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content border-right">
+<!--				<a class="exit close pull-right" title="Close">
+				    <i class="icon-remove-sign"></i>
+				</a>-->
+    <!--	    <h1 style="font-weight:100;margin: 0 10px 20px 10px;" class="clearfix">PROCESSING <strong>ideas</strong></h1>-->
+				<!--<div class="tabbable">-->
+				<!-- finder tabs -->
+				<ul id="finder_tabs" class="nav nav-pills">
+				    <li data-e-bind="hide:guest" class="active hide"><a data-target="#myProjects" data-toggle="tab" href="#find/my_projects">My Projects</a></li>
+				    <li data-e-bind="active:guest"><a data-target="#featured" data-toggle="tab" href="#find/featured"><i class="icon-star"></i> Featured</a></li>
+				    <li><a data-target="#most_appreciated" data-toggle="tab" href="#find/most_appreciated"><i class="icon-thumbs-up "></i> Most Appreciated</a></li>
+				    <li><a data-target="#most_viewed" data-toggle="tab" href="#find/most_viewed"><i class="icon-eye-open"></i> Most Viewed</a></li>
+				</ul>
+				<!-- finder tabs -->
+
+				<!-- finder tabs content -->
+				<!--<div class="tabs_content_wrapper">-->
+				<div id="finder_tabs_content" class="main_content">
+				    <div class="projects_wrapper tab-content">
+					<div data-e-bind="hide:guest" id="myProjects" class="tab-pane projects active hide">
+					    <div data-e-bind="collection:$myProjects"></div>
+					</div>
+					<div data-e-bind="active:guest" id="featured" class="tab-pane projects">
+					    <div data-e-bind="collection:$featured"></div>
+					</div>
+					<div id="most_appreciated" id="mostAppreciated" class="tab-pane projects">
+					    <div data-e-bind="collection:$mostAppreciated"></div>
+					</div>
+					<div id="most_viewed" id="mostViewed" class="tab-pane projects">
+					    <div data-e-bind="collection:$mostViewed"></div>
+					</div>
+				    </div>
+				</div>
+				<!--</div>-->
+				<!-- finder tabs content -->
+				<!--</div>-->
+			    </div>
+			</div>
+			<div class="span4"> <!-- nav right -->
+			    <div class="content_wrapper">
+				<h2>Welcome 
+				    <!--<img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" style="width:210px;height:210px;">-->
+				</h2>
+				<p>Pi is dedicated to creative coders, artists and designers. 
+    It aims to provide an inspiring environment to create, 
+    showcase and share interactive works, drawings 
+    and animations written in javascript and the <a href='http://processing.org/' target="_blank">Processing</a> 
+    language.</p>
+<p>Pi currently uses the magical javascript port of Processing, 
+    <a href='http://processingjs.org/' target="_blank">Processing JS</a>. 
+    Other libraries (like <a href='http://paperjs.org/' target="_blank">Paper.js</a>, 
+    <a href='http://raphaeljs.com/' target="_blank">Raphael.js</a>, 
+    <a href="http://threejs.org/" target="_blank">Three.js</a>, etc.) 
+    will be supported in the future.</p>
+<p><strong>Pi is still under heavy development. 
+	This public site is only intended as a temporary 
+	presentation and test of the project, with a limited 
+	set of features and many
+	known and unknown <a href="https://github.com/taseenb/Pi/issues" target="_blank">bugs</a>.
+	By the way, you can <a href="#contribute">contribute</a>
+	to this project!</strong></p>
+			    </div>
+			</div>
+		    </div> <!--Finder body-->
+
+		    <!--	    <div class="row-fluid footer"> Finder footer
+				    <div class="span12 ">
+					<span>
+					    Don't have an account yet?
+					    <a class="btn btn-small btn-success" href="#sign-up">Sign Up for Pi</a>
+					</span>
+				    </div>
+				</div> Finder footer-->
+
+		</div>
+	    </div> <!-- Finder -->
+
+	    <!-- Desktop -->
+	    <div id="desktop_bg" class="desktop_bg image fill">
+		<div id="desktop" class="desktop">
+		    <!--Popup-->
+		    <div id="popup" class="popup ui-dialog"></div>
+
+		    <!--Main icon-->
+		    <div id="icon_main" class="icon no_select new">
+			<img src="<?php echo $t; ?>/img/piLogo.svg" alt="Processing Ideas">
+			<span>Processing Ideas (alpha)</span>
+		    </div>
+		</div>
+	    </div>
+
+	    <!-- Add GitHub ribbon -->
+	    <a id="forkongithub" href="https://github.com/taseenb/Pi">Fork me on GitHub</a>
+
+
 	</div>
-    </div>
+    </div> <!-- pi_body -->
 
-</div>
-
-<!-- Add GitHub ribbon -->
-<a id="forkongithub" href="https://github.com/taseenb/Pi">Fork me on GitHub</a>
+</div> <!-- container -->

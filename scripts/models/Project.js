@@ -290,7 +290,7 @@ define([
 	    else {
 		that.exitWithoutSaving();
 	    }
-	    Pi.router.goHome();
+	    Pi.router.desktop();
 	},
 	/**
 	 * Exit without saving. 

@@ -126,14 +126,14 @@
     position:absolute;
     height:100% !important;
     width:100% !important;
-    background-color: #CCC;
+    background-color: #eee;
     overflow: auto;
 }
 
 .output.fullscreen .iframe_wrapper .secondary_tools {
     display: inline-block !important;
     padding: 0;
-    position: fixed;
+    position: absolute;
     top:12px;
     right: 32px;
     z-index: 500;
@@ -143,7 +143,7 @@
 }
 .output.fullscreen .iframe_wrapper .pictures_container {
     display:inline-block;
-    position: fixed;
+    position: absolute;
     top:48px;
     right: 32px;
     z-index: 499;

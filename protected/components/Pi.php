@@ -90,7 +90,7 @@ class Pi extends CComponent
 	// Pagination
 	$count = Project::model()->count($criteria);
 	$pages = new CPagination($count);
-	$pages->pageSize = 10;
+	$pages->pageSize = 15;
 	$pages->applyLimit($criteria);
 	
 	// Sorting

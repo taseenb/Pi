@@ -81,6 +81,11 @@ class SignupAction extends CAction
 	    // Create default User Collection
 	    //$user->default_collection = $user->createDefaultCollection();
 	    //$user->save(false, array("default_collection"));
+	    
+	    // Create user public folder
+	    $path = Yii::getPathOfAlias('webroot') . DS . Yii::app()->params['publicDirName'] . DS;
+	    Yii::log('Created directory: ' . $path, 'warning');
+	    F::makeWritableDir($path . $user->id);
 
 	    // Save Profile
 	    $profile->user_id = $user->id;

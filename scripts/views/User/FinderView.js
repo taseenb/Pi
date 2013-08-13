@@ -74,7 +74,7 @@ define([
 //	    Pi.user.nav.activate("find");
 //	    this.$el.addClass('active');
 	    Pi.user.get('projects').deactivateAllOpen();
-
+	    Pi.desktop.set('active', false);
 	    this.$el.show();
 
 //	    this.$el.animate({

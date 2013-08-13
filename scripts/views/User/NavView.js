@@ -69,6 +69,9 @@ define([
 	    this.deactivateAll();
 	    this.$el.find('a[href=#' + href + ']').closest('li').addClass('active');
 	},
+	deactivate: function(href) {
+	    this.$el.find('a[href=#' + href + ']').closest('li').removeClass('active');
+	},
 	/**
 	 * Remove 'active' class from all the items in the nav bar.
 	 */
@@ -79,26 +82,34 @@ define([
 	 * Hide nav with navigation.
 	 */
 	hide: function(outputWindow, callback) {
-	    this.$el.animate({
-		top: "-34"
-	    },
-	    200, "easeOutQuad", function() {
-		Pi.user.currentDesktop.$el.css({
-		    'top': 0
-		});
-		callback(outputWindow);
-	    });
+	    callback(outputWindow);
+//	    this.$el.fadeOut(function() {
+//		callback(outputWindow);
+//	    });
+//	    this.$el.animate({
+//		top: "-34"
+//	    },
+//	    200, "easeOutQuad", function() {
+////		Pi.user.currentDesktop.$el.css({
+////		    'top': 0
+////		});
+//		callback(outputWindow);
+//	    });
 	},
 	show: function(outputWindow, callback) {
-	    this.$el.animate({
-		top: "0"
-	    },
-	    200, function() {
-		Pi.user.currentDesktop.$el.css({
-		    'top': 34
-		});
-		callback(outputWindow);
-	    });
+	    callback(outputWindow);
+//	    this.$el.fadeIn(function() {
+//		callback(outputWindow);
+//	    });
+//	    this.$el.animate({
+//		top: "0"
+//	    },
+//	    200, function() {
+////		Pi.user.currentDesktop.$el.css({
+////		    'top': 34
+////		});
+//		callback(outputWindow);
+//	    });
 	}
     });
 

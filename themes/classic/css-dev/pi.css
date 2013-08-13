@@ -6,6 +6,37 @@
     width:19px;
 }
 
+/* Override bootstrap container
+------------------------------------------ */
+/*.container,
+.container-fluid {
+    position: absolute;
+    overflow: auto;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    z-index: -1000;
+}*/
+
+.pi_innerbody {
+    position: absolute;
+    top:34px;
+    left: 0;
+    bottom: 0;
+    right:0;
+    width: 100%;
+    z-index: -500 !important;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    
+}
+
+.border-right {
+    border-right: 1px solid #EAEAEA;
+}
+
 
 /* Pi helpers 
 ------------------------------------------ */
@@ -25,7 +56,7 @@
 }
 
 .no_select { 
-/*    Avoid text selection  */
+    /*    Avoid text selection  */
     user-select: none; 
     -o-user-select: none; 
     -moz-user-select: none; 

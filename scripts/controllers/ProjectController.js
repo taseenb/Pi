@@ -52,6 +52,7 @@ define([
 
 	    //console.log(project);
 	    if (project && project.get('tabs').length) { // project model already exists
+		Pi.desktop.set('active', true);
 		//console.log(project);
 		//console.log(action);
 		// Create the Ide if it does not exist. 
@@ -118,6 +119,7 @@ define([
 			    //console.log(newProject);
 			    Pi.user.get('projects').add(newProject);
 			    that.open(newProject.getId(), action);
+			    Pi.desktop.set('active', true);
 			    return;
 			}
 			else

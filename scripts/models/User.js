@@ -10,12 +10,14 @@ define([
     // Views
     "views/Project/IdeView",
     "views/Project/IconView",
+    // Controllers
+    'controllers/ProjectController',
     // Backbone Extensions
     'relational',
     'Pi/Model',
     // Helpers
     'Pi/Js'
-], function(Pi, Backbone, $, Projects, Tabs, Project, Tab, IdeView, IconView) {
+], function(Pi, Backbone, $, Projects, Tabs, Project, Tab, IdeView, IconView, ProjectController) {
 
     "use strict";
 
@@ -63,9 +65,11 @@ define([
 	desktopBootstrap: function(data) {
 	    if (this.isGuest() && !this.guestBootstrapped)
 	    {
-		// Start a demo sketch for the guest
-		var ProjectController = require('controllers/ProjectController');
-		ProjectController.new(Pi.user.getId());
+		// Start a demo sketch for the guest if no projects are open
+		if (!this.get('projects').length) {
+		    var ProjectController = require('controllers/ProjectController');
+		    ProjectController.new(Pi.user.getId());
+		}
 		this.guestBootstrapped = true;
 	    }
 	    else if (!this.isGuest() && !this.bootstrapped)
@@ -119,7 +123,7 @@ define([
 	    var projects = json;
 	    _.each(projects, function(project) {
 		if (project.open) {
-		    this.openProject(project.id);
+		    ProjectController.open(project.id);
 		}
 	    }, this);
 

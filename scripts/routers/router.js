@@ -57,7 +57,6 @@ define([
 		'Pi',
 		'controllers/ProjectController'
 	    ], function(Pi, ProjectController) {
-		
 		// If project is not new (id is an integer)
 		if (Pi.js.stringIsInteger(id.replace("/", "")))
 		{
@@ -66,19 +65,16 @@ define([
 		    // (only the first time this method is called)
 		    if (Pi.user.bootstrapProjectIds) {
 			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1) {
-			    //Pi.user.openProject(projectId, action);
 			    ProjectController.open(id, action);
 			}
 			delete Pi.user.bootstrapProjectIds;
 		    } else {
-			//Pi.user.openProject(projectId, action);
 			ProjectController.open(id, action);
 		    }
 		}
 		// Project is new (ie: id is not an integer): try to activate it
 		else
 		{
-		    //Pi.user.openProject(id, action);
 		    ProjectController.open(id, action);
 		}
 	    });
@@ -88,11 +84,13 @@ define([
 	 */
 	desktop: function() {
 	    require([
-		'Pi/start/startFinder'
+		'Pi/start/startFinder',
+		'controllers/ProjectController'
 	    ], function(Pi) {
-		Pi.user.finderView.hide();
-		Pi.user.nav.activate("desktop");
-		Pi.user.desktopBootstrap(Pi.bootstrap);
+//		Pi.user.finderView.hide();
+//		Pi.user.nav.activate("desktop");
+//		Pi.user.desktopBootstrap(Pi.bootstrap);
+		Pi.desktop.set('active');
 	    });
 	},
 	/**

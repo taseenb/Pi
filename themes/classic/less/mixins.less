@@ -651,7 +651,11 @@
       width: 100%;
       .clearfix();
       [class*="span"] {
-        .input-block-level();
+        /* .input-block-level(); */ /* pi */
+        display: block; /* pi */
+        width: 100%; /* pi */
+        min-height: 5px; /* pi */
+        
         float: left;
         margin-left: @fluidGridGutterWidth;
         *margin-left: @fluidGridGutterWidth - (.5 / @gridRowWidth * 100 * 1%);

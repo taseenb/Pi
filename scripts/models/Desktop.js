@@ -14,7 +14,7 @@ define([
 	    backgroundImage: Pi.defaultDesktopImage, // string image url for css (ex.: "url(/path/img.jpg)")
 	    backgroundColor: Pi.defaultDesktopColor, // string hex color (ex. "#FFCC00")
 	    visible: true,
-	    active: true
+	    active: false
 	}
 
     });

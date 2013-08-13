@@ -9,15 +9,15 @@
 // Base class and wrapper
 .navbar {
   overflow: visible;
-  margin-bottom: @baseLineHeight;
+  /* margin-bottom: @baseLineHeight; */
 
   // Fix for IE7's bad z-indexing so dropdowns don't appear below content that follows the navbar
   *position: relative;
   *z-index: 2;
   
   // Pi shadow for navbar
-  -webkit-box-shadow:  0px 2px 4px 0px rgba(0, 0, 0, 0.15);
-    box-shadow:  0px 2px 4px 0px rgba(0, 0, 0, 0.15);
+  -webkit-box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.15);
+    box-shadow:  0px 1px 2px 0px rgba(0, 0, 0, 0.15);
 }
 
 // Inner for background effects
@@ -27,8 +27,8 @@
   padding-left:  30px;
   padding-right: 30px;
   #gradient > .vertical(@navbarBackgroundHighlight, @navbarBackground);
-  border: 1px solid @navbarBorder;
-  .border-radius(@baseBorderRadius);
+  /* border: 1px solid @navbarBorder;
+  .border-radius(@baseBorderRadius); */
   .box-shadow(0 1px 4px rgba(0,0,0,.065));
 
   // Prevent floats from breaking the navbar
