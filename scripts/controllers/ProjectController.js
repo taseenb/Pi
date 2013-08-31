@@ -50,23 +50,22 @@ define([
 	    var that = this,
 		    project = Pi.user.get('projects').get(id);
 	    
-	    console.log(id);
+	    console.log("Project id: " + id);
 	    console.log(project);
+	    if (project)
+		console.log("Tabs: " + project.get('tabs').length);
 	    
-	    //console.log(project.get('tabs').length);
-	    if (project && project.get('tabs').length) { // project model already exists
+	    if (project && project.get('tabs').length) { // project model exists and is completely loaded
 		Pi.desktop.set('active', true);
-		//console.log(project);
-		//console.log(action);
 		// Create the Ide if it does not exist. 
 		// Save the new 'open' state, if changed
 		if (!project.ideView) {
 		    that.createIdeView(project);
-		    project.saveOpenState();
+		    //project.saveOpenState();
 		}
 		if (!project.get('open')) {
 		    project.set('open', 1);
-		    project.saveOpenState();
+		    //project.saveOpenState();
 		}
 		switch (action) {
 		    case "fs":
@@ -76,19 +75,19 @@ define([
 			project.set('fullScreen', true);
 			break;
 		    case "play":
-			project.playSketch({
-			    'fullScreen': false
-			});
+			project.playSketch();
 			break;
 		    case "code":
-			// @TODO open the ide and activate the requested tab
-
+			var tab = project.get('tabs').get(tabId);
+			if (tab)
+			    tab.set('active', 1);
+			else
+			    project.get('tabs').setMainActive();
 			break;
-		    default:
-			project.set('active', 1);
-
 		}
-		return true;
+		project.set('active', 1);
+//		if (!tabId)
+//		    project.get('tabs').setMainActive();
 	    }
 	    else // try to load the project from server and create the model
 	    {
@@ -104,7 +103,7 @@ define([
 		    },
 		    'success': function(model, response, options) {
 			// If the project does not belong to the user: 
-			// create a copy and open the copy
+			// create a copy and open the copy.
 			if (model.get('user_id') != Pi.user.get('id')) {
 			    var newTabs = [];
 			    model.get('tabs').each(function(tab) {
@@ -122,14 +121,14 @@ define([
 			    //console.log(newProject);
 			    Pi.user.get('projects').add(newProject);
 			    that.open(newProject.getId(), action);
-			    Pi.desktop.set('active', true);
 			    return;
 			}
+			// If the project belongs to the user, just open it.
 			else
 			    that.open(id, action);
 		    },
 		    'error': function(model, response, options) {
-			// project does not exist
+			// The project does not exist
 			project.clear({
 			    silent: true
 			});
@@ -183,7 +182,7 @@ define([
 			"<p>Please, save and close at least one window.<br>Otherwise your browser could explode!</p>"
 			);
 	    }
-	},
+	}
 	
 	
     });

@@ -1,3 +1,13 @@
+## Allow access from all domains for images
+#<IfModule mod_headers.c>
+##    <FilesMatch "\.(png|jpg|gif|svg)$">
+#        Header set Access-Control-Allow-Origin "*"
+#	Header set Access-Control-Allow-Methods "OPTIONS, GET, POST"
+#	Header set Access-Control-Allow-Headers "X-Requested-With,Content-Type"
+##    </FilesMatch>
+#</IfModule>
+
+
 RewriteEngine on
 
 # if a directory or a file exists, use it directly
@@ -6,3 +16,4 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # otherwise forward it to index.php
 RewriteRule . index.php
+

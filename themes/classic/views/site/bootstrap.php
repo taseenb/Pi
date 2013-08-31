@@ -48,7 +48,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    fileNameMaxLength: 36, // tab name characters
 	    autoSaveInterval: 30000, // in milliseconds // 30 seconds
 	    liveCodeInterval: 1000, // interval between sketch updates during live code mode (only when code is new)
-	    defaultDesktopImage: "", //"<?php //echo $t;                 ?>/img/bg/gradient_autumn.jpg",
+	    defaultDesktopImage: "", //"<?php //echo $t;                  ?>/img/bg/gradient_autumn.jpg",
 	    defaultDesktopColor: "",
 	    demoCode: "<?php echo $demoSketch ?>",
 	    spinnerCode: "<?php echo $spinnerSketch ?>",
@@ -83,7 +83,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 
 <!--Finder-->
 <div class="container-fluid"> <!-- finder container -->
-    
+
     <!-- Nav bar -->
     <div class="row-fluid">
 	<div class="span12">
@@ -114,10 +114,10 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 			<div class="span8">
 
 			    <div id="finder_content" class="content_wrapper ui-dialog-content ui-widget-content border-right">
-<!--				<a class="exit close pull-right" title="Close">
-				    <i class="icon-remove-sign"></i>
-				</a>-->
-    <!--	    <h1 style="font-weight:100;margin: 0 10px 20px 10px;" class="clearfix">PROCESSING <strong>ideas</strong></h1>-->
+				<!--				<a class="exit close pull-right" title="Close">
+								    <i class="icon-remove-sign"></i>
+								</a>-->
+				    <!--	    <h1 style="font-weight:100;margin: 0 10px 20px 10px;" class="clearfix">PROCESSING <strong>ideas</strong></h1>-->
 				<!--<div class="tabbable">-->
 				<!-- finder tabs -->
 				<ul id="finder_tabs" class="nav nav-pills">
@@ -136,7 +136,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 					    <!--<div data-e-bind="collection:$myProjects"></div>-->
 					</div>
 					<div id="featured" class="tab-pane projects <?php if ($isGuest) echo "active" ?>">
-<!--					    <div data-e-bind="collection:$featured"></div>-->
+					    <!--					    <div data-e-bind="collection:$featured"></div>-->
 					</div>
 					<div id="mostAppreciated" class="tab-pane projects">
 					    <!--<div data-e-bind="collection:$mostAppreciated"></div>-->
@@ -153,27 +153,40 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 			</div>
 			<div class="span4"> <!-- nav right -->
 			    <div class="content_wrapper">
-				<h2>Welcome 
-				    <!--<img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" style="width:210px;height:210px;">-->
-				</h2>
-				<p>Pi is dedicated to creative coders, artists and designers. 
-    It aims to provide an inspiring environment to create, 
-    showcase and share interactive works, drawings 
-    and animations written in javascript and the <a href='http://processing.org/' target="_blank">Processing</a> 
-    language.</p>
-<p>Pi currently uses the magical javascript port of Processing, 
-    <a href='http://processingjs.org/' target="_blank">Processing JS</a>. 
-    Other libraries (like <a href='http://paperjs.org/' target="_blank">Paper.js</a>, 
-    <a href='http://raphaeljs.com/' target="_blank">Raphael.js</a>, 
-    <a href="http://threejs.org/" target="_blank">Three.js</a>, etc.) 
-    will be supported in the future.</p>
-<p><strong>Pi is still under heavy development. 
-	This public site is only intended as a temporary 
-	presentation and test of the project, with a limited 
-	set of features and many
-	known and unknown <a href="https://github.com/taseenb/Pi/issues" target="_blank">bugs</a>.
-	By the way, you can <a href="#contribute">contribute</a>
-	to this project!</strong></p>
+				<div class="row">
+				    <div class="span12">
+					<a href="#desktop" class="btn btn-large btn-primary"><i class="icon-desktop "></i> Desktop</a> 
+					<br><br>
+				    </div>
+				</div>
+
+				<div class="row">
+				    <div class="span12">
+					<h2>Welcome 
+					    <!--<img src="<?php echo $t; ?>/img/piLogo.svg" title="Processing Ideas" style="width:210px;height:210px;">-->
+					</h2>
+					<p>Pi is dedicated to creative coders, artists and designers. 
+					    It aims to provide an inspiring environment to create, 
+					    showcase and share interactive works, drawings 
+					    and animations written in javascript and the <a href='http://processing.org/' target="_blank">Processing</a> 
+					    language.</p>
+					<p>Pi currently uses the magical javascript port of Processing, 
+					    <a href='http://processingjs.org/' target="_blank">Processing JS</a>. 
+					    Other libraries (like <a href='http://paperjs.org/' target="_blank">Paper.js</a>, 
+					    <a href='http://raphaeljs.com/' target="_blank">Raphael.js</a>, 
+					    <a href="http://threejs.org/" target="_blank">Three.js</a>, etc.) 
+					    will be supported in the future.</p>
+					<p><strong>Pi is still under heavy development. 
+						This public site is only intended as a temporary 
+						presentation and test of the project, with a limited 
+						set of features and many
+						known and unknown <a href="https://github.com/taseenb/Pi/issues" target="_blank">bugs</a>.
+						By the way, you can <a href="#contribute">contribute</a>
+						to this project!</strong></p>
+				    </div>
+				</div>
+
+
 			    </div>
 			</div>
 		    </div> <!--Finder body-->
@@ -205,7 +218,7 @@ $local = file_exists($scriptsPath . '/config_local.js') ? true : false;
 	    </div>
 
 	    <!-- Add GitHub ribbon -->
-	    <a id="forkongithub" href="https://github.com/taseenb/Pi">Fork me on GitHub</a>
+	    <!--	    <a id="forkongithub" href="https://github.com/taseenb/Pi">Fork me on GitHub</a>-->
 
 
 	</div>

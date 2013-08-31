@@ -51,36 +51,38 @@ define([
 	/**
 	 * Open or bring to front a particular project ide.
 	 */
-	openProject: function(id, action)
+	openProject: function(id, action, tabId)
 	{
 	    require([
 		'Pi',
-		'controllers/ProjectController'
+		'controllers/ProjectController',
+		'Pi/start/startFinder'
 	    ], function(Pi, ProjectController) {
 		// If project is not new, id should be an integer
+		var projectId = id;
 		if (Pi.js.stringIsInteger(id.replace("/", "")))
 		{
-		    var projectId = parseInt(id);
+		    projectId = parseInt(id);
 		    // Avoid double ajax calls by checking the bootstrapped projects
 		    // (only the first time this method is called)
-		    if (Pi.user.bootstrapProjectIds) 
-		    {
-			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1) 
-			{
-			    ProjectController.open(id, action);
-			}
-			delete Pi.user.bootstrapProjectIds;
-		    } 
-		    else 
-		    {
-			ProjectController.open(id, action);
-		    }
+//		    if (Pi.user.bootstrapProjectIds) 
+//		    {
+//			if (_.indexOf(Pi.user.bootstrapProjectIds, projectId) == -1) 
+//			{
+//			    ProjectController.open(id, action, tabId);
+//			}
+//			delete Pi.user.bootstrapProjectIds;
+//		    }
+//		    else 
+//		    {
+//			ProjectController.open(id, action, tabId);
+//		    }
 		}
 		// Project is new (ie: id is not an integer): try to activate it
-		else
-		{
-		    ProjectController.open(id, action);
-		}
+//		else
+//		{
+		    ProjectController.open(projectId, action, tabId);
+//		}
 	    });
 	},
 	/**

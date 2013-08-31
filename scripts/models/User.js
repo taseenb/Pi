@@ -121,16 +121,16 @@ define([
 	 * Load projects from json.
 	 * @param {json} json Json data with projects.
 	 */
-	openProjects: function(json)
-	{
-	    // Get user json data and load projects
-	    var projects = json;
-	    _.each(projects, function(project) {
-		if (project.open) {
-		    ProjectController.open(project.id);
-		}
-	    }, this);
-	},
+//	openProjects: function(json)
+//	{
+//	    // Get user json data and load projects
+//	    var projects = json;
+//	    _.each(projects, function(project) {
+//		if (project.open) {
+//		    ProjectController.open(project.id);
+//		}
+//	    }, this);
+//	},
 	/**
 	 * Save new projects (not already saved) in the db or destroy projects 
 	 * that were not modified by the user.

@@ -82,6 +82,26 @@ define([
 		tabsJson[i].id = tab.getId();
 	    });
 	    return tabsJson;
+	},
+	/**
+	 * Get the main tab of the collection.
+	 * @returns {object} The main tab model.
+	 */
+	getMain: function() {
+	    var isMain;
+	    this.each(function(tab){
+		if (tab.isMain())
+		    isMain = tab;
+	    });
+	    return isMain;
+	},
+	/**
+	 * Set the main tab active.
+	 */
+	setMainActive: function() {
+	    var mainTab = this.getMain();
+	    if (mainTab)
+		mainTab.set('active', true);
 	}
     });
 

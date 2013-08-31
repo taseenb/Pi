@@ -34,7 +34,8 @@ define([
 	{
 	    if (this.model.get('active')) {
 		Pi.user.get('projects').deactivateAllOpen();
-		Pi.user.finderView.hide();
+		if (Pi.user.finderView)
+		    Pi.user.finderView.hide();
 		Pi.user.nav.activate("desktop");
 		Pi.user.desktopBootstrap(Pi.bootstrap);
 	    }

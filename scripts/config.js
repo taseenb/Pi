@@ -24,8 +24,8 @@ var require = {
 	"jquery-easing": "lib/plugins/jquery.easing.min",
 	
 	// Processing
-	"processing": "lib/processing/processing-1.4.1.min",
-	//"processing": "//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.1/processing.min",
+	//"processing": "lib/processing/processing-1.4.1.min",
+	"processing": "//cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.1/processing.min",
 		
 	// JsHint
 	"jshint": "lib/jshint/jshint.min",

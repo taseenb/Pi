@@ -305,7 +305,7 @@ define([
 	exitWithoutSaving: function() {
 	    if (!Pi.user.isGuest()) {
 		this.set('open', false);
-		this.saveOpenState();
+		//this.saveOpenState();
 	    }
 	    else
 	    {

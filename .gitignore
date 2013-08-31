@@ -34,3 +34,4 @@ TODO.html
 /protected/controllers/actions/OLDCollectionReadAction.php
 /protected/controllers/OLDCollectionController.php
 /protected/models/OLDCollection.php
+/node_modules/
