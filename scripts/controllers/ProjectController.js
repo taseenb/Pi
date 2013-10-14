@@ -20,8 +20,9 @@ define([
 	
 	/**
 	 * Start a new project with a demo sketch.
+	 * @param {int} userId The current user id.
 	 */
-	new: function(userId)
+	'new': function(userId)
 	{
 	    // Create a new project
 	    var project = new Project({
@@ -46,7 +47,7 @@ define([
 	 * @param {string} action Action to perform.
 	 * @param {integer} tabId Optional: tab id to open.
 	 */
-	open: function(id, action, tabId) {
+	'open': function(id, action, tabId) {
 	    var that = this,
 		    project = Pi.user.get('projects').get(id);
 	    
@@ -142,7 +143,7 @@ define([
 	 * If data is not a Backbone model, a Project model will be created from the data.
 	 * @param {object} project A Project model or json data to create the Project Model.
 	 */
-	createIdeView: function(project)
+	'createIdeView': function(project)
 	{
 	    if (Pi.user.openProjectsCount() <= Pi.maxIdeSessions)
 	    {

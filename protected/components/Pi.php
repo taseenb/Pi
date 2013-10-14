@@ -86,6 +86,12 @@ class Pi extends CComponent
     public static function getTopProjects($top = 'featured', $withTabs = false, $json = true)
     {
 	$criteria = new CDbCriteria;
+	
+	// Do not show the current user's projects in the top selections
+	if (!Yii::app()->user->isGuest) {
+	    $user = self::getUser();
+	    $criteria->condition = "user_id!=" . $user->id;
+	}
 
 	// Pagination
 	$count = Project::model()->count($criteria);

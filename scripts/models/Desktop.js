@@ -1,6 +1,5 @@
 define([
     'Pi', 'backbone', 'jquery',
-    
     // Backbone Extensions
     'Pi/Model'
 
@@ -18,7 +17,7 @@ define([
 	}
 
     });
-    
+
     return Desktop;
 
 });

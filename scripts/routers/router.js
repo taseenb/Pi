@@ -7,7 +7,9 @@ define([
     'Pi/start/startDialogs',
     'Pi/start/startUser',
     // Js and Json helpers
-    'Pi/Js'
+    'Pi/Js',
+    // DOM ready
+    'domReady!'
 
 ], function(Pi, $, Backbone) {
 

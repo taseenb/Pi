@@ -78,7 +78,6 @@ define([
 	    else if (!this.isGuest() && !this.bootstrapped)
 	    {
 		this.update(data, true);
-		this.bootstrapped = true;
 	    }
 	},
 	/**
@@ -102,14 +101,18 @@ define([
 		this.profile.attributes[key] = value; // avoid backbone change event
 	    }, this);
 	    
-	    if (this.nav)
+	    if (this.nav) {
+		console.log(this.nav);
 		this.nav.render();
+	    }
 	    
 	    if (fetchProjects) {
 		this.persistNewProjects();
 		//this.fetchUserProjects();
 		//this.openProjects(data.projects);
 	    }
+	    
+	    this.bootstrapped = true;
 	},
 	/**
 	 * Get 'guest' attribute from the user.
