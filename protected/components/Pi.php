@@ -176,7 +176,7 @@ class Pi extends CComponent
 		'old_lastvisit_at' => $user->lastvisit_at,
 		'lastvisit_at' => time(),
 		'status' => $user->status,
-		'default_collection' => $user->default_collection,
+		//'default_collection' => $user->default_collection,
 		'create_time' => $user->create_time,
 		'update_time' => $user->update_time,
 	    );

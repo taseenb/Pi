@@ -78,7 +78,7 @@ class SignupAction extends CAction
 	// that also solves a problem with captcha double validation count
 	if ($user->save(false))
 	{
-	    // Create default User Collection
+	    // Create default User Collection // COLLECTIONS ARE NOT USED ANYMORE IN PI!
 	    //$user->default_collection = $user->createDefaultCollection();
 	    //$user->save(false, array("default_collection"));
 	    

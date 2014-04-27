@@ -11,7 +11,6 @@
  * @var integer $lastvisit
  * @var integer $superuser
  * @var integer $status
- * @var integer $default_collection
  * @var timestamp $lastvisit_at
  */
 class User extends ActiveRecord
@@ -59,7 +58,7 @@ class User extends ActiveRecord
 		array('status', 'in', 'range' => array(self::UNACTIVE, self::ACTIVE, self::BANNED)),
 		array('superuser', 'in', 'range' => array(0, 1)),
 		array('email, superuser, status', 'required'),
-		array('create_time, lastvisit_at, superuser, status, default_collection', 'numerical', 'integerOnly' => true),
+		array('create_time, lastvisit_at, superuser, status', 'numerical', 'integerOnly' => true),
 		array('id, username, password, email, activkey, lastvisit_at, superuser, status', 'safe', 'on' => 'search'),
 	    );
 	}
@@ -131,7 +130,7 @@ class User extends ActiveRecord
 	    'status' => UserModule::t("Status"),
 	    'update_time' => UserModule::t("Update Time"),
 	    'create_time' => UserModule::t("Create Time"),
-	    'default_collection' => UserModule::t("Default Collection"),
+//	    'default_collection' => UserModule::t("Default Collection"),
 	);
     }
 
@@ -151,7 +150,7 @@ class User extends ActiveRecord
 		'condition' => 'superuser=1',
 	    ),
 	    'notsafe' => array(
-		'select' => 'id, username, password, email, activkey, lastvisit_at, superuser, status, default_collection',
+		'select' => 'id, username, password, email, activkey, lastvisit_at, superuser, status',
 	    ),
 	);
     }
@@ -160,7 +159,7 @@ class User extends ActiveRecord
     {
 	return CMap::mergeArray(Yii::app()->getModule('user')->defaultScope, array(
 		    'alias' => 'user',
-		    'select' => 'user.id, user.username, user.email, user.lastvisit_at, user.superuser, user.status, user.default_collection, user.update_time, user.create_time',
+		    'select' => 'user.id, user.username, user.email, user.lastvisit_at, user.superuser, user.status, user.update_time, user.create_time',
 	));
     }
 
@@ -204,7 +203,7 @@ class User extends ActiveRecord
 	$criteria->compare('status', $this->status);
 	$criteria->compare('update_time', $this->update_time);
 	$criteria->compare('create_time', $this->create_time);
-	$criteria->compare('default_collection', $this->default_collection);
+//	$criteria->compare('default_collection', $this->default_collection);
 
 	return new CActiveDataProvider(get_class($this), array(
 	    'criteria' => $criteria,
