@@ -116,8 +116,6 @@
 
   $.fn.tab = function ( option ) {
     return this.each(function () {
-	//console.log(this);
-	//console.log(option);
       var $this = $(this)
         , data = $this.data('tab')
       if (!data) $this.data('tab', (data = new Tab(this)))

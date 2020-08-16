@@ -57,7 +57,7 @@ var supportedModes = {
     Erlang:      ["erl|hrl"],
     EJS:         ["ejs"],
     Forth:       ["frt|fs|ldr"],
-    FTL:         ["ftl"],
+    FreeMarker:  ["ftl"],
     Glsl:        ["glsl|frag|vert"],
     golang:      ["go"],
     Groovy:      ["groovy"],
@@ -135,8 +135,7 @@ var nameOverrides = {
     golang: "Go",
     C_Cpp: "C/C++",
     coffee: "CoffeeScript",
-    HTML_Ruby: "HTML (Ruby)",
-    FTL: "FreeMarker"
+    HTML_Ruby: "HTML (Ruby)"
 };
 var modesByName = {};
 for (var name in supportedModes) {

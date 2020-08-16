@@ -4,15 +4,16 @@ if (typeof window.window != "undefined" && window.document) {
     return;
 }
 
-window.console = function() {
-    var msgs = Array.prototype.slice.call(arguments, 0);
-    postMessage({type: "log", data: msgs});
+window.console = {
+    log: function() {
+        var msgs = Array.prototype.slice.call(arguments, 0);
+        postMessage({type: "log", data: msgs});
+    },
+    error: function() {
+        var msgs = Array.prototype.slice.call(arguments, 0);
+        postMessage({type: "log", data: msgs});
+    }
 };
-window.console.error =
-window.console.warn = 
-window.console.log =
-window.console.trace = window.console;
-
 window.window = window;
 window.ace = window;
 
@@ -85,9 +86,10 @@ window.define = function(id, deps, factory) {
     };
 
     require.modules[id] = {
-        exports: {},
         factory: function() {
-            var module = this;
+            var module = {
+                exports: {}
+            };
             var returnExports = factory(req, module.exports, module);
             if (returnExports)
                 module.exports = returnExports;
@@ -1175,7 +1177,7 @@ var Document = function(text) {
     };
     this.getTextRange = function(range) {
         if (range.start.row == range.end.row) {
-            return this.getLine(range.start.row)
+            return this.$lines[range.start.row]
                 .substring(range.start.column, range.end.column);
         }
         var lines = this.getLines(range.start.row, range.end.row);
@@ -1687,24 +1689,29 @@ var oop = require("./lib/oop");
 var EventEmitter = require("./lib/event_emitter").EventEmitter;
 
 var Anchor = exports.Anchor = function(doc, row, column) {
-    this.$onChange = this.onChange.bind(this);
-    this.attach(doc);
-    
+    this.document = doc;
+
     if (typeof column == "undefined")
         this.setPosition(row.row, row.column);
     else
         this.setPosition(row, column);
+
+    this.$onChange = this.onChange.bind(this);
+    doc.on("change", this.$onChange);
 };
 
 (function() {
 
     oop.implement(this, EventEmitter);
+
     this.getPosition = function() {
         return this.$clipPositionToDocument(this.row, this.column);
     };
+
     this.getDocument = function() {
         return this.document;
     };
+
     this.onChange = function(e) {
         var delta = e.data;
         var range = delta.range;
@@ -1766,6 +1773,7 @@ var Anchor = exports.Anchor = function(doc, row, column) {
 
         this.setPosition(row, column, true);
     };
+
     this.setPosition = function(row, column, noClip) {
         var pos;
         if (noClip) {
@@ -1792,12 +1800,9 @@ var Anchor = exports.Anchor = function(doc, row, column) {
             value: pos
         });
     };
+
     this.detach = function() {
         this.document.removeEventListener("change", this.$onChange);
-    };
-    this.attach = function(doc) {
-        this.document = doc || this.document;
-        this.document.on("change", this.$onChange);
     };
     this.$clipPositionToDocument = function(row, column) {
         var pos = {};
@@ -2011,6 +2016,8 @@ var PHP = {Constants:{}};
 
 
 
+
+
 PHP.Constants.T_INCLUDE = 262;
 PHP.Constants.T_INCLUDE_ONCE = 261;
 PHP.Constants.T_EVAL = 260;
@@ -2107,7 +2114,6 @@ PHP.Constants.T_ISSET = 350;
 PHP.Constants.T_EMPTY = 351;
 PHP.Constants.T_HALT_COMPILER = 352;
 PHP.Constants.T_CLASS = 353;
-PHP.Constants.T_TRAIT = 382;
 PHP.Constants.T_INTERFACE = 354;
 PHP.Constants.T_EXTENDS = 355;
 PHP.Constants.T_IMPLEMENTS = 356;
@@ -2155,10 +2161,6 @@ PHP.Lexer = function( src, ini ) {
     openTag = (ini === undefined || (/^(on|true|1)$/i.test(ini.short_open_tag) ) ? /(\<\?php\s|\<\?|\<\%|\<script language\=('|")?php('|")?\>)/i : /(\<\?php\s|<\?=|\<script language\=('|")?php('|")?\>)/i),
         openTagStart = (ini === undefined || (/^(on|true|1)$/i.test(ini.short_open_tag)) ? /^(\<\?php\s|\<\?|\<\%|\<script language\=('|")?php('|")?\>)/i : /^(\<\?php\s|<\?=|\<script language\=('|")?php('|")?\>)/i),
             tokens = [
-            {
-                value: PHP.Constants.T_NAMESPACE,
-                re: /^namespace(?=\s)/i
-            },
             {
                 value: PHP.Constants.T_USE,
                 re: /^use(?=\s)/i
@@ -2453,10 +2455,6 @@ PHP.Lexer = function( src, ini ) {
                 afterWhitespace: true
             },
             {
-                value: PHP.Constants.T_TRAIT,
-                re: /^trait(?=[\s]+[A-Za-z])/i,
-            },
-            {
                 value: PHP.Constants.T_PUBLIC,
                 re: /^public(?=[\s])/i
             },
@@ -2708,7 +2706,7 @@ PHP.Lexer = function( src, ini ) {
 
                                 results.push([
                                     parseInt(( curlyOpen > 0 ) ? PHP.Constants.T_CONSTANT_ENCAPSED_STRING : PHP.Constants.T_ENCAPSED_AND_WHITESPACE, 10),
-                                    match[ 0 ].replace(/\n/g,"\\n").replace(/\r/g,""),
+                                    match[ 0 ],
                                     line
                                     ]);
 
@@ -2739,15 +2737,9 @@ PHP.Lexer = function( src, ini ) {
 
                         return undefined;
 
-                    } else {
-                        result = result.replace(/\n/g,"\\n").replace(/\r/g,"");
                     }
                     return result;
                 }
-            },
-            {
-                value: PHP.Constants.T_NS_SEPARATOR,
-                re: /^\\(?=[a-zA-Z_])/
             },
             {
                 value: PHP.Constants.T_STRING,
@@ -3091,13 +3083,9 @@ PHP.Parser.prototype.getNextToken = function( ) {
         if (typeof token === "string") {
             this.startAttributes['startLine'] = this.line;
             this.endAttributes['endLine'] = this.line;
-            if ('b"' === token) {
-                this.tokenValue = 'b"';
-                return '"'.charCodeAt(0);
-            } else {
-                this.tokenValue = token;
-                return token.charCodeAt(0);
-            }
+
+            this.tokenValue = token;
+            return token.charCodeAt(0);
         } else {
 
 
@@ -3159,77 +3147,12 @@ PHP.Parser.prototype.createTokenMap = function() {
             tokenMap[ i ] = PHP.Constants.T_ECHO;
         } else if( PHP.Constants.T_CLOSE_TAG === i ) {
             tokenMap[ i ] = 59;
-        } else if ( 'UNKNOWN' !== (name = this.tokenName( i ) ) ) { 
+        } else if ( 'UNKNOWN' !== (name = this.tokenName( i ) ) ) {
+
             tokenMap[ i ] =  this[name];
         }
     }
     return tokenMap;
-};
-
-var yynStandard = function () {
-    this.yyval =  this.yyastk[ this.stackPos-(1-1) ];
-};
-
-PHP.Parser.prototype.MakeArray = function( arr ) {
-    return Array.isArray( arr ) ? arr : [ arr ];
-}
-
-
-PHP.Parser.prototype.parseString = function( str ) {
-    var bLength = 0;
-    if ('b' === str[0]) {
-        bLength = 1;
-    }
-
-    if ('\'' === str[ bLength ]) {
-        str = str.replace(
-            ['\\\\', '\\\''],
-            [  '\\',   '\'']);
-    } else {
-
-        str = this.parseEscapeSequences( str, '"');
-
-    }
-
-    return str;
-
-};
-
-PHP.Parser.prototype.parseEscapeSequences = function( str, quote ) {
-
-
-
-    if (undefined !== quote) {
-        str = str.replace(new RegExp('\\' + quote, "g"), quote);
-    }
-
-    var replacements = {
-        '\\': '\\',
-        '$':  '$',
-        'n': "\n",
-        'r': "\r",
-        't': "\t",
-        'f': "\f",
-        'v': "\v",
-        'e': "\x1B"
-    };
-
-    return str.replace(
-        /~\\\\([\\\\$nrtfve]|[xX][0-9a-fA-F]{1,2}|[0-7]{1,3})~/g,
-        function ( matches ){
-            var str = matches[1];
-
-            if ( replacements[ str ] !== undefined ) {
-                return replacements[ str ];
-            } else if ('x' === str[ 0 ] || 'X' === str[ 0 ]) {
-                return chr(hexdec(str));
-            } else {
-                return chr(octdec(str));
-            }
-        }
-        );
-
-    return str;
 };
 
 PHP.Parser.prototype.TOKEN_NONE    = -1;
@@ -5703,63 +5626,6 @@ PHP.Parser.prototype.Stmt_Class_verifyModifier = function() {
 
 };
 
-PHP.Parser.prototype.Node_Stmt_Namespace = function() {
-    return {
-        type: "Node_Stmt_Namespace",
-        name: arguments[ 0 ],
-        attributes: arguments[ 2 ]
-    };  
-};
-
-PHP.Parser.prototype.Node_Stmt_Use = function() {
-    return {
-        type: "Node_Stmt_Use",
-        name: arguments[ 0 ],
-        attributes: arguments[ 2 ]
-    };  
-};
-
-PHP.Parser.prototype.Node_Stmt_UseUse = function() {
-    return {
-        type: "Node_Stmt_UseUse",
-        name: arguments[ 0 ],
-        as: arguments[1],
-        attributes: arguments[ 2 ]
-    };  
-};
-
-PHP.Parser.prototype.Node_Stmt_TraitUseAdaptation_Precedence = function() {
-    return {
-        type: "Node_Stmt_TraitUseAdaptation_Precedence",
-        name: arguments[ 0 ],
-        attributes: arguments[ 2 ]
-    };  
-};
-
-PHP.Parser.prototype.Node_Stmt_TraitUseAdaptation_Alias = function() {
-    return {
-        type: "Node_Stmt_TraitUseAdaptation_Alias",
-        name: arguments[ 0 ],
-        attributes: arguments[ 2 ]
-    };  
-};
-
-PHP.Parser.prototype.Node_Stmt_Trait = function() {
-    return {
-        type: "Node_Stmt_Trait",
-        name: arguments[ 0 ],
-        attributes: arguments[ 2 ]
-    };  
-};
-
-PHP.Parser.prototype.Node_Stmt_TraitUse = function() {
-    return {
-        type: "Node_Stmt_TraitUse",
-        name: arguments[ 0 ],
-        attributes: arguments[ 2 ]
-    };  
-};
-
 PHP.Parser.prototype.Node_Stmt_Class = function() {
     return {
         type: "Node_Stmt_Class",
@@ -6787,26 +6653,6 @@ PHP.Parser.prototype.Node_Name = function() {
   
 };
 
-PHP.Parser.prototype.Node_Name_FullyQualified = function() {
-   
-    return {
-        type: "Node_Name_FullyQualified",
-        parts: arguments[ 0 ],
-        attributes: arguments[ 1 ]
-    };  
-  
-};
-
-PHP.Parser.prototype.Node_Name_Relative = function() {
-   
-    return {
-        type: "Node_Name_Relative",
-        parts: arguments[ 0 ],
-        attributes: arguments[ 1 ]
-    };  
-  
-};
-
 PHP.Parser.prototype.Node_Param = function() {
    
     return {
@@ -6830,6 +6676,7 @@ PHP.Parser.prototype.Node_Arg = function() {
     };  
   
 };
+
 
 PHP.Parser.prototype.Node_Const = function() {
    

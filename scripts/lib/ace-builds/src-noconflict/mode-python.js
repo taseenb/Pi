@@ -39,9 +39,7 @@ var PythonFoldMode = require("./folding/pythonic").FoldMode;
 var Range = require("../range").Range;
 
 var Mode = function() {
-    var highlighter = new PythonHighlightRules();
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
-    this.$keywordList = highlighter.$keywordList;
+    this.$tokenizer = new Tokenizer(new PythonHighlightRules().getRules());
     this.foldingRules = new PythonFoldMode("\\:");
 };
 oop.inherits(Mode, TextMode);

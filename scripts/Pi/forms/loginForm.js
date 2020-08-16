@@ -134,6 +134,7 @@ define([
 	}
     });
 
+
     $btn.click(function(e) {
 	e.preventDefault(); // important! do not submit the form
 	e.stopPropagation();
@@ -154,7 +155,6 @@ define([
 	    }
 	});
     });
-    
     function ajaxSuccess(data) {
 	$message.fadeOut(200, function() {
 	    // USER SUCCESSFULLY LOGGED IN

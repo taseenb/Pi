@@ -40,11 +40,8 @@ var Range = require("../range").Range;
 var WorkerClient = require("../worker/worker_client").WorkerClient;
 
 var Mode = function() {
-    var highlighter = new LuaHighlightRules();
-    
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
+    this.$tokenizer = new Tokenizer(new LuaHighlightRules().getRules());
     this.foldingRules = new LuaFoldMode();
-    this.$keywordList = highlighter.$keywordList;
 };
 oop.inherits(Mode, TextMode);
 
@@ -230,7 +227,7 @@ var LuaHighlightRules = function() {
         "start" : [{
             stateName: "bracketedComment",
             onMatch : function(value, currentState, stack){
-                stack.unshift(this.next, value.length - 2, currentState);
+                stack.unshift(this.next, value.length, currentState);
                 return "comment";
             },
             regex : /\-\-\[=*\[/,
@@ -246,7 +243,7 @@ var LuaHighlightRules = function() {
                         }
                         return "comment";
                     },
-                    regex : /\]=*\]/,
+                    regex : /(?:[^\\]|\\.)*?\]=*\]/,
                     next  : "start"
                 }, {
                     defaultToken : "comment"
@@ -278,7 +275,7 @@ var LuaHighlightRules = function() {
                         return "comment";
                     },
                     
-                    regex : /\]=*\]/,
+                    regex : /(?:[^\\]|\\.)*?\]=*\]/,
                     next  : "start"
                 }, {
                     defaultToken : "comment"

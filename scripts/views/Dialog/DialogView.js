@@ -32,14 +32,14 @@ define([
 		buttons: model.buttons,
 		close: function() {
 		    Pi.user.nav.deactivateAll();
+		    window.location.hash = "";
 		},
 		create: function() {
 		    // Add Bootstrap style to buttons
 		    that.$el.dialog('widget')
 			    .find(".ui-button")
 			    .not('.ui-dialog-titlebar-close')
-			    .addClass('btn')
-			    .css({
+			    .addClass('btn').css({
 			"margin-left": 10
 		    });
 		}

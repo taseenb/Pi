@@ -1,23 +1,23 @@
 define([
-    'Pi', 'backbone', 'jquery',
-    // Backbone Extensions
-    'Pi/Model'
+  'Pi',
+  'backbone',
+  'jquery',
 
-], function(Pi, Backbone, $) {
+  // Backbone Extensions
+  'Pi/Model'
+], function (Pi, Backbone, $) {
+  'use strict'
 
-    "use strict";
+  var Desktop = Backbone.Model.extend({
+    modelName: 'Desktop',
+    defaults: {
+      backgroundImage: Pi.defaultDesktopImage, // string image url for css (ex.: "url(/path/img.jpg)")
+      backgroundColor: Pi.defaultDesktopColor, // string hex color (ex. "#FFCC00")
+      visible: true,
+      active: false,
+      bootstrapped: false
+    }
+  })
 
-    var Desktop = Backbone.Model.extend({
-	modelName: "Desktop",
-	defaults: {
-	    backgroundImage: Pi.defaultDesktopImage, // string image url for css (ex.: "url(/path/img.jpg)")
-	    backgroundColor: Pi.defaultDesktopColor, // string hex color (ex. "#FFCC00")
-	    visible: true,
-	    active: false
-	}
-
-    });
-
-    return Desktop;
-
-});
+  return Desktop
+})

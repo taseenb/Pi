@@ -4,15 +4,16 @@ if (typeof window.window != "undefined" && window.document) {
     return;
 }
 
-window.console = function() {
-    var msgs = Array.prototype.slice.call(arguments, 0);
-    postMessage({type: "log", data: msgs});
+window.console = {
+    log: function() {
+        var msgs = Array.prototype.slice.call(arguments, 0);
+        postMessage({type: "log", data: msgs});
+    },
+    error: function() {
+        var msgs = Array.prototype.slice.call(arguments, 0);
+        postMessage({type: "log", data: msgs});
+    }
 };
-window.console.error =
-window.console.warn = 
-window.console.log =
-window.console.trace = window.console;
-
 window.window = window;
 window.ace = window;
 
@@ -85,9 +86,10 @@ window.define = function(id, deps, factory) {
     };
 
     require.modules[id] = {
-        exports: {},
         factory: function() {
-            var module = this;
+            var module = {
+                exports: {}
+            };
             var returnExports = factory(req, module.exports, module);
             if (returnExports)
                 module.exports = returnExports;
@@ -1170,7 +1172,7 @@ var Document = function(text) {
     };
     this.getTextRange = function(range) {
         if (range.start.row == range.end.row) {
-            return this.getLine(range.start.row)
+            return this.$lines[range.start.row]
                 .substring(range.start.column, range.end.column);
         }
         var lines = this.getLines(range.start.row, range.end.row);
@@ -1682,24 +1684,29 @@ var oop = require("./lib/oop");
 var EventEmitter = require("./lib/event_emitter").EventEmitter;
 
 var Anchor = exports.Anchor = function(doc, row, column) {
-    this.$onChange = this.onChange.bind(this);
-    this.attach(doc);
-    
+    this.document = doc;
+
     if (typeof column == "undefined")
         this.setPosition(row.row, row.column);
     else
         this.setPosition(row, column);
+
+    this.$onChange = this.onChange.bind(this);
+    doc.on("change", this.$onChange);
 };
 
 (function() {
 
     oop.implement(this, EventEmitter);
+
     this.getPosition = function() {
         return this.$clipPositionToDocument(this.row, this.column);
     };
+
     this.getDocument = function() {
         return this.document;
     };
+
     this.onChange = function(e) {
         var delta = e.data;
         var range = delta.range;
@@ -1761,6 +1768,7 @@ var Anchor = exports.Anchor = function(doc, row, column) {
 
         this.setPosition(row, column, true);
     };
+
     this.setPosition = function(row, column, noClip) {
         var pos;
         if (noClip) {
@@ -1787,12 +1795,9 @@ var Anchor = exports.Anchor = function(doc, row, column) {
             value: pos
         });
     };
+
     this.detach = function() {
         this.document.removeEventListener("change", this.$onChange);
-    };
-    this.attach = function(doc) {
-        this.document = doc || this.document;
-        this.document.on("change", this.$onChange);
     };
     this.$clipPositionToDocument = function(row, column) {
         var pos = {};
@@ -1996,33 +2001,33 @@ exports.delayedCall = function(fcn, defaultTimeout) {
     return _self;
 };
 });
-ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(require, exports, module) {
+ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' , 'exports'], function(require, exports, module) {
 
 (function (root, name, factory) {
-   factory(exports)
+  
+
+  if (typeof exports !== 'undefined') {
+    factory(exports);
+  } else if (typeof define === 'function' && define.amd) {
+    ace.define(['exports'], factory);
+  } else {
+    factory((root[name] = {}));
+  }
 }(this, 'luaparse', function (exports) {
   
 
-  exports.version = '0.1.4';
+  exports.version = '0.0.11';
 
   var input, options, length;
   var defaultOptions = exports.defaultOptions = {
       wait: false
     , comments: true
     , scope: false
-    , locations: false
-    , ranges: false
   };
 
   var EOF = 1, StringLiteral = 2, Keyword = 4, Identifier = 8
     , NumericLiteral = 16, Punctuator = 32, BooleanLiteral = 64
     , NilLiteral = 128, VarargLiteral = 256;
-
-  exports.tokenTypes = { EOF: EOF, StringLiteral: StringLiteral
-    , Keyword: Keyword, Identifier: Identifier, NumericLiteral: NumericLiteral
-    , Punctuator: Punctuator, BooleanLiteral: BooleanLiteral
-    , NilLiteral: NilLiteral, VarargLiteral: VarargLiteral
-  };
 
   var errors = exports.errors = {
       unexpected: 'Unexpected %1 \'%2\' near \'%3\''
@@ -2278,41 +2283,16 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
         , argument: argument
       };
     }
-
-    , comment: function(value, raw) {
-      return {
-          type: 'Comment'
-        , value: value
-        , raw: raw
-      };
-    }
   };
-
-  function finishNode(node) {
-    if (trackLocations) {
-      var location = locations.pop();
-      location.complete();
-      if (options.locations) node.loc = location.loc;
-      if (options.ranges) node.range = location.range;
-    }
-    return node;
-  }
 
   var slice = Array.prototype.slice
     , toString = Object.prototype.toString
-    , indexOf = function indexOf(array, element) {
-      for (var i = 0, length = array.length; i < length; i++) {
-        if (array[i] === element) return i;
+    , indexOf = Array.prototype.indexOf || function indexOf(element) {
+      for (var i = 0, length = this.length; i < length; i++) {
+        if (this[i] === element) return i;
       }
       return -1;
     };
-
-  function indexOfObject(array, property, element) {
-    for (var i = 0, length = array.length; i < length; i++) {
-      if (array[i][property] === element) return i;
-    }
-    return -1;
-  }
 
   function sprintf(format) {
     var args = slice.call(arguments, 1);
@@ -2327,7 +2307,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       , dest = {}
       , src, prop;
 
-    for (var i = 0, length = args.length; i < length; i++) {
+    for (var i = 0, l = args.length; i < l; i++) {
       src = args[i];
       for (prop in src) if (src.hasOwnProperty(prop)) {
         dest[prop] = src[prop];
@@ -2381,16 +2361,13 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
 
   var index
     , token
-    , previousToken
     , lookahead
     , comments
     , tokenStart
     , line
     , lineStart;
 
-  exports.lex = lex;
-
-  function lex() {
+  function readToken() {
     skipWhiteSpace();
     while (45 === input.charCodeAt(index) &&
            45 === input.charCodeAt(index + 1)) {
@@ -2405,12 +2382,12 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       , range: [index, index]
     };
 
-    var charCode = input.charCodeAt(index)
+    var character = input.charCodeAt(index)
       , next = input.charCodeAt(index + 1);
     tokenStart = index;
-    if (isIdentifierStart(charCode)) return scanIdentifierOrKeyword();
+    if (isIdentifierStart(character)) return scanIdentifierOrKeyword();
 
-    switch (charCode) {
+    switch (character) {
       case 39: case 34: // '"
         return scanStringLiteral();
       case 48: case 49: case 50: case 51: case 52: case 53:
@@ -2458,10 +2435,10 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
 
   function skipWhiteSpace() {
     while (index < length) {
-      var charCode = input.charCodeAt(index);
-      if (isWhiteSpace(charCode)) {
+      var character = input.charCodeAt(index);
+      if (isWhiteSpace(character)) {
         index++;
-      } else if (isLineTerminator(charCode)) {
+      } else if (isLineTerminator(character)) {
         line++;
         lineStart = ++index;
       } else {
@@ -2521,18 +2498,18 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     var delimiter = input.charCodeAt(index++)
       , stringStart = index
       , string = ''
-      , charCode;
+      , character;
 
     while (index < length) {
-      charCode = input.charCodeAt(index++);
-      if (delimiter === charCode) break;
-      if (92 === charCode) { // \
+      character = input.charCodeAt(index++);
+      if (delimiter === character) break;
+      if (92 === character) { // \
         string += input.slice(stringStart, index - 1) + readEscapeSequence();
         stringStart = index;
       }
-      else if (index >= length || isLineTerminator(charCode)) {
+      else if (index >= length || isLineTerminator(character)) {
         string += input.slice(stringStart, index - 1);
-        raise({}, errors.unfinishedString, string + String.fromCharCode(charCode));
+        raise({}, errors.unfinishedString, string + String.fromCharCode(character));
       }
     }
     string += input.slice(stringStart, index - 1);
@@ -2663,9 +2640,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     var character = input.charAt(index)
       , content = ''
       , isLong = false
-      , commentStart = index
-      , lineStartComment = lineStart
-      , lineComment = line;
+      , commentStart = index;
 
     if ('[' === character) {
       content = readLongString();
@@ -2677,21 +2652,15 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
         if (isLineTerminator(input.charCodeAt(index))) break;
         index++;
       }
-      if (options.comments) content = input.slice(commentStart, index);
+      content = input.slice(commentStart, index);
     }
 
     if (options.comments) {
-      var node = ast.comment(content, input.slice(tokenStart, index));
-      if (options.locations) {
-        node.loc = {
-            start: { line: lineComment, column: tokenStart - lineStartComment }
-          , end: { line: line, column: index - lineStart }
-        };
-      }
-      if (options.ranges) {
-        node.range = [tokenStart, index];
-      }
-      comments.push(node);
+      comments.push({
+          type: 'Comment'
+        , value: content
+        , raw: input.slice(tokenStart, index)
+      });
     }
   }
 
@@ -2718,6 +2687,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
         line++;
         lineStart = index;
       }
+
       if (']' === character) {
         terminator = true;
         for (var i = 0; i < level; i++) {
@@ -2734,9 +2704,8 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
   }
 
   function next() {
-    previousToken = token;
     token = lookahead;
-    lookahead = lex();
+    lookahead = readToken();
   }
 
   function consume(value) {
@@ -2752,28 +2721,28 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     else raise(token, errors.expected, value, token.value);
   }
 
-  function isWhiteSpace(charCode) {
-    return 9 === charCode || 32 === charCode || 0xB === charCode || 0xC === charCode;
+  function isWhiteSpace(character) {
+    return 9 === character || 32 === character || 0xB === character || 0xC === character;
   }
 
-  function isLineTerminator(charCode) {
-    return 10 === charCode || 13 === charCode;
+  function isLineTerminator(character) {
+    return 10 === character || 13 === character;
   }
 
-  function isDecDigit(charCode) {
-    return charCode >= 48 && charCode <= 57;
+  function isDecDigit(character) {
+    return character >= 48 && character <= 57;
   }
 
-  function isHexDigit(charCode) {
-    return (charCode >= 48 && charCode <= 57) || (charCode >= 97 && charCode <= 102) || (charCode >= 65 && charCode <= 70);
+  function isHexDigit(character) {
+    return (character >= 48 && character <= 57) || (character >= 97 && character <= 102) || (character >= 65 && character <= 70);
   }
 
-  function isIdentifierStart(charCode) {
-    return (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122) || 95 === charCode;
+  function isIdentifierStart(character) {
+    return (character >= 65 && character <= 90) || (character >= 97 && character <= 122) || 95 === character;
   }
 
-  function isIdentifierPart(charCode) {
-    return (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122) || 95 === charCode || (charCode >= 48 && charCode <= 57);
+  function isIdentifierPart(character) {
+    return (character >= 65 && character <= 90) || (character >= 97 && character <= 122) || 95 === character || (character >= 48 && character <= 57);
   }
 
   function isKeyword(id) {
@@ -2822,7 +2791,8 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
   }
   var scopes
     , scopeDepth
-    , globals;
+    , globals
+    , globalNames;
   function createScope() {
     scopes.push(Array.apply(null, scopes[scopeDepth++]));
   }
@@ -2831,7 +2801,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     scopeDepth--;
   }
   function scopeIdentifierName(name) {
-    if (-1 !== indexOf(scopes[scopeDepth], name)) return;
+    if (-1 !== indexOf.call(scopes[scopeDepth], name)) return;
     scopes[scopeDepth].push(name);
   }
   function scopeIdentifier(node) {
@@ -2839,60 +2809,22 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     attachScope(node, true);
   }
   function attachScope(node, isLocal) {
-    if (!isLocal && -1 === indexOfObject(globals, 'name', node.name))
+    if (!isLocal && -1 === indexOf.call(globalNames, node.name)) {
+      globalNames.push(node.name);
       globals.push(node);
+    }
 
     node.isLocal = isLocal;
   }
   function scopeHasName(name) {
-    return (-1 !== indexOf(scopes[scopeDepth], name));
-  }
-
-  var locations = []
-    , trackLocations;
-
-  function createLocationMarker() {
-    return new Marker(token);
-  }
-
-  function Marker(token) {
-    if (options.locations) {
-      this.loc = {
-          start: {
-            line: token.line
-          , column: token.range[0] - token.lineStart
-        }
-        , end: {
-            line: 0
-          , column: 0
-        }
-      };
-    }
-    if (options.ranges) this.range = [token.range[0], 0];
-  }
-  Marker.prototype.complete = function() {
-    if (options.locations) {
-      this.loc.end.line = previousToken.line;
-      this.loc.end.column = previousToken.range[1] - previousToken.lineStart;
-    }
-    if (options.ranges) {
-      this.range[1] = previousToken.range[1];
-    }
-  };
-  function markLocation() {
-    if (trackLocations) locations.push(createLocationMarker());
-  }
-  function pushLocation(marker) {
-    if (trackLocations) locations.push(marker);
+    return (-1 !== indexOf.call(scopes[scopeDepth], name));
   }
 
   function parseChunk() {
     next();
-    markLocation();
     var body = parseBlock();
     if (EOF !== token.type) unexpected(token);
-    if (trackLocations && !body.length) previousToken = token;
-    return finishNode(ast.chunk(body));
+    return ast.chunk(body);
   }
 
   function parseBlock(terminator) {
@@ -2914,7 +2846,6 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
   }
 
   function parseStatement() {
-    markLocation();
     if (Keyword === token.type) {
       switch (token.value) {
         case 'local':    next(); return parseLocalStatement();
@@ -2935,7 +2866,6 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     if (Punctuator === token.type) {
       if (consume('::')) return parseLabelStatement();
     }
-    if (trackLocations) locations.pop();
     if (consume(';')) return;
 
     return parseAssignmentOrCallStatement();
@@ -2951,11 +2881,11 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     }
 
     expect('::');
-    return finishNode(ast.labelStatement(label));
+    return ast.labelStatement(label);
   }
 
   function parseBreakStatement() {
-    return finishNode(ast.breakStatement());
+    return ast.breakStatement();
   }
 
   function parseGotoStatement() {
@@ -2963,13 +2893,13 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       , label = parseIdentifier();
 
     if (options.scope) label.isLabel = scopeHasName('::' + name + '::');
-    return finishNode(ast.gotoStatement(label));
+    return ast.gotoStatement(label);
   }
 
   function parseDoStatement() {
     var body = parseBlock();
     expect('end');
-    return finishNode(ast.doStatement(body));
+    return ast.doStatement(body);
   }
 
   function parseWhileStatement() {
@@ -2977,14 +2907,14 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     expect('do');
     var body = parseBlock();
     expect('end');
-    return finishNode(ast.whileStatement(condition, body));
+    return ast.whileStatement(condition, body);
   }
 
   function parseRepeatStatement() {
     var body = parseBlock();
     expect('until');
     var condition = parseExpectedExpression();
-    return finishNode(ast.repeatStatement(condition, body));
+    return ast.repeatStatement(condition, body);
   }
 
   function parseReturnStatement() {
@@ -2999,44 +2929,33 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       }
       consume(';'); // grammar tells us ; is optional here.
     }
-    return finishNode(ast.returnStatement(expressions));
+    return ast.returnStatement(expressions);
   }
 
   function parseIfStatement() {
     var clauses = []
       , condition
-      , body
-      , marker;
-    if (trackLocations) {
-      marker = locations[locations.length - 1];
-      locations.push(marker);
-    }
+      , body;
+
     condition = parseExpectedExpression();
     expect('then');
     body = parseBlock();
-    clauses.push(finishNode(ast.ifClause(condition, body)));
+    clauses.push(ast.ifClause(condition, body));
 
-    if (trackLocations) marker = createLocationMarker();
     while (consume('elseif')) {
-      pushLocation(marker);
       condition = parseExpectedExpression();
       expect('then');
       body = parseBlock();
-      clauses.push(finishNode(ast.elseifClause(condition, body)));
-      if (trackLocations) marker = createLocationMarker();
+      clauses.push(ast.elseifClause(condition, body));
     }
 
     if (consume('else')) {
-      if (trackLocations) {
-        marker = new Marker(previousToken);
-        locations.push(marker);
-      }
       body = parseBlock();
-      clauses.push(finishNode(ast.elseClause(body)));
+      clauses.push(ast.elseClause(body));
     }
 
     expect('end');
-    return finishNode(ast.ifStatement(clauses));
+    return ast.ifStatement(clauses);
   }
 
   function parseForStatement() {
@@ -3053,9 +2972,8 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       body = parseBlock();
       expect('end');
 
-      return finishNode(ast.forNumericStatement(variable, start, end, step, body));
-    }
-    else {
+      return ast.forNumericStatement(variable, start, end, step, body);
+    } else {
       var variables = [variable];
       while (consume(',')) {
         variable = parseIdentifier();
@@ -3073,7 +2991,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       body = parseBlock();
       expect('end');
 
-      return finishNode(ast.forGenericStatement(variables, iterators, body));
+      return ast.forGenericStatement(variables, iterators, body);
     }
   }
 
@@ -3102,7 +3020,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
         }
       }
 
-      return finishNode(ast.localStatement(variables, init));
+      return ast.localStatement(variables, init);
     }
     if (consume('function')) {
       name = parseIdentifier();
@@ -3115,10 +3033,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
 
   function parseAssignmentOrCallStatement() {
     var previous = token
-      , expression, marker;
-
-    if (trackLocations) marker = createLocationMarker();
-    expression = parsePrefixExpression();
+      , expression = parsePrefixExpression();
 
     if (null == expression) return unexpected(token);
     if (',='.indexOf(token.value) >= 0) {
@@ -3136,23 +3051,19 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
         exp = parseExpectedExpression();
         init.push(exp);
       } while (consume(','));
-
-      pushLocation(marker);
-      return finishNode(ast.assignmentStatement(variables, init));
+      return ast.assignmentStatement(variables, init);
     }
     if (isCallExpression(expression)) {
-      pushLocation(marker);
-      return finishNode(ast.callStatement(expression));
+      return ast.callStatement(expression);
     }
     return unexpected(previous);
   }
 
   function parseIdentifier() {
-    markLocation();
     var identifier = token.value;
     if (Identifier !== token.type) raiseUnexpectedToken('<name>', token);
     next();
-    return finishNode(ast.identifier(identifier));
+    return ast.identifier(identifier);
   }
 
   function parseFunctionDeclaration(name, isLocal) {
@@ -3168,8 +3079,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
 
           if (consume(',')) continue;
           else if (consume(')')) break;
-        }
-        else if (VarargLiteral === token.type) {
+        } else if (VarargLiteral === token.type) {
           parameters.push(parsePrimaryExpression());
           expect(')');
           break;
@@ -3183,29 +3093,24 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     expect('end');
 
     isLocal = isLocal || false;
-    return finishNode(ast.functionStatement(name, parameters, isLocal, body));
+    return ast.functionStatement(name, parameters, isLocal, body);
   }
 
   function parseFunctionName() {
-    var base, name, marker;
-
-    if (trackLocations) marker = createLocationMarker();
-    base = parseIdentifier();
-
+    var base = parseIdentifier()
+      , name;
     if (options.scope) attachScope(base, false);
 
     while (consume('.')) {
-      pushLocation(marker);
       name = parseIdentifier();
       if (options.scope) attachScope(name, false);
-      base = finishNode(ast.memberExpression(base, '.', name));
+      base = ast.memberExpression(base, '.', name);
     }
 
     if (consume(':')) {
-      pushLocation(marker);
       name = parseIdentifier();
       if (options.scope) attachScope(name, false);
-      base = finishNode(ast.memberExpression(base, ':', name));
+      base = ast.memberExpression(base, ':', name);
     }
 
     return base;
@@ -3216,27 +3121,23 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       , key, value;
 
     while (true) {
-      markLocation();
       if (Punctuator === token.type && consume('[')) {
         key = parseExpectedExpression();
         expect(']');
         expect('=');
         value = parseExpectedExpression();
-        fields.push(finishNode(ast.tableKey(key, value)));
+        fields.push(ast.tableKey(key, value));
       } else if (Identifier === token.type) {
         key = parseExpectedExpression();
         if (consume('=')) {
           value = parseExpectedExpression();
-          fields.push(finishNode(ast.tableKeyString(key, value)));
+          fields.push(ast.tableKeyString(key, value));
         } else {
-          fields.push(finishNode(ast.tableValue(key)));
+          fields.push(ast.tableValue(key));
         }
       } else {
-        if (null == (value = parseExpression())) {
-          locations.pop();
-          break;
-        }
-        fields.push(finishNode(ast.tableValue(value)));
+        if (null == (value = parseExpression())) break;
+        fields.push(ast.tableValue(value));
       }
       if (',;'.indexOf(token.value) >= 0) {
         next();
@@ -3245,7 +3146,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       if ('}' === token.value) break;
     }
     expect('}');
-    return finishNode(ast.tableConstructorExpression(fields));
+    return ast.tableConstructorExpression(fields);
   }
 
   function parseExpression() {
@@ -3260,37 +3161,34 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
   }
 
   function binaryPrecedence(operator) {
-    var charCode = operator.charCodeAt(0)
+    var character = operator.charCodeAt(0)
       , length = operator.length;
 
     if (1 === length) {
-      switch (charCode) {
+      switch (character) {
         case 94: return 10; // ^
         case 42: case 47: case 37: return 7; // * / %
         case 43: case 45: return 6; // + -
         case 60: case 62: return 3; // < >
       }
     } else if (2 === length) {
-      switch (charCode) {
+      switch (character) {
         case 46: return 5; // ..
         case 60: case 62: case 61: case 126: return 3; // <= >= == ~=
         case 111: return 1; // or
       }
-    } else if (97 === charCode && 'and' === operator) return 2;
+    } else if (97 === character && 'and' === operator) return 2;
     return 0;
   }
 
   function parseSubExpression(minPrecedence) {
-    var operator = token.value
-      , expression, marker;
-
-    if (trackLocations) marker = createLocationMarker();
+    var operator = token.value;
+    var expression;
     if (isUnary(token)) {
-      markLocation();
       next();
       var argument = parseSubExpression(8);
       if (argument == null) raiseUnexpectedToken('<expression>', token);
-      expression = finishNode(ast.unaryExpression(operator, argument));
+      expression = ast.unaryExpression(operator, argument);
     }
     if (null == expression) {
       expression = parsePrimaryExpression();
@@ -3312,18 +3210,14 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       next();
       var right = parseSubExpression(precedence);
       if (null == right) raiseUnexpectedToken('<expression>', token);
-      if (trackLocations) locations.push(marker);
-      expression = finishNode(ast.binaryExpression(operator, expression, right));
-
+      expression = ast.binaryExpression(operator, expression, right);
     }
     return expression;
   }
 
   function parsePrefixExpression() {
-    var base, name, marker
+    var base, name
       , isLocal;
-
-    if (trackLocations) marker = createLocationMarker();
     if (Identifier === token.type) {
       name = token.value;
       base = parseIdentifier();
@@ -3340,37 +3234,31 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
       if (Punctuator === token.type) {
         switch (token.value) {
           case '[':
-            pushLocation(marker);
             next();
             expression = parseExpectedExpression();
-            base = finishNode(ast.indexExpression(base, expression));
+            base = ast.indexExpression(base, expression);
             expect(']');
             break;
           case '.':
-            pushLocation(marker);
             next();
             identifier = parseIdentifier();
             if (options.scope) attachScope(identifier, isLocal);
-            base = finishNode(ast.memberExpression(base, '.', identifier));
+            base = ast.memberExpression(base, '.', identifier);
             break;
           case ':':
-            pushLocation(marker);
             next();
             identifier = parseIdentifier();
             if (options.scope) attachScope(identifier, isLocal);
-            base = finishNode(ast.memberExpression(base, ':', identifier));
-            pushLocation(marker);
+            base = ast.memberExpression(base, ':', identifier);
             base = parseCallExpression(base);
             break;
           case '(': case '{': // args
-            pushLocation(marker);
             base = parseCallExpression(base);
             break;
           default:
             return base;
         }
       } else if (StringLiteral === token.type) {
-        pushLocation(marker);
         base = parseCallExpression(base);
       } else {
         break;
@@ -3394,16 +3282,16 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
           }
 
           expect(')');
-          return finishNode(ast.callExpression(base, expressions));
+          return ast.callExpression(base, expressions);
 
         case '{':
-          markLocation();
           next();
           var table = parseTableConstructor();
-          return finishNode(ast.tableCallExpression(base, table));
+          return ast.tableCallExpression(base, table);
       }
+
     } else if (StringLiteral === token.type) {
-      return finishNode(ast.stringCallExpression(base, parsePrimaryExpression()));
+      return ast.stringCallExpression(base, parsePrimaryExpression());
     }
 
     raiseUnexpectedToken('function arguments', token);
@@ -3412,24 +3300,17 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
   function parsePrimaryExpression() {
     var literals = StringLiteral | NumericLiteral | BooleanLiteral | NilLiteral | VarargLiteral
       , value = token.value
-      , type = token.type
-      , marker;
-
-    if (trackLocations) marker = createLocationMarker();
+      , type = token.type;
 
     if (type & literals) {
-      pushLocation(marker);
       var raw = input.slice(token.range[0], token.range[1]);
       next();
-      return finishNode(ast.literal(type, value, raw));
+      return ast.literal(type, value, raw);
     } else if (Keyword === type && 'function' === value) {
-      pushLocation(marker);
       next();
       return parseFunctionDeclaration(null);
-    } else if (consume('{')) {
-      pushLocation(marker);
+    } else if (consume('{'))
       return parseTableConstructor();
-    }
   }
 
   exports.parse = parse;
@@ -3450,7 +3331,7 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     scopes = [[]];
     scopeDepth = 0;
     globals = [];
-    locations = [];
+    globalNames = [];
 
     if (options.comments) comments = [];
     if (!options.wait) return end();
@@ -3469,18 +3350,14 @@ ace.define('ace/mode/lua/luaparse', ['require', 'exports', 'module' ], function(
     if ('undefined' !== typeof _input) write(_input);
 
     length = input.length;
-    trackLocations = options.locations || options.ranges;
-    lookahead = lex();
+    lookahead = readToken();
 
     var chunk = parseChunk();
     if (options.comments) chunk.comments = comments;
     if (options.scope) chunk.globals = globals;
-
-    if (locations.length > 0)
-      throw new Error('Location tracking failed. This is most likely a bug in luaparse');
-
     return chunk;
   }
+  exports.lex = readToken;
 
 }));
 
