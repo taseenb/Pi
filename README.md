@@ -1,8 +1,6 @@
-# Pi == Processing ideas
+# Pi == Processing ideas BETA
 
-Processing ideas (alpha)  
-The Processing ide web application http://www.processingideas.com/  
-Languages: Javascript + Php
+A Processing editor for the browser.
 
 ## Setup
 
