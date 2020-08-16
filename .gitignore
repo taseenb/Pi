@@ -21,7 +21,6 @@ secrets.php
 **/_notes
 **/_notes/
 
-
 .bowerrc
 bower.json
 
@@ -39,7 +38,9 @@ TODO.html
 /protected/controllers/actions/OLDCollectionReadAction.php
 /protected/controllers/OLDCollectionController.php
 /protected/models/OLDCollection.php
-/node_modules/# Logs
+/node_modules/
+
+# Logs
 logs
 *.log
 npm-debug.log*
