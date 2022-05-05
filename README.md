@@ -1,3 +1,5 @@
+# THIS PROJECT IS ARCHIVED! (2012 PROJECT)
+
 # Pi == Processing ideas BETA
 
 A Processing editor for the browser.
